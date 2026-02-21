@@ -84,7 +84,6 @@ data class ResultsColors(
     val text: Color
 )
 
-
 data class VacancyColors(
     val title: Color,
     val subTitle: Color
@@ -103,11 +102,11 @@ data class TopBarStateColors(
     val icon: Color
 )
 
-val LocalAndroidDiplomaScheme = staticCompositionLocalOf<AndroidDiplomaScheme>{
+val LocalAndroidDiplomaScheme = staticCompositionLocalOf<AndroidDiplomaScheme> {
     error("No AndroidDiplomaScheme provided")
 }
 
-val LocalAndroidDiplomaTypography = staticCompositionLocalOf<AndroidDiplomaTypography>{
+val LocalAndroidDiplomaTypography = staticCompositionLocalOf<AndroidDiplomaTypography> {
     error("No AndroidDiplomaTypography provided")
 }
 
@@ -115,8 +114,8 @@ val LocalAndroidDiplomaTypography = staticCompositionLocalOf<AndroidDiplomaTypog
 fun AndoroidDiplomaTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
-){
-    val colorScheme = when{
+) {
+    val colorScheme = when {
         darkTheme -> DarkColorScheme
         else -> LightColorScheme
     }
