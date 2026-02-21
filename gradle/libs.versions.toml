@@ -7,7 +7,9 @@ minSdk = "26"
 compileSdk = "36"
 targetSdk = "36"
 
-kotlin = "2.1.21"
+agp = "8.12.3"
+
+kotlin = "2.2.10"
 coreKtx = "1.17.0"
 
 activity = "1.12.3"
@@ -95,3 +97,8 @@ uiTests-espressoCore = "androidx.test.espresso:espresso-core:3.5.1"
 [plugins]
 google-kspPlugin = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+developproperties = { id = "ru.practicum.android.diploma.plugins.developproperties" }
+android-application = { id = "com.android.application", version.ref = "agp" }
+detekt = { id = "convention.detekt" }
