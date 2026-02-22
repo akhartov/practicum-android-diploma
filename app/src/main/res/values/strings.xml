@@ -1,3 +1,55 @@
 <resources>
     <string name="app_name">Practicum-Android-Diploma</string>
+    <string name="main">Главная</string>
+    <string name="search">Поиск</string>
+    <string name="favorites">Избранное</string>
+    <string name="vacancy">Вакансия</string>
+    <string name="description_vacancy">Описание вакансии</string>
+    <string name="required_experience">Требуемый опыт</string>
+    <string name="year">год</string>
+    <string name="yeara">года</string>
+    <string name="years">лет</string>
+    <string name="responsibilities">Обязанности</string>
+    <string name="requirements">Требования</string>
+    <string name="conditions">Условия</string>
+    <string name="key_skills">Ключевые навыки</string>
+    <string name="select">Выбрать</string>
+    <string name="apply">Применить</string>
+    <string name="reset">Сбросить</string>
+    <string name="workplace">Место работы</string>
+    <string name="expected_salary">Ожидаемая зарплата</string>
+    <string name="enter_amount">Введите сумму</string>
+    <string name="enter_industry">Введите отрасль</string>
+    <string name="from">от</string>
+    <string name="to">до</string>
+    <string name="search_vacancies">Поиск вакансий</string>
+    <string name="filter_settings">Настройки фильтрации</string>
+    <string name="vacancies_not_found">Вакансия не найдена или\nудалена</string>
+    <string name="no_salary">Зарплата не указана</string>
+    <string name="workplace_selection">Выбор места работы</string>
+    <string name="country_selection">Выбор страны</string>
+    <string name="region_selection">Выбор региона</string>
+    <string name="industry_selection">Выбор отрасли</string>
+    <string name="industry">Отрасль</string>
+    <string name="no_internet">Нет интернета</string>
+    <string name="no_region">Такого региона нет</string>
+    <string name="region_selection_error">Не удалось получить\nсписок</string>
+    <string name="server_error">Ошибка сервера</string>
+    <string name="cant_get_vacancies">Не удалось получить\nсписок вакансий</string>
+    <string name="dont_show_without_salary">Не показывать без зарплаты</string>
+    <string name="no_vacancies">Таких вакансий нет</string>
+
+    <string name="team">Команда</string>
+    <string name="developers">Над приложением работали</string>
+    <string name="dev1">Анастасия Гайфуллина</string>
+    <string name="dev2">Владислав Горшенин</string>
+    <string name="dev3">Александр Номоконов</string>
+    <string name="dev4">Андрей Хартов</string>
+
+    <plurals name="found_n_vacancies">
+        <item quantity="one">Найдена %d вакансия</item>
+        <item quantity="few">Найдено %d вакансии</item>
+        <item quantity="many">Найдено %d вакансий</item>
+        <item quantity="other">Найдено %d вакансий</item>
+    </plurals>
 </resources>
