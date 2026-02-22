@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Practicum-Android-Diploma</string>
+    <string name="app_name">Job Search</string>
     <string name="main">Главная</string>
     <string name="search">Поиск</string>
     <string name="favorites">Избранное</string>
@@ -46,10 +46,4 @@
     <string name="dev3">Александр Номоконов</string>
     <string name="dev4">Андрей Хартов</string>
 
-    <plurals name="found_n_vacancies">
-        <item quantity="one">Найдена %d вакансия</item>
-        <item quantity="few">Найдено %d вакансии</item>
-        <item quantity="many">Найдено %d вакансий</item>
-        <item quantity="other">Найдено %d вакансий</item>
-    </plurals>
 </resources>
