@@ -6,9 +6,6 @@
     <string name="vacancy">Вакансия</string>
     <string name="description_vacancy">Описание вакансии</string>
     <string name="required_experience">Требуемый опыт</string>
-    <string name="year">год</string>
-    <string name="yeara">года</string>
-    <string name="years">лет</string>
     <string name="responsibilities">Обязанности</string>
     <string name="requirements">Требования</string>
     <string name="conditions">Условия</string>
