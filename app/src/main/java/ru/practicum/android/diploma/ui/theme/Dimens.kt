@@ -24,6 +24,4 @@ object Dimens {
     val companyBarHeight = 58.dp
     val industryItemHeight = 60.dp
     val itemHeight = 60.dp
-
-
 }
