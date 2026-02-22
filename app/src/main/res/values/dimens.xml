@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="padding_2">2dp</dimen>
+    <dimen name="padding_4">4dp</dimen>
+    <dimen name="padding_6">6dp</dimen>
+    <dimen name="padding_8">8dp</dimen>
+    <dimen name="padding_16">16dp</dimen>
+    <dimen name="padding_20">20dp</dimen>
+    <dimen name="padding_24">24dp</dimen>
+
+    <dimen name="corner_radius_12">12dp</dimen>
+
+    <dimen name="search_bar_height">56dp</dimen>
+    <dimen name="button_height">60dp</dimen>
+    <dimen name="salary_bar_height">56dp</dimen>
+    <dimen name="tool_bar_height">56dp</dimen>
+    <dimen name="navigation_bar_height">58dp</dimen>
+    <dimen name="company_bar_height">58dp</dimen>
+    <dimen name="industry_item_height">60dp</dimen>
+    <dimen name="item_height">60dp</dimen>
+
+</resources>
