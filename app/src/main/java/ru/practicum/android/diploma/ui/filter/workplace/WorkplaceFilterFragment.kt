@@ -9,24 +9,28 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.stringResource
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import ru.practicum.android.diploma.R
 
 class WorkplaceFilterFragment : Fragment() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return ComposeView(requireContext()).apply {
-            setContent {
-                WorkplaceFilterScreen(
-                    navigateToCountryFilter = {
-                        findNavController().navigate(R.id.action_workplaceFilterFragment_to_countryFilterFragment)
-                    },
-                    navigateToRegionFilter = {
-                        findNavController().navigate(R.id.action_workplaceFilterFragment_to_regionFilterFragment)
-                    }
-                )
-            }
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View = ComposeView(requireContext()).apply {
+        setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+
+        setContent {
+            WorkplaceFilterScreen(
+                navigateToCountryFilter = {
+                    findNavController().navigate(R.id.action_workplaceFilterFragment_to_countryFilterFragment)
+                },
+                navigateToRegionFilter = {
+                    findNavController().navigate(R.id.action_workplaceFilterFragment_to_regionFilterFragment)
+                }
+            )
         }
     }
 }
@@ -37,14 +41,14 @@ fun WorkplaceFilterScreen(
     navigateToRegionFilter: () -> Unit
 ) {
     Column {
-        Text("Выбор места работы")
+        Text(stringResource(R.string.workplace_selection))
         Button(
             onClick = navigateToCountryFilter,
-            content = { Text("Выбор страны") },
+            content = { Text(stringResource(R.string.country_selection)) },
         )
         Button(
             onClick = navigateToRegionFilter,
-            content = { Text("Выбор региона") },
+            content = { Text(stringResource(R.string.region_selection)) },
         )
     }
 }

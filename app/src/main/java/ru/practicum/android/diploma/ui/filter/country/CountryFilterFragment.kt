@@ -8,15 +8,20 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.stringResource
 import androidx.fragment.app.Fragment
+import ru.practicum.android.diploma.R
 
 class CountryFilterFragment : Fragment() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return ComposeView(requireContext()).apply {
-            setContent {
-                CountryFilterScreen()
-            }
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View = ComposeView(requireContext()).apply {
+        setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+
+        setContent {
+            CountryFilterScreen()
         }
     }
 }
@@ -24,6 +29,6 @@ class CountryFilterFragment : Fragment() {
 @Composable
 fun CountryFilterScreen() {
     Column {
-        Text("Выбор страны")
+        Text(stringResource(R.string.country_selection))
     }
 }

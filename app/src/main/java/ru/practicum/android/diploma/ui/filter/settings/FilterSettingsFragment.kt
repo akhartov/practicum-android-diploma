@@ -9,24 +9,28 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.stringResource
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import ru.practicum.android.diploma.R
 
 class FilterSettingsFragment : Fragment() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return ComposeView(requireContext()).apply {
-            setContent {
-                FilterSettingsScreen(
-                    navigateToWorkplaceFilter = {
-                        findNavController().navigate(R.id.action_filterSettingsFragment_to_workplaceFilterFragment)
-                    },
-                    navigateToIndustryFilter = {
-                        findNavController().navigate(R.id.action_filterSettingsFragment_to_industryFilterFragment)
-                    }
-                )
-            }
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View = ComposeView(requireContext()).apply {
+        setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+
+        setContent {
+            FilterSettingsScreen(
+                navigateToWorkplaceFilter = {
+                    findNavController().navigate(R.id.action_filterSettingsFragment_to_workplaceFilterFragment)
+                },
+                navigateToIndustryFilter = {
+                    findNavController().navigate(R.id.action_filterSettingsFragment_to_industryFilterFragment)
+                }
+            )
         }
     }
 }
@@ -37,14 +41,14 @@ fun FilterSettingsScreen(
     navigateToIndustryFilter: () -> Unit
 ) {
     Column {
-        Text("Настройки фильтрации")
+        Text(stringResource(R.string.filter_settings))
         Button(
             onClick = navigateToWorkplaceFilter,
-            content = { Text("Выбор места работы") },
+            content = { Text(stringResource(R.string.workplace_selection)) },
         )
         Button(
             onClick = navigateToIndustryFilter,
-            content = { Text("Выбор отрасли") },
+            content = { Text(stringResource(R.string.industry_selection)) },
         )
     }
 }

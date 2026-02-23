@@ -8,15 +8,17 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/rootFragmentContainerView"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:name="androidx.navigation.fragment.NavHostFragment"
-        app:navGraph="@navigation/root_navigation_graph"
         app:defaultNavHost="true"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:navGraph="@navigation/root_navigation_graph" />
 
     <View
         android:id="@+id/bottomNavigationSeparatorLine"
@@ -29,17 +31,21 @@
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
+        style="@style/BottomNavigationMenu"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/bottom_navigation_menu_background"
-        android:textSize="12sp"
-        app:menu="@menu/bottom_navigation_menu"
         app:itemActiveIndicatorStyle="@style/TransparentActiveIndicator"
         app:itemIconTint="@drawable/bottom_navigation_selector"
+        app:itemPaddingBottom="10dp"
+        app:itemPaddingTop="8dp"
+        app:itemTextAppearanceActive="@style/BottomNavigationMenuText"
+        app:itemTextAppearanceInactive="@style/BottomNavigationMenuText"
         app:itemTextColor="@drawable/bottom_navigation_selector"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/bottom_navigation_menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-    <!--        android:fontFamily="@font/ys_display_regular"-->
+
