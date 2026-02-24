@@ -1,14 +1,14 @@
 package ru.practicum.android.diploma.data.network
 
 import retrofit2.http.GET
-import retrofit2.http.Query
+import retrofit2.http.QueryMap
 import ru.practicum.android.diploma.data.dto.FilterAreaDto
 import ru.practicum.android.diploma.data.dto.FilterIndustryDto
 import ru.practicum.android.diploma.data.dto.VacancyResponse
 
 interface VacancyApi {
     @GET("/vacancies")
-    suspend fun getVacanciesPage(@Query("page") page: Int): VacancyResponse
+    suspend fun getVacancies(@QueryMap options: Map<String, String>): VacancyResponse
 
     @GET("/areas")
     suspend fun getFilterArea(): List<FilterAreaDto>

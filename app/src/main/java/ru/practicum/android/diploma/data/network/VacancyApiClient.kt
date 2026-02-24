@@ -5,7 +5,7 @@ import ru.practicum.android.diploma.data.dto.FilterIndustryDto
 import ru.practicum.android.diploma.data.dto.VacancyResponse
 
 interface VacancyApiClient {
-    suspend fun getVacanciesPage(page: Int): VacancyResponse
+    suspend fun getVacancies(options: Map<String, String>): VacancyResponse
 
     suspend fun getFilterAreas(): List<FilterAreaDto>
 

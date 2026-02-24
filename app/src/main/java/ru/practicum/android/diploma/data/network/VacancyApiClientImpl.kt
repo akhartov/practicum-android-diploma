@@ -8,9 +8,9 @@ import ru.practicum.android.diploma.data.dto.VacancyResponse
 
 class VacancyApiClientImpl(private val api: VacancyApi) : VacancyApiClient {
 
-    override suspend fun getVacanciesPage(page: Int): VacancyResponse {
+    override suspend fun getVacancies(options: Map<String, String>): VacancyResponse {
         return withContext(Dispatchers.IO) {
-            api.getVacanciesPage(page)
+            api.getVacancies(options)
         }
     }
 
