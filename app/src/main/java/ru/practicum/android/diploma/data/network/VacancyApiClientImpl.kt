@@ -5,6 +5,7 @@ import kotlinx.coroutines.withContext
 import ru.practicum.android.diploma.data.dto.FilterAreaDto
 import ru.practicum.android.diploma.data.dto.FilterIndustryDto
 import ru.practicum.android.diploma.data.dto.VacancyResponse
+import ru.practicum.android.diploma.data.dto.vacancy.VacancyDetailDto
 
 class VacancyApiClientImpl(private val api: VacancyApi) : VacancyApiClient {
 
@@ -14,15 +15,21 @@ class VacancyApiClientImpl(private val api: VacancyApi) : VacancyApiClient {
         }
     }
 
-    override suspend fun getFilterAreas(): List<FilterAreaDto> {
+    override suspend fun getVacancyById(id: String): VacancyDetailDto {
         return withContext(Dispatchers.IO) {
-            api.getFilterArea()
+            api.getVacancyById(id)
         }
     }
 
-    override suspend fun getFilterIndustry(): List<FilterIndustryDto> {
+    override suspend fun getFilterAreas(): List<FilterAreaDto> {
         return withContext(Dispatchers.IO) {
-            api.getFilterIndustry()
+            api.getFilterAreas()
+        }
+    }
+
+    override suspend fun getFilterIndustries(): List<FilterIndustryDto> {
+        return withContext(Dispatchers.IO) {
+            api.getFilterIndustries()
         }
     }
 }
