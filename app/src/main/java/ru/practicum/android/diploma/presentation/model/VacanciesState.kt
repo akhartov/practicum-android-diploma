@@ -6,5 +6,6 @@ sealed interface VacanciesState {
     object Loading : VacanciesState // Идет поиск вакансий
     object NoInternet : VacanciesState // Нет интернета
     object ServerError : VacanciesState // Ошибка сервера
-    class Content(val vacancies: VacancyShortDetails) : VacanciesState
+    class Content(val vacancies: VacancyShortDetails) : VacanciesState // результат поиска
+    class NewPageInProgress(val vacancies: VacancyShortDetails) : VacanciesState // запрос следующей страницы
 }
