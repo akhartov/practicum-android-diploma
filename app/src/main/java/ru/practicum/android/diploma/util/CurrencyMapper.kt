@@ -6,26 +6,17 @@ class CurrencyMapper {
 
     fun codeToSymbol(currencyCode: String): String {
         return when (currencyCode.uppercase(getDefault())) {
+            "RUB" -> "₽"
+            "RUR" -> "₽"
+            "BYR" -> "Br"
             "USD" -> "$"
             "EUR" -> "€"
-            "RUB" -> "₽"
-            "GBP" -> "£"
-            "JPY" -> "¥"
-            "CNY" -> "¥"
-            "AUD" -> "$"
-            "CAD" -> "$"
-            "CHF" -> "Fr"
-            "SEK" -> "kr"
-            "NOK" -> "kr"
-            "DKK" -> "kr"
-            "PLN" -> "zł"
-            "CZK" -> "Kč"
-            "HUF" -> "Ft"
-            "TRY" -> "₺"
-            "ZAR" -> "R"
-            "BRL" -> "$"
-            "INR" -> "₹"
-            "KRW" -> "₩"
+            "KZT" -> "₸"
+            "UAH" -> "₴"
+            "AZN" -> "₼"
+            "UZS" -> "So'm"
+            "GEL" -> "₾"
+            "KGT" -> "₸"
             else -> currencyCode
         }
     }
