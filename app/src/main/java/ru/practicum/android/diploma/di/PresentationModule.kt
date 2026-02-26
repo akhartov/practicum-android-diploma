@@ -55,5 +55,5 @@ val presentationModule = module {
 
     single { CurrencyMapper() }
 
-    single { SalaryMapper(androidContext(),get()) }
+    single { SalaryMapper(androidContext(), get()) }
 }
