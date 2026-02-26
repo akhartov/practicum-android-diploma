@@ -37,7 +37,7 @@ class SalaryMapper(
 
     // форматирование одной границы
     private fun formatLimit(limit: String, number: Int?): String {
-        return if (number != null){
+        return if (number != null) {
             limit + SAMPLE_NUMBER.format(number)
         } else {
             ""
