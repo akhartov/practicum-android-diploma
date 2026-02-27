@@ -1,17 +1,54 @@
 [versions]
 
-java = "VERSION_1_8"
+java = "VERSION_11"
 
 # Build constants
 minSdk = "26"
-compileSdk = "34"
-targetSdk = "33"
+compileSdk = "36"
+targetSdk = "36"
+
+agp = "8.12.3"
+
+kotlin = "2.2.10"
+coreKtx = "1.17.0"
+
+activity = "1.12.3"
+glide = "5.0.5"
+gson = "2.13.2"
+retrofit = "2.11.0"
+ktx = "2.10.0"
+koin = "4.1.1"
+navigation = "2.9.5"
+fragment = "1.8.9"
+coroutines = "1.10.2"
+room = "2.7.0"
+ksp = "2.2.10-2.0.2"
+
+activityCompose = "1.12.3"
+composeBom = "2026.01.01"
+coil = "2.7.0"
+uiToolingPreview = "1.10.2"
+uiTooling = "1.10.2"
+runtimeLivedata = "1.10.2"
+material3 = "1.4.0"
+ui = "1.10.2"
 
 # Detekt
 detekt = "1.23.3"
 detektTwitterComposeRules ="0.0.26"
 
 [libraries]
+converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
+glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
+glidecompiler = { group = "com.github.bumptech.glide", name = "compiler", version.ref = "glide" }
+gson-gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
+retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+koin = { group = "io.insert-koin", name = "koin-android", version.ref = "koin"}
+kotlinx-coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines"}
+room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room"}
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room"}
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room"}
+
 
 # Detekt
 staticAnalysis-detektPlugin = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
@@ -25,10 +62,28 @@ staticAnalysis-detektTwitterComposeRules = { module = "com.twitter.compose.rules
 # AndroidX
 androidX-core = "androidx.core:core-ktx:1.12.0"
 androidX-appCompat = "androidx.appcompat:appcompat:1.6.1"
+androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-lifecycle = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "ktx"}
+androidx-livedata = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "ktx"}
+coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil"}
+androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview", version.ref = "uiToolingPreview" }
+androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "uiTooling" }
+androidx-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata", version.ref = "runtimeLivedata" }
+
 
 # UI layer libraries
 ui-material = "com.google.android.material:material:1.10.0"
 ui-constraintLayout = "androidx.constraintlayout:constraintlayout:2.1.4"
+navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigation"}
+navigation-ui = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigation"}
+fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "fragment"}
+androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
+androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
+androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+androidx-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "ui" }
+material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
+
 
 # Unit tests
 unitTests-junit = "junit:junit:4.13.2"
@@ -38,3 +93,12 @@ uiTests-junitExt = "androidx.test.ext:junit:1.1.5"
 uiTests-espressoCore = "androidx.test.espresso:espresso-core:3.5.1"
 
 [bundles]
+
+[plugins]
+google-kspPlugin = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+developproperties = { id = "ru.practicum.android.diploma.plugins.developproperties" }
+android-application = { id = "com.android.application", version.ref = "agp" }
+detekt = { id = "convention.detekt" }
