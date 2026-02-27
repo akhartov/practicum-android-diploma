@@ -59,4 +59,21 @@ class VacancyMapper(
             )
         )
     }
+
+    fun mapToShortDetails(vacancyDto: VacancyDetailDto): VacancyShortDetails {
+        return VacancyShortDetails(
+            vacancyTitle = getTitle(vacancyDto),
+            employerName = vacancyDto.employer?.name,
+            employerLogoUrl = vacancyDto.employer?.logoUrl,
+            salaryString = salaryMapper.getSalaryInfo(
+                vacancyDto.salary?.from,
+                vacancyDto.salary?.to,
+                vacancyDto.salary?.currency ?: ""
+            )
+        )
+    }
+
+    private fun getTitle(vacancyDto: VacancyDetailDto): String {
+        return vacancyDto.address?.city?.let { "${vacancyDto.name}, ${vacancyDto.address.city}" } ?: vacancyDto.name
+    }
 }
