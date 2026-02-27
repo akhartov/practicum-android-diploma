@@ -6,7 +6,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class Debounce() {
+class Debounce {
 
     private var searchJob: Job? = null
     private val scope = CoroutineScope(Dispatchers.IO + Job())
@@ -32,7 +32,7 @@ class Debounce() {
     }
 
     // Устанавливается функция для debounce
-    fun setSearchRequest(searchRequest: (searchText: String) -> Unit){
+    fun setSearchRequest(searchRequest: (searchText: String) -> Unit) {
         this.searchRequest = searchRequest
     }
 
