@@ -12,9 +12,7 @@ data class VacancyEntity(
     val employerCity: String? = null, // Город работодателя
     val employerName: String? = null, // Работодатель название
     val employerLogoUrl: String? = null, // Работодатель логотип
-    val salaryFrom: Int? = null, // Зарплата от
-    val salaryTo: Int? = null, // Зарплата до
-    val salaryCurrencyCode: String? = null, // Зарплата код валюты
+    val salaryString: String? = null, // Зарплата от X до Y Руб
     val experience: String? = null, // Нет опыта
     val schedule: String? = null, // Полный день
     val employment: String? = null, // Полная занятость
