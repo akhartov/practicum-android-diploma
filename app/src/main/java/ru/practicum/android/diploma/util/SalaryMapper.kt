@@ -38,15 +38,18 @@ class SalaryMapper(
     // форматирование одной границы
     private fun formatLimit(limit: String, number: Int?): String {
         return if (number != null) {
-            limit + SAMPLE_NUMBER.format(number)
+            val formatter = java.text.DecimalFormat("#,###")
+            val formattedNumber = formatter.format(number)
+            SAMPLE_ONE_LIMIT.format(limit, formattedNumber)
         } else {
             ""
         }
+
     }
 
     companion object {
-        const val SAMPLE_NUMBER = " %d"
         const val SAMPLE_ONE_LIMIT = "%s %s"
         const val SAMPLE_TWO_LIMIT = "%s %s %s"
     }
 }
+
