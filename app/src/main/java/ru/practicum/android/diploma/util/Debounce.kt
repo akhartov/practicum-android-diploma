@@ -1,43 +1,42 @@
-package ru.practicum.android.diploma.util
+package com.practicum.playlistmaker.ui
 
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class Debounce {
-
-    private var searchJob: Job? = null
-    private val scope = CoroutineScope(Dispatchers.IO + Job())
-    private var searchRequest: (searchText: String) -> Unit = {}
-    private var latestSearchText: String = SEARCH_DEFAULT
-
-    // Передаётся запроса поиска и лямда для выполнения самого поиска
-    fun searchDebounce(searchText: String) {
-        if (latestSearchText.equals(searchText)) {
-            return
+fun <T> debounce(delayMillis: Long,
+                 coroutineScope: CoroutineScope,
+                 useLastParam: Boolean,
+                 action: (T) -> Unit): (T) -> Unit {
+    var debounceJob: Job? = null
+    return { param: T ->
+        if (useLastParam) {
+            debounceJob?.cancel()
         }
-        latestSearchText = searchText
-        clear()
-        searchJob = scope.launch {
-            delay(SEARCH_DEBOUNCE_DELAY)
-            searchRequest(searchText)
+        if (debounceJob?.isCompleted != false || useLastParam) {
+            debounceJob = coroutineScope.launch {
+                delay(delayMillis)
+                action(param)
+            }
         }
     }
+}
 
-    // Отмена всех корутин
-    fun clear() {
-        searchJob?.cancel()
-    }
-
-    // Устанавливается функция для debounce
-    fun setSearchRequest(searchRequest: (searchText: String) -> Unit) {
-        this.searchRequest = searchRequest
-    }
-
-    companion object {
-        const val SEARCH_DEBOUNCE_DELAY = 2000L
-        const val SEARCH_DEFAULT = ""
+fun debounce(delayMillis: Long,
+             coroutineScope: CoroutineScope,
+             useLastParam: Boolean,
+             action: () -> Unit): () -> Unit {
+    var debounceJob: Job? = null
+    return {
+        if (useLastParam) {
+            debounceJob?.cancel()
+        }
+        if (debounceJob?.isCompleted != false || useLastParam) {
+            debounceJob = coroutineScope.launch {
+                delay(delayMillis)
+                action()
+            }
+        }
     }
 }
