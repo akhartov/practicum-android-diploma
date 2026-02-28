@@ -1,23 +1,42 @@
 package ru.practicum.android.diploma.data.network
 
+import android.content.Context
+import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import ru.practicum.android.diploma.data.Response
 import ru.practicum.android.diploma.data.dto.FilterAreaDto
 import ru.practicum.android.diploma.data.dto.FilterIndustryDto
-import ru.practicum.android.diploma.data.dto.VacancyResponse
-import ru.practicum.android.diploma.data.dto.vacancy.VacancyDetailDto
+import ru.practicum.android.diploma.util.NetworkChecker
 
-class VacancyApiClientImpl(private val api: VacancyApi) : VacancyApiClient {
+class VacancyApiClientImpl(private val api: VacancyApi, private val context: Context) : VacancyApiClient {
 
-    override suspend fun getVacancies(options: Map<String, String>): VacancyResponse {
+    override suspend fun getVacancies(options: Map<String, String>): Response {
+        if (!NetworkChecker.isConnected(context)) {
+            return Response().apply { resultCode = -1 }
+        }
         return withContext(Dispatchers.IO) {
-            api.getVacancies(options)
+            try {
+                val response = api.getVacancies(options)
+                response.apply { resultCode = 200 }
+            } catch (e: Throwable) {
+                e.message?.let { Log.e("VacancyApiClientImpl", it) }
+                Response().apply { resultCode = 500 }
+            }
         }
     }
 
-    override suspend fun getVacancyById(id: String): VacancyDetailDto {
+    override suspend fun getVacancyById(id: String): Response {
+        if (!NetworkChecker.isConnected(context)) {
+            return Response().apply { resultCode = -1 }
+        }
         return withContext(Dispatchers.IO) {
-            api.getVacancyById(id)
+            try {
+                val response = api.getVacancyById(id)
+                response.apply { resultCode = 200 }
+            } catch (e: Throwable) {
+                Response().apply { resultCode = 500 }
+            }
         }
     }
 
