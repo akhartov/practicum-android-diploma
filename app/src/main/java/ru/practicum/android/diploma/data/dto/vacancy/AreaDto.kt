@@ -4,7 +4,7 @@ import ru.practicum.android.diploma.domain.models.Area
 
 data class AreaDto(
     val id: Int,
-    val parentId: Int,
+    val parentId: Int?,
     val name: String,
     val areas: List<AreaDto>? = null,
 )

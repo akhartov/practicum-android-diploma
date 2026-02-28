@@ -6,14 +6,14 @@ import retrofit2.http.QueryMap
 import ru.practicum.android.diploma.data.dto.FilterAreaDto
 import ru.practicum.android.diploma.data.dto.FilterIndustryDto
 import ru.practicum.android.diploma.data.dto.VacancyResponse
-import ru.practicum.android.diploma.data.dto.vacancy.VacancyDetailDto
+import ru.practicum.android.diploma.data.dto.vacancy.VacancyDto
 
 interface VacancyApi {
     @GET("/vacancies")
     suspend fun getVacancies(@QueryMap options: Map<String, String>): VacancyResponse
 
     @GET("/vacancies/{id}")
-    suspend fun getVacancyById(@Path("id") id: String): VacancyDetailDto
+    suspend fun getVacancyById(@Path("id") id: String): VacancyDto
 
     @GET("/areas")
     suspend fun getFilterAreas(): List<FilterAreaDto>
