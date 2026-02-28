@@ -7,6 +7,6 @@ data class VacancyDetails(
     val employerCity: String? = null, // Работодатель город ("Москва")
     val salary: String? = null, // "от ${SalaryDto.from} до ${SalaryDto.to} ${SalaryDto.currency}"
     val experience: String? = null, // "${VacancyDetailDto.schedule}, ${VacancyDetailDto.employment}"
-    val descriptions: List<VacancyDescription>? = null, // Заголовок и пункты VacancyDetailDto.description
+    val descriptions: String? = null, // Html-разметка или обычный текст
     val skills: List<String>? = null, // Ключевые навыки, список полученый из VacancyDetailDto.skills
 )

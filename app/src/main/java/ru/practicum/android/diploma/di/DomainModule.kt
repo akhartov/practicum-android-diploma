@@ -5,6 +5,6 @@ import ru.practicum.android.diploma.domain.converters.DescriptionSplitter
 import ru.practicum.android.diploma.domain.converters.VacancyMapper
 
 val domainModule = module {
-    single { VacancyMapper(get(), get()) }
+    single { VacancyMapper(get()) }
     single { DescriptionSplitter() }
 }
