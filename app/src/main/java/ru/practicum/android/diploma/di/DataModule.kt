@@ -14,6 +14,7 @@ import ru.practicum.android.diploma.data.db.dao.VacancyDao
 import ru.practicum.android.diploma.data.network.VacancyApi
 import ru.practicum.android.diploma.data.network.VacancyApiClient
 import ru.practicum.android.diploma.data.network.VacancyApiClientImpl
+import ru.practicum.android.diploma.util.InterntConnection
 
 val dataModule = module {
 
@@ -52,4 +53,6 @@ val dataModule = module {
     }
 
     factory<VacancyApiClient> { VacancyApiClientImpl(get()) }
+
+    single { InterntConnection(androidContext()) }
 }
