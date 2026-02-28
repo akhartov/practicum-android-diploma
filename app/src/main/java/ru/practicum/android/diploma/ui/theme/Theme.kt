@@ -59,7 +59,7 @@ private val DarkCustomScheme = AndroidDiplomaScheme(
         text = Black,
         hint = White,
         cursor = Blue,
-        icon = Blue
+        icon = Black
     ),
     vacancy = VacancyColors(
         title = White,
@@ -111,7 +111,7 @@ val LocalAndroidDiplomaTypography = staticCompositionLocalOf<AndroidDiplomaTypog
 }
 
 @Composable
-fun AndoroidDiplomaTheme(
+fun AndroidDiplomaTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
