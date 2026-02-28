@@ -56,6 +56,6 @@ val dataModule = module {
     factory<VacancyApiClient> { VacancyApiClientImpl(get(), get()) }
 
     single<SearchVacanciesRepository> {
-        SearchVacanciesRepositoryImpl(get())
+        SearchVacanciesRepositoryImpl(get(), get())
     }
 }
