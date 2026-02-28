@@ -9,6 +9,7 @@ import ru.practicum.android.diploma.data.dto.FilterAreaDto
 import ru.practicum.android.diploma.data.dto.FilterIndustryDto
 import ru.practicum.android.diploma.util.NetworkChecker
 import ru.practicum.android.diploma.util.NetworkResponseStatus
+import java.io.IOException
 
 class VacancyApiClientImpl(private val api: VacancyApi, private val context: Context) : VacancyApiClient {
 
@@ -20,7 +21,7 @@ class VacancyApiClientImpl(private val api: VacancyApi, private val context: Con
             try {
                 val response = api.getVacancies(options)
                 response.apply { resultCode = NetworkResponseStatus.SUCCESS }
-            } catch (e: Exception) {
+            } catch (e: IOException) {
                 e.message?.let { Log.e("VacancyApiClientImpl", it) }
                 Response().apply { resultCode = NetworkResponseStatus.SERVER_ERROR }
             }
@@ -35,7 +36,7 @@ class VacancyApiClientImpl(private val api: VacancyApi, private val context: Con
             try {
                 val response = api.getVacancyById(id)
                 response.apply { resultCode = NetworkResponseStatus.SUCCESS }
-            } catch (_: Exception) {
+            } catch (_: IOException) {
                 Response().apply { resultCode = NetworkResponseStatus.SERVER_ERROR }
             }
         }

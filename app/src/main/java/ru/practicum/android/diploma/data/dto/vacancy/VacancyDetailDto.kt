@@ -19,7 +19,7 @@ data class VacancyDetailDto(
     val skills: List<String>? = null,
     val url: String? = null,
     val industry: IndustryDto? = null,
-): Response()
+) : Response()
 
 fun VacancyDetailDto.toVacancyShort(): VacancyShort {
     return VacancyShort(
