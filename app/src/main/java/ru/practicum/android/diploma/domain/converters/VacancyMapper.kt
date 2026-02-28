@@ -7,7 +7,6 @@ import ru.practicum.android.diploma.presentation.model.VacancyShortDetails
 import ru.practicum.android.diploma.util.SalaryMapper
 
 class VacancyMapper(
-    private val descriptionSplitter: DescriptionSplitter,
     private val salaryMapper: SalaryMapper
 ) {
     fun mapToEntity(vacancyDto: VacancyDetailDto, insertTime: Long): VacancyEntity {
@@ -42,7 +41,7 @@ class VacancyMapper(
                 vacancyEntity.salaryCurrencyCode ?: ""
             ),
             experience = vacancyEntity.experience,
-            descriptions = descriptionSplitter.splitText(vacancyEntity.description),
+            descriptions = vacancyEntity.description,
             skills = vacancyEntity.skills
         )
     }
