@@ -10,7 +10,7 @@ data class VacancyResponse(
     val pages: Int,
     val page: Int,
     val items: List<VacancyDetailDto>
-): Response()
+) : Response()
 
 fun VacancyResponse.toVacancyShortResponse(): VacancyShortResponse {
     return VacancyShortResponse(
