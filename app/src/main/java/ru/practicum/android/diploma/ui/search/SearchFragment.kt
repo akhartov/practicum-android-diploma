@@ -69,12 +69,11 @@ fun SearchScreen(
     onFilterIconClick: () -> Unit,
     onVacancyItemClick: () -> Unit
 ) {
-
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = Dimens.padding16)
-    ){
+    ) {
         Text(stringResource(R.string.search_vacancies))
         Button(
             onClick = onFilterIconClick,
@@ -86,8 +85,8 @@ fun SearchScreen(
         )
         SearchTextField(
             searchQuery = searchQuery,
-        placeholder = stringResource(R.string.enter_search_query),
-        onQueryChange = onQueryChange,
+            placeholder = stringResource(R.string.enter_search_query),
+            onQueryChange = onQueryChange,
         )
     }
 }
