@@ -49,6 +49,7 @@ class VacancyMapper(
 
     fun entityToShortDetails(vacancyEntity: VacancyEntity): VacancyShortDetails {
         return VacancyShortDetails(
+            vacancyId = vacancyEntity.vacancyId,
             vacancyTitle = "${vacancyEntity.vacancyName}, ${vacancyEntity.employerCity}",
             employerName = vacancyEntity.employerName,
             employerLogoUrl = vacancyEntity.employerLogoUrl,
@@ -62,6 +63,7 @@ class VacancyMapper(
 
     fun mapToShortDetails(vacancyDto: VacancyDetailDto): VacancyShortDetails {
         return VacancyShortDetails(
+            vacancyId = vacancyDto.id,
             vacancyTitle = getTitle(vacancyDto),
             employerName = vacancyDto.employer?.name,
             employerLogoUrl = vacancyDto.employer?.logoUrl,
