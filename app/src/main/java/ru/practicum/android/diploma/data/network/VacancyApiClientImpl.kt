@@ -8,34 +8,35 @@ import ru.practicum.android.diploma.data.Response
 import ru.practicum.android.diploma.data.dto.FilterAreaDto
 import ru.practicum.android.diploma.data.dto.FilterIndustryDto
 import ru.practicum.android.diploma.util.NetworkChecker
+import ru.practicum.android.diploma.util.NetworkResponseStatus
 
 class VacancyApiClientImpl(private val api: VacancyApi, private val context: Context) : VacancyApiClient {
 
     override suspend fun getVacancies(options: Map<String, String>): Response {
         if (!NetworkChecker.isConnected(context)) {
-            return Response().apply { resultCode = -1 }
+            return Response().apply { resultCode = NetworkResponseStatus.NO_INTERNET }
         }
         return withContext(Dispatchers.IO) {
             try {
                 val response = api.getVacancies(options)
-                response.apply { resultCode = 200 }
-            } catch (e: Throwable) {
+                response.apply { resultCode = NetworkResponseStatus.SUCCESS }
+            } catch (e: Exception) {
                 e.message?.let { Log.e("VacancyApiClientImpl", it) }
-                Response().apply { resultCode = 500 }
+                Response().apply { resultCode = NetworkResponseStatus.SERVER_ERROR }
             }
         }
     }
 
     override suspend fun getVacancyById(id: String): Response {
         if (!NetworkChecker.isConnected(context)) {
-            return Response().apply { resultCode = -1 }
+            return Response().apply { resultCode = NetworkResponseStatus.NO_INTERNET }
         }
         return withContext(Dispatchers.IO) {
             try {
                 val response = api.getVacancyById(id)
-                response.apply { resultCode = 200 }
-            } catch (e: Throwable) {
-                Response().apply { resultCode = 500 }
+                response.apply { resultCode = NetworkResponseStatus.SUCCESS }
+            } catch (_: Exception) {
+                Response().apply { resultCode = NetworkResponseStatus.SERVER_ERROR }
             }
         }
     }
