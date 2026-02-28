@@ -14,6 +14,10 @@ import ru.practicum.android.diploma.presentation.team.TeamViewModel
 import ru.practicum.android.diploma.presentation.vacancy.VacancyViewModel
 import ru.practicum.android.diploma.util.CurrencyMapper
 import ru.practicum.android.diploma.util.SalaryMapper
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
+import java.util.Locale
+import java.util.logging.Formatter
 
 val presentationModule = module {
 
@@ -55,5 +59,12 @@ val presentationModule = module {
 
     single { CurrencyMapper() }
 
-    single { SalaryMapper(androidContext(), get()) }
+    single {
+        val symbols = DecimalFormatSymbols(Locale.ROOT).apply {
+            groupingSeparator = ' '
+        }
+        DecimalFormat("#,###", symbols)
+    }
+
+    single { SalaryMapper(androidContext(), get(), get())}
 }

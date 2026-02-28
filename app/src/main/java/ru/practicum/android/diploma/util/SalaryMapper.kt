@@ -2,10 +2,13 @@ package ru.practicum.android.diploma.util
 
 import android.content.Context
 import ru.practicum.android.diploma.R
+import java.text.DecimalFormat
+import java.util.logging.Formatter
 
 class SalaryMapper(
     val context: Context,
-    val currencyMapper: CurrencyMapper
+    val currencyMapper: CurrencyMapper,
+    val formatter: DecimalFormat
 ) {
     // все элементы соотвествуют классу SalaryDto
     fun getSalaryInfo(
@@ -38,13 +41,11 @@ class SalaryMapper(
     // форматирование одной границы
     private fun formatLimit(limit: String, number: Int?): String {
         return if (number != null) {
-            val formatter = java.text.DecimalFormat("#,###")
             val formattedNumber = formatter.format(number)
             SAMPLE_ONE_LIMIT.format(limit, formattedNumber)
         } else {
             ""
         }
-
     }
 
     companion object {
