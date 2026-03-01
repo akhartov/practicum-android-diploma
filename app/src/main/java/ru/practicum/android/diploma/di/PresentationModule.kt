@@ -59,12 +59,5 @@ val presentationModule = module {
 
     single { CurrencyMapper() }
 
-    single {
-        val symbols = DecimalFormatSymbols(Locale.ROOT).apply {
-            groupingSeparator = ' '
-        }
-        DecimalFormat("#,###", symbols)
-    }
-
-    single { SalaryMapper(androidContext(), get(), get())}
+    single { SalaryMapper(androidContext(), get())}
 }

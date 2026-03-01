@@ -3,13 +3,21 @@ package ru.practicum.android.diploma.util
 import android.content.Context
 import ru.practicum.android.diploma.R
 import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
+import java.util.Locale
 import java.util.logging.Formatter
 
 class SalaryMapper(
     val context: Context,
     val currencyMapper: CurrencyMapper,
-    val formatter: DecimalFormat
 ) {
+    private val formatter by lazy {
+        val symbols = DecimalFormatSymbols(Locale.ROOT).apply {
+            groupingSeparator = ' '
+        }
+        DecimalFormat("#,###", symbols)
+    }
+
     // все элементы соотвествуют классу SalaryDto
     fun getSalaryInfo(
         from: Int? = null,
