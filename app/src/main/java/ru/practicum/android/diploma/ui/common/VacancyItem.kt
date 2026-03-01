@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -58,7 +59,7 @@ fun VacancyItem(
             AsyncImage(
                 model = vacancy.employerLogoUrl,
                 contentDescription = null,
-                modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(Dimens.cornerRadius12)),
+                modifier = Modifier.wrapContentSize().clip(RoundedCornerShape(Dimens.cornerRadius12)),
                 placeholder = painterResource(R.drawable.placeholder_vacancy_logo),
                 error = painterResource(R.drawable.placeholder_vacancy_logo),
                 contentScale = ContentScale.Fit
