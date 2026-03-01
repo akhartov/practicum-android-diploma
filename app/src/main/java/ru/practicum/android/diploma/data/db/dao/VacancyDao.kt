@@ -1,7 +1,6 @@
 package ru.practicum.android.diploma.data.db.dao
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -16,9 +15,15 @@ interface VacancyDao {
     @Query("SELECT * FROM ${VacancyEntity.TABLE_NAME} ORDER BY insertTime DESC")
     fun getVacanciesFlow(): Flow<List<VacancyEntity>>
 
+    @Query("SELECT * FROM ${VacancyEntity.TABLE_NAME} ORDER BY insertTime LIMIT :pageSize OFFSET :offset")
+    suspend fun getVacanciesPage(offset: Int, pageSize: Int): List<VacancyEntity>
+
     @Query("SELECT * FROM ${VacancyEntity.TABLE_NAME} WHERE vacancyId = :id")
     suspend fun getVacancy(id: String): VacancyEntity?
 
-    @Delete
-    suspend fun deleteVacancy(vacancy: VacancyEntity)
+    @Query("DELETE FROM ${VacancyEntity.TABLE_NAME} WHERE vacancyId = :vacancyId")
+    suspend fun deleteVacancyId(vacancyId: String)
+
+    @Query("SELECT EXISTS(SELECT 1 FROM ${VacancyEntity.TABLE_NAME} WHERE vacancyId = :vacancyId)")
+    suspend fun existsById(vacancyId: String): Boolean
 }

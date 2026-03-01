@@ -8,6 +8,8 @@ object Dimens {
     val padding4 = 4.dp
     val padding6 = 6.dp
     val padding8 = 8.dp
+    val padding9 = 9.dp
+    val padding12 = 12.dp
     val padding16 = 16.dp
     val padding20 = 20.dp
     val padding24 = 24.dp
@@ -29,4 +31,6 @@ object Dimens {
     val teamMemberHeight = 20.dp
     val teamScreenTitleHeight = 64.dp
     val teamTitleHeight = 92.dp
+    val logoSize = 48.dp
+    val logoBorderThickness = 1.dp
 }
