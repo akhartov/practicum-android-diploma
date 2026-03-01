@@ -5,10 +5,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import ru.practicum.android.diploma.R
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.ui.theme.Dimens
 import ru.practicum.android.diploma.ui.theme.LocalAndroidDiplomaTypography
 
@@ -20,7 +20,7 @@ fun TeamScreenTitle() {
             color = MaterialTheme.colorScheme.onBackground
         ),
         modifier = Modifier
-            .height(Dimens.itemHeight)
+            .height(Dimens.teamTeamScreenTitltHeight)
             .wrapContentWidth()
             .padding(vertical = Dimens.padding20)
             .padding(start = Dimens.padding16)

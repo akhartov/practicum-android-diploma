@@ -15,7 +15,6 @@ import ru.practicum.android.diploma.ui.theme.LocalAndroidDiplomaTypography
 
 @Composable
 fun TeamMember(memberName: String) {
-    Column {
         Text(
             text = memberName,
             style = LocalAndroidDiplomaTypography.current.medium16.copy(
@@ -24,7 +23,6 @@ fun TeamMember(memberName: String) {
             modifier = Modifier
                 .wrapContentWidth()
                 .padding(horizontal = Dimens.padding16)
+                .padding(bottom = Dimens.padding16)
         )
-        Spacer(Modifier.height(16.dp))
-    }
 }

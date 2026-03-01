@@ -11,14 +11,15 @@ import ru.practicum.android.diploma.ui.theme.Dimens
 import ru.practicum.android.diploma.ui.theme.LocalAndroidDiplomaTypography
 
 @Composable
-fun TeamTitle(){
+fun TeamTitle() {
     Text(
         text = stringResource(R.string.developers),
         style = LocalAndroidDiplomaTypography.current.bold32.copy(
             color = MaterialTheme.colorScheme.onBackground
         ),
         modifier = Modifier
-            .padding(vertical = Dimens.padding8)
+            .padding(top = Dimens.padding16)
+            .padding(bottom = Dimens.padding24)
             .padding(horizontal = Dimens.padding16)
 
     )
