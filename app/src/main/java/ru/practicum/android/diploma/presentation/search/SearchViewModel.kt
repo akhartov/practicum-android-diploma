@@ -10,8 +10,10 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.api.SearchVacanciesInteractor
+import ru.practicum.android.diploma.domain.models.SearchParams
 import ru.practicum.android.diploma.presentation.model.VacanciesState
 import ru.practicum.android.diploma.util.NetworkResponseStatus
 import ru.practicum.android.diploma.util.Resource
@@ -20,17 +22,17 @@ import ru.practicum.android.diploma.util.Resource
 class SearchViewModel(private val searchVacanciesInteractor: SearchVacanciesInteractor) : ViewModel() {
     private val _state = MutableStateFlow<VacanciesState>(VacanciesState.Empty)
     val state: StateFlow<VacanciesState> = _state.asStateFlow()
-    private var _searchText = MutableStateFlow("")
-    val searchText: StateFlow<String> = _searchText.asStateFlow()
+    private val _searchParams = MutableStateFlow(SearchParams(text = "", page = 0))
+    val searchParams: StateFlow<SearchParams> = _searchParams.asStateFlow()
 
     init {
-        searchText.debounce(SEARCH_DEBOUNCE_DELAY) // пауза
+        searchParams.debounce(SEARCH_DEBOUNCE_DELAY) // пауза
             .distinctUntilChanged() // ограничиваем если есть новый поиск
-            .onEach { text -> searchVacancies(text) }
+            .onEach { searchParams -> searchVacancies(searchParams.text, searchParams.page) }
             .launchIn(viewModelScope)
     }
 
-    fun searchVacancies(text: String) {
+    fun searchVacancies(text: String, page: Int) {
         if (text.isBlank()) return
 
         _state.value = VacanciesState.Loading
@@ -38,6 +40,7 @@ class SearchViewModel(private val searchVacanciesInteractor: SearchVacanciesInte
         viewModelScope.launch {
             val options = hashMapOf<String, String>().apply {
                 put("text", text)
+                put("page", page.toString())
             }
 
             searchVacanciesInteractor.searchVacancies(options)
@@ -65,8 +68,8 @@ class SearchViewModel(private val searchVacanciesInteractor: SearchVacanciesInte
         }
     }
 
-    fun searchDebounce(changedText: String) {
-        _searchText.value = changedText
+    fun onSearchTextDebounce(text: String) {
+        _searchParams.update { it.copy(text = text, page = 0) }
     }
 
     companion object {
