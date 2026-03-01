@@ -20,10 +20,13 @@ fun TeamScreenTitle() {
             color = MaterialTheme.colorScheme.onBackground
         ),
         modifier = Modifier
-            .height(Dimens.teamTeamScreenTitltHeight)
             .wrapContentWidth()
-            .padding(vertical = Dimens.padding20)
-            .padding(start = Dimens.padding16)
-            .padding(end = Dimens.padding8)
+            .height(Dimens.teamScreenTitleHeight)
+            .padding(
+                top = Dimens.padding20,
+                bottom = Dimens.padding20,
+                start = Dimens.padding16,
+                end = Dimens.padding8
+            )
     )
 }

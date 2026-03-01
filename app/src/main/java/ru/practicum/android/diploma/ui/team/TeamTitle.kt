@@ -1,6 +1,8 @@
 package ru.practicum.android.diploma.ui.team
 
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,9 +20,11 @@ fun TeamTitle() {
             color = MaterialTheme.colorScheme.onBackground
         ),
         modifier = Modifier
-            .padding(top = Dimens.padding16)
-            .padding(bottom = Dimens.padding24)
-            .padding(horizontal = Dimens.padding16)
-
+            .height(Dimens.teamTitleHeight)
+            .wrapContentWidth()
+            .padding(
+                horizontal = Dimens.padding16,
+                vertical = Dimens.padding8
+            )
     )
 }

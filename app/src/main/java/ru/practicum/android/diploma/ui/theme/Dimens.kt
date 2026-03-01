@@ -16,6 +16,8 @@ object Dimens {
     val cornerRadius12 = 12.dp
 
     // Высоты элементов
+    val spacer8 = 8.dp
+    val spacer24 = 24.dp
     val searchBarHeight = 56.dp
     val buttonHeight = 60.dp
     val salaryBarHeight = 56.dp
@@ -24,5 +26,7 @@ object Dimens {
     val companyBarHeight = 58.dp
     val industryItemHeight = 60.dp
     val itemHeight = 60.dp
-    val teamTeamScreenTitltHeight = 64.dp
+    val teamMemberHeight = 20.dp
+    val teamScreenTitleHeight = 64.dp
+    val teamTitleHeight = 92.dp
 }

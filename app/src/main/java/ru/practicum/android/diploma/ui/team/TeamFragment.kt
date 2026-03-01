@@ -12,10 +12,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.Fragment
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.ui.theme.AndroidDiplomaTheme
+import ru.practicum.android.diploma.ui.theme.Dimens
 
 class TeamFragment : Fragment() {
 
@@ -38,8 +39,9 @@ class TeamFragment : Fragment() {
 fun TeamScreen() {
     Column {
         TeamScreenTitle()
+        Spacer(Modifier.height(Dimens.spacer8))
         TeamTitle()
-        Spacer(Modifier.height(24.dp))
+        Spacer(Modifier.height(Dimens.spacer24))
         TeamMember(stringResource(R.string.dev1))
         TeamMember(stringResource(R.string.dev2))
         TeamMember(stringResource(R.string.dev3))
