@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.api.SearchVacanciesInteractor
 import ru.practicum.android.diploma.domain.models.SearchParams
+import ru.practicum.android.diploma.domain.models.VacancyShortResponse
 import ru.practicum.android.diploma.presentation.model.VacanciesState
 import ru.practicum.android.diploma.util.NetworkResponseStatus
 import ru.practicum.android.diploma.util.Resource
@@ -47,24 +48,30 @@ class SearchViewModel(private val searchVacanciesInteractor: SearchVacanciesInte
                 .collect { resource ->
                     when (resource) {
                         is Resource.Success -> {
-                            if (resource.data != null) {
-                                if (resource.data.found != 0) {
-                                    _state.value = VacanciesState.Content(resource.data)
-                                } else {
-                                    _state.value = VacanciesState.NotFound
-                                }
-                            }
+                            handleSuccess(resource.data)
                         }
 
                         is Resource.Error -> {
-                            when (resource.error) {
-                                NetworkResponseStatus.NO_INTERNET -> _state.value = VacanciesState.NoInternet
-                                NetworkResponseStatus.SERVER_ERROR -> _state.value = VacanciesState.ServerError
-                            }
-
+                            handleError(resource.error)
                         }
                     }
                 }
+        }
+    }
+
+    private fun handleSuccess(data: VacancyShortResponse?) {
+        when {
+            data == null -> _state.value = VacanciesState.NotFound
+            data.found == 0 -> _state.value = VacanciesState.NotFound
+            else -> _state.value = VacanciesState.Content(data)
+        }
+    }
+
+    private fun handleError(errorCode: Int?) {
+        _state.value = when (errorCode) {
+            NetworkResponseStatus.NO_INTERNET -> VacanciesState.NoInternet
+            NetworkResponseStatus.SERVER_ERROR -> VacanciesState.ServerError
+            else -> VacanciesState.ServerError // или другая ошибка по умолчанию
         }
     }
 
