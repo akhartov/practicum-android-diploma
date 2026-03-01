@@ -20,9 +20,7 @@ class VacancyMapper(
             employerCity = vacancyDto.address?.city,
             employerName = vacancyDto.employer?.name,
             employerLogoUrl = vacancyDto.employer?.logoUrl,
-            salaryFrom = vacancyDto.salary?.from,
-            salaryTo = vacancyDto.salary?.to,
-            salaryCurrencyCode = vacancyDto.salary?.currency,
+            salaryString = getSalarySting(vacancyDto.salary),
             experience = vacancyDto.experience?.name,
             schedule = vacancyDto.schedule?.name,
             employment = vacancyDto.employment?.name,
@@ -49,15 +47,29 @@ class VacancyMapper(
         )
     }
 
+    fun vacancyToEntity(vacancy: Vacancy, insertTime: Long): VacancyEntity {
+        return VacancyEntity(
+            vacancyId = vacancy.id,
+            insertTime = insertTime,
+            vacancyName = vacancy.name,
+            employerCity = vacancy.employerCity,
+            employerName = vacancy.employerName,
+            employerLogoUrl = vacancy.employerLogoUrl,
+            salaryString = vacancy.salaryString,
+            experience = vacancy.experience,
+            schedule = vacancy.schedule,
+            employment = vacancy.employment,
+            description = vacancy.description,
+            skills = vacancy.skills,
+            url = vacancy.url
+        )
+    }
+
     fun entityToVacancy(vacancyEntity: VacancyEntity): Vacancy {
         return Vacancy(
             id = vacancyEntity.vacancyId,
             name = vacancyEntity.vacancyName,
-            salaryString = salaryMapper.getSalaryInfo(
-                vacancyEntity.salaryFrom,
-                vacancyEntity.salaryTo,
-                vacancyEntity.salaryCurrencyCode ?: ""
-            ),
+            salaryString = vacancyEntity.salaryString,
             experience = vacancyEntity.experience,
             schedule = vacancyEntity.schedule,
             employment = vacancyEntity.employment,
@@ -76,7 +88,7 @@ class VacancyMapper(
             vacancyTitle = "${vacancyEntity.vacancyName}, ${vacancyEntity.employerCity}",
             employerName = vacancyEntity.employerName,
             employerLogoUrl = vacancyEntity.employerLogoUrl,
-            salaryString = getSalarySting(vacancyEntity)
+            salaryString = vacancyEntity.salaryString,
         )
     }
 
@@ -117,14 +129,6 @@ class VacancyMapper(
             salaryDto?.from,
             salaryDto?.to,
             salaryDto?.currency ?: ""
-        )
-    }
-
-    private fun getSalarySting(vacancyEntity: VacancyEntity): String {
-        return salaryMapper.getSalaryInfo(
-            vacancyEntity.salaryFrom,
-            vacancyEntity.salaryFrom,
-            vacancyEntity.salaryCurrencyCode ?: ""
         )
     }
 }
