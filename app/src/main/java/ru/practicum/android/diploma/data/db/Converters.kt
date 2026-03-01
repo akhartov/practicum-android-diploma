@@ -28,6 +28,6 @@ class Converters {
 
     @TypeConverter
     fun toString(list: List<String>?): String? {
-        return gson.toJson(list)
+        return list?.let { gson.toJson(list) }
     }
 }
