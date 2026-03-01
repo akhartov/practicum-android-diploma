@@ -17,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -51,14 +52,13 @@ fun VacancyItem(
                     width = Dimens.logoBorderThickness,
                     color = vacancyItemColors.logoColor,
                     shape = RoundedCornerShape(Dimens.cornerRadius12)
-                )
-                .padding(Dimens.padding8),
+                ),
             contentAlignment = Alignment.Center
         ) {
             AsyncImage(
                 model = vacancy.employerLogoUrl,
                 contentDescription = null,
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(Dimens.cornerRadius12)),
                 placeholder = painterResource(R.drawable.placeholder_vacancy_logo),
                 error = painterResource(R.drawable.placeholder_vacancy_logo),
                 contentScale = ContentScale.Fit

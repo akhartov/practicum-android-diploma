@@ -7,7 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -71,6 +75,37 @@ fun SearchScreen(
     onFilterIconClick: () -> Unit,
     onVacancyItemClick: () -> Unit
 ) {
+    val vacancies: List<VacancyShort> = listOf(
+        VacancyShort(
+            id = "1",
+            vacancyTitle = "Андроид-разработчик, Москва",
+            employerName = "Еда",
+            employerLogoUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Yandex_logo_2021_Russian.svg/1024px-Yandex_logo_2021_Russian.svg.png",
+            salaryString = "от 100 000 ₽"
+        ),
+        VacancyShort(
+            id = "2",
+            vacancyTitle = "Разработчик на С++ в команду внутренних сервисов, Москва",
+            employerName = "Google",
+            employerLogoUrl = null,
+            salaryString = "от 40 000 до 80 000 ₽"
+        ),
+        VacancyShort(
+            id = "3",
+            vacancyTitle = "Разработчик платформы данных, Санкт-Петербург",
+            employerName = "Алиса",
+            employerLogoUrl = "https://cdn.weatherapi.com/weather/64x64/day/116.png",
+            salaryString = "Зарплата не указана"
+        ),
+        VacancyShort(
+            id = "4",
+            vacancyTitle = "Разработчик бэкенда, Москва",
+            employerName = "Авто.ру",
+            employerLogoUrl = "https://fastly.picsum.photos/id/280/200/200.jpg?hmac=jjE26x23XLyRTL5st1-nb_BAHldv1V3JoFRn4g_nN04",
+            salaryString = "от 1500 $"
+        )
+    )
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -90,36 +125,16 @@ fun SearchScreen(
             placeholder = stringResource(R.string.enter_search_query),
             onQueryChange = onQueryChange,
         )
-        VacancyItem(
-            vacancy = VacancyShort(
-                id = "1",
-                vacancyTitle = "Андроид-разработчик, Москва",
-                employerName = "Еда",
-                employerLogoUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Yandex_logo_2021_Russian.svg/1024px-Yandex_logo_2021_Russian.svg.png",
-                salaryString = "от 100 000 ₽"
-            ),
-            onClick = {}
-        )
-        VacancyItem(
-            vacancy = VacancyShort(
-                id = "1",
-                vacancyTitle = "Разработчик на С++ в команду внутренних сервисов, Москва",
-                employerName = "Google",
-                employerLogoUrl = null,
-                salaryString = "от 40 000 до 80 000 ₽"
-            ),
-            onClick = {}
-        )
-        VacancyItem(
-            vacancy = VacancyShort(
-                id = "1",
-                vacancyTitle = "Разработчик платформы данных, Санкт-Петербург",
-                employerName = "Алиса",
-                employerLogoUrl = "https://cdn.weatherapi.com/weather/64x64/day/116.png",
-                salaryString = "Зарплата не указана"
-            ),
-            onClick = {}
-        )
+
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+        ) {
+            itemsIndexed(vacancies) { _, vacancy ->
+                VacancyItem(vacancy = vacancy, onClick = {})
+            }
+        }
     }
 }
 
