@@ -10,12 +10,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import ru.practicum.android.diploma.ui.theme.Dimens
 import ru.practicum.android.diploma.ui.theme.LocalAndroidDiplomaTypography
 
 @Composable
-fun TeamMember(memberName: String){
+fun TeamMember(memberName: String) {
     Column {
         Text(
             text = memberName,
@@ -29,4 +28,3 @@ fun TeamMember(memberName: String){
         Spacer(Modifier.height(16.dp))
     }
 }
-
