@@ -80,7 +80,7 @@ fun SearchScreen(
             id = "1",
             vacancyTitle = "Андроид-разработчик, Москва",
             employerName = "Еда",
-            employerLogoUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Yandex_logo_2021_Russian.svg/1024px-Yandex_logo_2021_Russian.svg.png",
+            employerLogoUrl = null,
             salaryString = "от 100 000 ₽"
         ),
         VacancyShort(
@@ -101,7 +101,7 @@ fun SearchScreen(
             id = "4",
             vacancyTitle = "Разработчик бэкенда, Москва",
             employerName = "Авто.ру",
-            employerLogoUrl = "https://fastly.picsum.photos/id/280/200/200.jpg?hmac=jjE26x23XLyRTL5st1-nb_BAHldv1V3JoFRn4g_nN04",
+            employerLogoUrl = null,
             salaryString = "от 1500 $"
         )
     )
