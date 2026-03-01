@@ -23,7 +23,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.domain.models.VacancyShort
 import ru.practicum.android.diploma.ui.common.SearchTextField
+import ru.practicum.android.diploma.ui.common.VacancyItem
 import ru.practicum.android.diploma.ui.theme.AndroidDiplomaTheme
 import ru.practicum.android.diploma.ui.theme.Dimens
 
@@ -87,6 +89,36 @@ fun SearchScreen(
             searchQuery = searchQuery,
             placeholder = stringResource(R.string.enter_search_query),
             onQueryChange = onQueryChange,
+        )
+        VacancyItem(
+            vacancy = VacancyShort(
+                id = "1",
+                vacancyTitle = "Андроид-разработчик, Москва",
+                employerName = "Еда",
+                employerLogoUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Yandex_logo_2021_Russian.svg/1024px-Yandex_logo_2021_Russian.svg.png",
+                salaryString = "от 100 000 ₽"
+            ),
+            onClick = {}
+        )
+        VacancyItem(
+            vacancy = VacancyShort(
+                id = "1",
+                vacancyTitle = "Разработчик на С++ в команду внутренних сервисов, Москва",
+                employerName = "Google",
+                employerLogoUrl = null,
+                salaryString = "от 40 000 до 80 000 ₽"
+            ),
+            onClick = {}
+        )
+        VacancyItem(
+            vacancy = VacancyShort(
+                id = "1",
+                vacancyTitle = "Разработчик платформы данных, Санкт-Петербург",
+                employerName = "Алиса",
+                employerLogoUrl = "https://cdn.weatherapi.com/weather/64x64/day/116.png",
+                salaryString = "Зарплата не указана"
+            ),
+            onClick = {}
         )
     }
 }
