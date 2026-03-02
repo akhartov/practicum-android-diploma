@@ -40,7 +40,7 @@ class SearchViewModel(private val searchVacanciesInteractor: SearchVacanciesInte
     }
 
     fun searchVacancies(text: String, page: Int) {
-        if (text.isBlank())  {
+        if (text.isBlank()) {
             lastSuccesResult = VacancyShortResponse.Empty
             _state.value = VacanciesState.Empty
             return
