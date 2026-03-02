@@ -18,6 +18,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -36,9 +37,10 @@ fun SearchContent(
     state: VacanciesState.Content,
     onVacancyItemClick: (String) -> Unit,
     onLoadNextPage: () -> Unit,
-    isSearchInProgress: StateFlow<Boolean>
+    isSearchInProgressFlow: StateFlow<Boolean>
 ) {
     val listState = rememberLazyListState()
+    val isSearchInProgress by isSearchInProgressFlow.collectAsState()
 
     val shouldLoadNext by remember {
         derivedStateOf {
@@ -49,7 +51,7 @@ fun SearchContent(
     }
 
     LaunchedEffect(shouldLoadNext) {
-        if (shouldLoadNext && !isSearchInProgress.value) {
+        if (shouldLoadNext && !isSearchInProgress) {
             // запрос следующей страницы, только после окончания поиска
             onLoadNextPage()
         }
@@ -72,7 +74,7 @@ fun SearchContent(
                     onClick = { onVacancyItemClick(vacancy.id) }
                 )
             }
-            if (isSearchInProgress.value) {
+            if (isSearchInProgress) {
                 item(key = "loading_indicator") {
                     Box(
                         modifier = Modifier
@@ -88,31 +90,36 @@ fun SearchContent(
             }
         }
 
-        Box(
-            modifier = Modifier.align(Alignment.TopCenter),
-            contentAlignment = Alignment.TopCenter
-        ) {
+        if (!isSearchInProgress) {
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = Dimens.padding9)
-                    .wrapContentWidth(Alignment.CenterHorizontally)
-                    .background(
-                        color = MaterialTheme.colorScheme.primary,
-                        shape = RoundedCornerShape(Dimens.cornerRadius12)
-                    ),
-                contentAlignment = Alignment.Center
+                modifier = Modifier.align(Alignment.TopCenter),
+                contentAlignment = Alignment.TopCenter
             ) {
-                Text(
-                    text = pluralStringResource(
-                        R.plurals.found_n_vacancies,
-                        state.vacancies.found,
-                        state.vacancies.found
-                    ),
-                    style = LocalAndroidDiplomaTypography.current.regular16,
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    modifier = Modifier.padding(horizontal = Dimens.padding12, vertical = Dimens.padding4)
-                )
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = Dimens.padding9)
+                        .wrapContentWidth(Alignment.CenterHorizontally)
+                        .background(
+                            color = MaterialTheme.colorScheme.primary,
+                            shape = RoundedCornerShape(Dimens.cornerRadius12)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = pluralStringResource(
+                            R.plurals.found_n_vacancies,
+                            state.vacancies.found,
+                            state.vacancies.found
+                        ),
+                        style = LocalAndroidDiplomaTypography.current.regular16,
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        modifier = Modifier.padding(
+                            horizontal = Dimens.padding12,
+                            vertical = Dimens.padding4
+                        )
+                    )
+                }
             }
         }
     }

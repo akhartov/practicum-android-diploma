@@ -38,7 +38,7 @@ fun SearchScreen(
     onFilterIconClick: () -> Unit,
     onVacancyItemClick: (String) -> Unit,
     onLoadNextPage: () -> Unit,
-    isSearchInProgress: StateFlow<Boolean>
+    isSearchInProgressFlow: StateFlow<Boolean>
 ) {
     Scaffold(
         topBar = {
@@ -143,7 +143,7 @@ fun SearchScreen(
                         state = state,
                         onVacancyItemClick = onVacancyItemClick,
                         onLoadNextPage = onLoadNextPage,
-                        isSearchInProgress = isSearchInProgress
+                        isSearchInProgressFlow = isSearchInProgressFlow
                     )
                 }
             }

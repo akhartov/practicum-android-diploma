@@ -30,7 +30,7 @@ class SearchViewModel(private val searchVacanciesInteractor: SearchVacanciesInte
     private val _searchParams = MutableStateFlow(SearchParams(text = "", page = 0))
     val searchParams: StateFlow<SearchParams> = _searchParams.asStateFlow()
     private val _isSearchInProgress = MutableStateFlow(false)
-    val isSearchInProgress: StateFlow<Boolean> = _isSearchInProgress.asStateFlow()
+    val isSearchInProgressFlow: StateFlow<Boolean> = _isSearchInProgress.asStateFlow()
 
     init {
         searchParams.debounce(SEARCH_DEBOUNCE_DELAY) // пауза

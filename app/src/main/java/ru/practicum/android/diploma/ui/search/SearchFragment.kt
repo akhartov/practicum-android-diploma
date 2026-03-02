@@ -72,7 +72,7 @@ class SearchFragment : Fragment() {
             onLoadNextPage = {
                 viewModel.onLoadNextPage()
             },
-            isSearchInProgress = viewModel.isSearchInProgress
+            isSearchInProgressFlow = viewModel.isSearchInProgressFlow
         )
     }
 
