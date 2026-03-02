@@ -18,15 +18,19 @@ class SharingInteractorImpl(
 
     private fun ensureValidUrl(text: String): String {
         val trimmedText = text.trim()
-        if (trimmedText.startsWith("http://") || trimmedText.startsWith("https://")) {
+        if (trimmedText.startsWith(HTTP_SCHEMA) || trimmedText.startsWith(HTTPS_SCHEMA)) {
             return trimmedText
         }
 
         return if (trimmedText.isNotEmpty()) {
-            "https://$trimmedText"
+            "$HTTPS_SCHEMA$trimmedText"
         } else {
             ""
         }
     }
 
+    companion object {
+        const val HTTP_SCHEMA = "http://"
+        const val HTTPS_SCHEMA = "https://"
+    }
 }
