@@ -24,9 +24,7 @@ fun TeamScreenTitle() {
             .height(Dimens.teamScreenTitleHeight)
             .padding(
                 top = Dimens.padding20,
-                bottom = Dimens.padding20,
-                start = Dimens.padding16,
-                end = Dimens.padding8
+                bottom = Dimens.padding20
             )
     )
 }

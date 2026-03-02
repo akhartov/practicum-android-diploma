@@ -19,8 +19,6 @@ fun TeamMember(memberName: String) {
         modifier = Modifier
             .wrapContentWidth()
             .padding(
-                start = Dimens.padding16,
-                end = Dimens.padding16,
                 bottom = Dimens.padding16
             )
     )

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
@@ -36,7 +37,9 @@ class TeamFragment : Fragment() {
 
 @Composable
 fun TeamScreen() {
-    Column {
+    Column(
+        Modifier.padding(horizontal = Dimens.padding16)
+    ) {
         TeamScreenTitle()
         Spacer(Modifier.height(Dimens.spacer8))
         TeamTitle()

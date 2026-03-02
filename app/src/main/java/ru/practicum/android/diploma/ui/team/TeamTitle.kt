@@ -23,7 +23,6 @@ fun TeamTitle() {
             .height(Dimens.teamTitleHeight)
             .wrapContentWidth()
             .padding(
-                horizontal = Dimens.padding16,
                 vertical = Dimens.padding8
             )
     )
