@@ -15,6 +15,7 @@ object Dimens {
     val padding24 = 24.dp
 
     // Углы
+    val cornerRadius4 = 4.dp
     val cornerRadius12 = 12.dp
 
     // Высоты элементов
@@ -28,4 +29,5 @@ object Dimens {
     val itemHeight = 60.dp
     val logoSize = 48.dp
     val logoBorderThickness = 1.dp
+    val filterIconSize = 24.dp
 }
