@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.ui.search
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
@@ -36,7 +37,7 @@ fun SearchContent(
     state: VacanciesState.Content,
     onVacancyItemClick: (String) -> Unit,
     onLoadNextPage: () -> Unit,
-    isNextPageLoading: StateFlow<Boolean>
+    isSearchInProgress: StateFlow<Boolean>
 ) {
     val listState = rememberLazyListState()
 
@@ -49,7 +50,8 @@ fun SearchContent(
     }
 
     LaunchedEffect(shouldLoadNext) {
-        if (shouldLoadNext && isNextPageLoading.value) {
+        if (shouldLoadNext && !isSearchInProgress.value) {
+            // запрос следующей страницы, только после окончания поиска
             onLoadNextPage()
         }
     }
@@ -71,7 +73,8 @@ fun SearchContent(
                     onClick = { onVacancyItemClick(vacancy.id) }
                 )
             }
-            if (isNextPageLoading.value) {
+            if (isSearchInProgress.value) {
+                Log.d("TEST", "Loading...")
                 item(key = "loading_indicator") {
                     Box(
                         modifier = Modifier

@@ -5,4 +5,8 @@ class VacancyShortResponse(
     val pages: Int,
     val page: Int,
     val items: List<VacancyShort>
-)
+) {
+    companion object {
+        val Empty = VacancyShortResponse(0, 0, 0, listOf())
+    }
+}
