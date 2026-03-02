@@ -28,7 +28,6 @@ object Dimens {
     val companyBarHeight = 58.dp
     val industryItemHeight = 60.dp
     val itemHeight = 60.dp
-    val teamMemberHeight = 20.dp
     val teamScreenTitleHeight = 64.dp
     val teamTitleHeight = 92.dp
     val logoSize = 48.dp
