@@ -24,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.pluralStringResource
+import kotlinx.coroutines.flow.StateFlow
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.presentation.model.VacanciesState
 import ru.practicum.android.diploma.ui.common.VacancyItem
@@ -34,20 +35,21 @@ import ru.practicum.android.diploma.ui.theme.LocalAndroidDiplomaTypography
 fun SearchContent(
     state: VacanciesState.Content,
     onVacancyItemClick: (String) -> Unit,
-    onLoadNextPage: () -> Unit
+    onLoadNextPage: () -> Unit,
+    isNextPageLoading: StateFlow<Boolean>
 ) {
     val listState = rememberLazyListState()
 
     val shouldLoadNext by remember {
         derivedStateOf {
-            val lastVisibleItemIndex = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: -1
+            val lastVisibleItemIndex = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index
             val totalItemsCount = listState.layoutInfo.totalItemsCount
-            lastVisibleItemIndex >= totalItemsCount - 1
+            lastVisibleItemIndex != null && lastVisibleItemIndex >= totalItemsCount - 1
         }
     }
 
     LaunchedEffect(shouldLoadNext) {
-        if (shouldLoadNext) {
+        if (shouldLoadNext && isNextPageLoading.value) {
             onLoadNextPage()
         }
     }
@@ -63,15 +65,13 @@ fun SearchContent(
                 Spacer(modifier = Modifier.height(Dimens.padding38))
             }
 
-            items(state.vacancies) { vacancy ->
+            items(state.vacancies.items) { vacancy ->
                 VacancyItem(
                     vacancy = vacancy,
                     onClick = { onVacancyItemClick(vacancy.id) }
                 )
             }
-//            if (state.isLoadingNextPage) {
-//            if (true) {
-            if (false) {
+            if (isNextPageLoading.value) {
                 item(key = "loading_indicator") {
                     Box(
                         modifier = Modifier
@@ -103,8 +103,11 @@ fun SearchContent(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-//                    text = pluralStringResource(R.plurals.found_n_vacancies, state.found, state.found),
-                    text = pluralStringResource(R.plurals.found_n_vacancies, 6, 6),
+                    text = pluralStringResource(
+                        R.plurals.found_n_vacancies,
+                        state.vacancies.found,
+                        state.vacancies.found
+                    ),
                     style = LocalAndroidDiplomaTypography.current.regular16,
                     color = MaterialTheme.colorScheme.onPrimary,
                     modifier = Modifier.padding(horizontal = Dimens.padding12, vertical = Dimens.padding4)

@@ -1,14 +1,19 @@
 package ru.practicum.android.diploma.ui.search
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,6 +23,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import kotlinx.coroutines.flow.StateFlow
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.presentation.model.VacanciesState
 import ru.practicum.android.diploma.ui.common.SearchTextField
@@ -31,7 +37,8 @@ fun SearchScreen(
     onQueryChange: (String) -> Unit,
     onFilterIconClick: () -> Unit,
     onVacancyItemClick: (String) -> Unit,
-    onLoadNextPage: () -> Unit
+    onLoadNextPage: () -> Unit,
+    isNextPageLoading: StateFlow<Boolean>
 ) {
     Scaffold(
         topBar = {
@@ -78,19 +85,49 @@ fun SearchScreen(
                         )
                     }
                 }
+                is VacanciesState.NotFound -> {
+                    Box(
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        SearchPlaceholder(
+                            imageRes = R.drawable.placeholder_empty_search,
+                            stringResource(R.string.cant_get_vacancies)
+                        )
+                        Box(
+                            modifier = Modifier.align(Alignment.TopCenter),
+                            contentAlignment = Alignment.TopCenter
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = Dimens.padding9)
+                                    .wrapContentWidth(Alignment.CenterHorizontally)
+                                    .background(
+                                        color = MaterialTheme.colorScheme.primary,
+                                        shape = RoundedCornerShape(Dimens.cornerRadius12)
+                                    ),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.no_vacancies),
+                                    style = LocalAndroidDiplomaTypography.current.regular16,
+                                    color = MaterialTheme.colorScheme.onPrimary,
+                                    modifier = Modifier.padding(horizontal = Dimens.padding12, vertical = Dimens.padding4)
+                                )
+                            }
+                        }
+                    }
+                }
 
                 is VacanciesState.NoInternet,
-                is VacanciesState.NotFound,
                 is VacanciesState.ServerError -> {
                     SearchPlaceholder(
                         imageRes = when (state) {
                             is VacanciesState.NoInternet -> R.drawable.placeholder_no_internet
-                            is VacanciesState.NotFound -> R.drawable.placeholder_empty_search
                             else -> R.drawable.placeholder_server_error
                         },
                         title = when (state) {
                             is VacanciesState.NoInternet -> stringResource(R.string.no_internet)
-                            is VacanciesState.NotFound -> stringResource(R.string.cant_get_vacancies)
                             else -> stringResource(R.string.server_error)
                         }
                     )
@@ -100,16 +137,9 @@ fun SearchScreen(
                     SearchContent(
                         state = state,
                         onVacancyItemClick = onVacancyItemClick,
-                        onLoadNextPage = onLoadNextPage
+                        onLoadNextPage = onLoadNextPage,
+                        isNextPageLoading = isNextPageLoading
                     )
-                }
-
-                is VacanciesState.NewPageInProgress -> {
-//                    SearchContent(
-//                        state = state,
-//                        onVacancyItemClick = onVacancyItemClick,
-//                        onLoadNextPage = onLoadNextPage
-//                    )
                 }
             }
         }

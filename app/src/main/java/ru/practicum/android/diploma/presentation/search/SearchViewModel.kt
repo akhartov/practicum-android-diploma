@@ -25,6 +25,8 @@ class SearchViewModel(private val searchVacanciesInteractor: SearchVacanciesInte
     val state: StateFlow<VacanciesState> = _state.asStateFlow()
     private val _searchParams = MutableStateFlow(SearchParams(text = "", page = 0))
     val searchParams: StateFlow<SearchParams> = _searchParams.asStateFlow()
+    private val _isNextPageLoading = MutableStateFlow(false)
+    val isNextPageLoading: StateFlow<Boolean> = _isNextPageLoading.asStateFlow()
 
     init {
         searchParams.debounce(SEARCH_DEBOUNCE_DELAY) // пауза
@@ -57,6 +59,10 @@ class SearchViewModel(private val searchVacanciesInteractor: SearchVacanciesInte
                     }
                 }
         }
+    }
+
+    fun onLoadNextPage() {
+
     }
 
     private fun handleSuccess(data: VacancyShortResponse?) {

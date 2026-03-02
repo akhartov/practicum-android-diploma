@@ -1,25 +1,23 @@
 package ru.practicum.android.diploma.ui.search
 
-import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.domain.models.VacancyShort
-import ru.practicum.android.diploma.presentation.model.VacanciesState
 import ru.practicum.android.diploma.presentation.search.SearchViewModel
 import ru.practicum.android.diploma.ui.theme.AndroidDiplomaTheme
 import ru.practicum.android.diploma.util.debounce
@@ -55,13 +53,20 @@ class SearchFragment : Fragment() {
 
     @Composable
     fun SearchScreenContent() {
-//        val state by viewModel.state.observeAsState(VacanciesState.Empty)
+        val state by viewModel.state.collectAsState()
 //        val state = VacanciesState.Empty
 //        val state = VacanciesState.Loading
 //        val state = VacanciesState.NoInternet
 //        val state = VacanciesState.NotFound
 //        val state = VacanciesState.ServerError
-        val state = VacanciesState.Content(vacancies)
+//        val state = VacanciesState.Content(
+//            VacancyShortResponse(
+//                found = 35,
+//                pages = 2,
+//                1,
+//                items = vacancies
+//            )
+//        )
 
         var searchQuery by remember { mutableStateOf("") }
 
@@ -70,7 +75,7 @@ class SearchFragment : Fragment() {
             searchQuery = searchQuery,
             onQueryChange = { newQuery ->
                 searchQuery = newQuery
-//                viewModel.onSearchTextDebounce(newQuery)
+                viewModel.onSearchTextDebounce(newQuery)
             },
             onFilterIconClick = {
                 findNavController().navigate(R.id.action_searchFragment_to_filterSettingsFragment)
@@ -79,8 +84,9 @@ class SearchFragment : Fragment() {
                 vacancyClickDebounce(vacancyId)
             },
             onLoadNextPage = {
-//                viewModel.loadNextPage()
-            }
+                viewModel.onLoadNextPage()
+            },
+            isNextPageLoading = viewModel.isNextPageLoading
         )
     }
 
@@ -133,19 +139,3 @@ val vacancies: List<VacancyShort> = listOf(
         salaryString = "от 1500 $"
     )
 )
-
-@Preview(name = "Light", showBackground = true)
-@Preview(name = "Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-fun SearchScreenEmptyPreview() {
-    AndroidDiplomaTheme {
-        SearchScreen(
-            state = VacanciesState.Empty,
-            searchQuery = "",
-            onQueryChange = {},
-            onFilterIconClick = {},
-            onVacancyItemClick = {},
-            onLoadNextPage = {}
-        )
-    }
-}
