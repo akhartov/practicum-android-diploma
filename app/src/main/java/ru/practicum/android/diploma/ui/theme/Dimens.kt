@@ -20,6 +20,7 @@ object Dimens {
 
     // Высоты элементов
     val searchBarHeight = 64.dp
+    val headerHeight = 64.dp
     val buttonHeight = 60.dp
     val salaryBarHeight = 56.dp
     val toolBarHeight = 56.dp
