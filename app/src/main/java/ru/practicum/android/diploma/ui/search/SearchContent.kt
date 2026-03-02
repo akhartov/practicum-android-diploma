@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.ui.search
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
@@ -74,7 +73,6 @@ fun SearchContent(
                 )
             }
             if (isSearchInProgress.value) {
-                Log.d("TEST", "Loading...")
                 item(key = "loading_indicator") {
                     Box(
                         modifier = Modifier

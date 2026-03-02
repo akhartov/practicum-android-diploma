@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.presentation.search
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.FlowPreview
@@ -41,10 +40,13 @@ class SearchViewModel(private val searchVacanciesInteractor: SearchVacanciesInte
     }
 
     fun searchVacancies(text: String, page: Int) {
-        if (text.isBlank()) return
+        if (text.isBlank())  {
+            lastSuccesResult = VacancyShortResponse.Empty
+            _state.value = VacanciesState.Empty
+            return
+        }
 
         _isSearchInProgress.value = true
-        Log.d("TEST", "Search page $page in progress..")
 
         if (page == 0) {
             lastSuccesResult = VacancyShortResponse.Empty
@@ -61,8 +63,6 @@ class SearchViewModel(private val searchVacanciesInteractor: SearchVacanciesInte
 
             searchVacanciesInteractor.searchVacancies(options)
                 .collect { resource ->
-                    _isSearchInProgress.value = false
-                    Log.d("TEST", "Search finished")
                     when (resource) {
                         is Resource.Success -> {
                             handleSuccess(resource.data)
@@ -72,6 +72,8 @@ class SearchViewModel(private val searchVacanciesInteractor: SearchVacanciesInte
                             handleError(resource.error)
                         }
                     }
+
+                    _isSearchInProgress.value = false
                 }
         }
     }
@@ -81,7 +83,7 @@ class SearchViewModel(private val searchVacanciesInteractor: SearchVacanciesInte
             data == null -> _state.value = VacanciesState.NotFound
             data.found == 0 -> _state.value = VacanciesState.NotFound
             else -> {
-                currentPage.addAndGet(PAGE_INCREMENT) // увеличиваем счетчик страниц, только когда что-то нашли
+                currentPage.incrementAndGet() // увеличиваем счетчик страниц, только когда что-то нашли
                 lastSuccesResult = VacancyShortResponse(
                     found = data.found,
                     pages = data.pages,
