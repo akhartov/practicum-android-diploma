@@ -70,9 +70,9 @@ class SearchFragment : Fragment() {
                 vacancyClickDebounce(vacancyId)
             },
             onLoadNextPage = {
-//                viewModel.onLoadNextPage()
+                viewModel.onLoadNextPage()
             },
-            isNextPageLoading = viewModel.isNextPageLoading
+            isSearchInProgress = viewModel.isSearchInProgress
         )
     }
 
