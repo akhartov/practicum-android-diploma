@@ -61,9 +61,7 @@ class SearchViewModel(private val searchVacanciesInteractor: SearchVacanciesInte
         }
     }
 
-    fun onLoadNextPage() {
-
-    }
+//    fun onLoadNextPage() {  }
 
     private fun handleSuccess(data: VacancyShortResponse?) {
         when {

@@ -85,6 +85,7 @@ fun SearchScreen(
                         )
                     }
                 }
+
                 is VacanciesState.NotFound -> {
                     Box(
                         modifier = Modifier.fillMaxSize()
@@ -112,7 +113,11 @@ fun SearchScreen(
                                     text = stringResource(R.string.no_vacancies),
                                     style = LocalAndroidDiplomaTypography.current.regular16,
                                     color = MaterialTheme.colorScheme.onPrimary,
-                                    modifier = Modifier.padding(horizontal = Dimens.padding12, vertical = Dimens.padding4)
+                                    modifier = Modifier
+                                        .padding(
+                                            horizontal = Dimens.padding12,
+                                            vertical = Dimens.padding4
+                                        )
                                 )
                             }
                         }

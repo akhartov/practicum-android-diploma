@@ -25,7 +25,6 @@ fun SearchTopAppBar(
     title: String,
     onFilterIconClick: () -> Unit
 ) {
-
     Surface(
         color = MaterialTheme.colorScheme.background,
         contentColor = LocalAndroidDiplomaScheme.current.topBar.text
