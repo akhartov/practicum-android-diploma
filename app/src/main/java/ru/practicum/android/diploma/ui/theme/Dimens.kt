@@ -19,6 +19,9 @@ object Dimens {
     val cornerRadius12 = 12.dp
 
     // Высоты элементов
+    val spacer8 = 8.dp
+    val spacer16 = 16.dp
+    val spacer24 = 24.dp
     val searchBarHeight = 64.dp
     val headerHeight = 64.dp
     val buttonHeight = 60.dp
@@ -28,6 +31,8 @@ object Dimens {
     val companyBarHeight = 58.dp
     val industryItemHeight = 60.dp
     val itemHeight = 60.dp
+    val teamScreenTitleHeight = 64.dp
+    val teamTitleHeight = 92.dp
     val logoSize = 48.dp
     val logoBorderThickness = 1.dp
     val progressIndicatorSize = 36.dp

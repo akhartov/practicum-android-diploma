@@ -5,13 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.fragment.app.Fragment
 import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.ui.theme.AndroidDiplomaTheme
+import ru.practicum.android.diploma.ui.theme.Dimens
 
 class TeamFragment : Fragment() {
 
@@ -23,14 +28,25 @@ class TeamFragment : Fragment() {
         setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
 
         setContent {
-            TeamScreen()
+            AndroidDiplomaTheme {
+                TeamScreen()
+            }
         }
     }
 }
 
 @Composable
 fun TeamScreen() {
-    Column {
-        Text(stringResource(R.string.team))
+    Column(
+        Modifier.padding(horizontal = Dimens.padding16)
+    ) {
+        TeamScreenTitle()
+        Spacer(Modifier.height(Dimens.spacer16))
+        TeamTitle()
+        Spacer(Modifier.height(Dimens.spacer24))
+        TeamMember(stringResource(R.string.dev1))
+        TeamMember(stringResource(R.string.dev2))
+        TeamMember(stringResource(R.string.dev3))
+        TeamMember(stringResource(R.string.dev4))
     }
 }
