@@ -41,7 +41,7 @@ fun TeamScreen() {
         Modifier.padding(horizontal = Dimens.padding16)
     ) {
         TeamScreenTitle()
-        Spacer(Modifier.height(Dimens.spacer8))
+        Spacer(Modifier.height(Dimens.spacer16))
         TeamTitle()
         Spacer(Modifier.height(Dimens.spacer24))
         TeamMember(stringResource(R.string.dev1))
