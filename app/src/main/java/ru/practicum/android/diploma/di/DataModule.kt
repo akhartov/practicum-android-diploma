@@ -12,9 +12,11 @@ import ru.practicum.android.diploma.BuildConfig
 import ru.practicum.android.diploma.data.SearchVacanciesRepositoryImpl
 import ru.practicum.android.diploma.data.db.AppDatabase
 import ru.practicum.android.diploma.data.db.dao.VacancyDao
+import ru.practicum.android.diploma.data.impl.SharingInteractorImpl
 import ru.practicum.android.diploma.data.network.VacancyApi
 import ru.practicum.android.diploma.data.network.VacancyApiClient
 import ru.practicum.android.diploma.data.network.VacancyApiClientImpl
+import ru.practicum.android.diploma.domain.SharingInteractor
 import ru.practicum.android.diploma.domain.api.SearchVacanciesRepository
 
 val dataModule = module {
@@ -30,6 +32,8 @@ val dataModule = module {
     }
 
     single<VacancyDao> { get<AppDatabase>().vacancyDao() }
+
+    single<SharingInteractor> { SharingInteractorImpl(androidContext()) }
 
     single<VacancyApi> {
         val headerInterceptor = Interceptor { chain ->
