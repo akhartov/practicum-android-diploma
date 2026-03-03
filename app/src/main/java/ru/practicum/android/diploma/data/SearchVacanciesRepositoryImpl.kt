@@ -30,6 +30,10 @@ class SearchVacanciesRepositoryImpl(
                     emit(Resource.Success(mapper.mapResponse(response as VacancyResponse)))
                 }
 
+                NetworkResponseStatus.NOT_FOUND -> {
+                    emit(Resource.Error(NetworkResponseStatus.NOT_FOUND))
+                }
+
                 else -> {
                     emit(Resource.Error(NetworkResponseStatus.SERVER_ERROR))
                 }

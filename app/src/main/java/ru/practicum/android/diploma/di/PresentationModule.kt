@@ -42,7 +42,7 @@ val presentationModule = module {
     }
 
     viewModel {
-        VacancyViewModel(get())
+        VacancyViewModel(get(), get(), get())
     }
 
     viewModel {

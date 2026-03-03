@@ -19,6 +19,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.presentation.search.SearchViewModel
 import ru.practicum.android.diploma.ui.theme.AndroidDiplomaTheme
+import ru.practicum.android.diploma.ui.vacancy.VacancyFragment
 import ru.practicum.android.diploma.util.debounce
 
 class SearchFragment : Fragment() {
@@ -32,7 +33,7 @@ class SearchFragment : Fragment() {
     ) { vacancyId ->
         findNavController().navigate(
             R.id.action_searchFragment_to_vacancyFragment,
-//            VacancyFragment.createArgs(vacancyId)
+            VacancyFragment.createArgs(vacancyId)
         )
     }
 

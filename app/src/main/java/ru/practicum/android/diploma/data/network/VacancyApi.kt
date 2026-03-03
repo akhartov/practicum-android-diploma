@@ -22,6 +22,6 @@ interface VacancyApi {
     suspend fun getFilterIndustries(): List<FilterIndustryDto>
 
     companion object {
-        const val HOST_URL = "https://practicum-diploma-8bc38133faba.herokuapp.com"
+        const val HOST_URL = "http://155.212.163.151"
     }
 }

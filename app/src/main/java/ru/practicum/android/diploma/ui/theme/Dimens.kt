@@ -16,6 +16,7 @@ object Dimens {
     val padding38 = 38.dp
     val padding32 = 32.dp
     val padding200 = 200.dp
+    val padding62 = 62.dp
     val padding186 = 186.dp
 
     // Углы

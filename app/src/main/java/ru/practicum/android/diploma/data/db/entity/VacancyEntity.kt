@@ -2,6 +2,7 @@ package ru.practicum.android.diploma.data.db.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import ru.practicum.android.diploma.domain.models.Phones
 
 @Entity(tableName = VacancyEntity.TABLE_NAME)
 data class VacancyEntity(
@@ -21,7 +22,7 @@ data class VacancyEntity(
     val skills: List<String>? = null, // Ключевые навыки,
     val contactsName: String? = null,
     val contactsEmail: String? = null,
-    val contactsPhones: List<String>? = null,
+    val contactsPhones: List<Phones>? = null,
     val url: String? = null // Ссылка для шаринга
 ) {
     companion object {

@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,7 +20,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -39,11 +42,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import coil.compose.AsyncImage
 import org.koin.androidx.compose.koinViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.domain.models.Contacts
+import ru.practicum.android.diploma.domain.models.MailData
 import ru.practicum.android.diploma.domain.models.Vacancy
+import ru.practicum.android.diploma.presentation.model.LikeButtonState
 import ru.practicum.android.diploma.presentation.model.VacancyDetailsState
 import ru.practicum.android.diploma.presentation.vacancy.VacancyViewModel
 import ru.practicum.android.diploma.ui.theme.AndroidDiplomaTheme
@@ -52,7 +59,7 @@ import ru.practicum.android.diploma.ui.theme.LocalAndroidDiplomaScheme
 import ru.practicum.android.diploma.ui.theme.LocalAndroidDiplomaTypography
 
 class VacancyFragment : Fragment() {
-
+    private val vacancyViewModel: VacancyViewModel by viewModel()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -61,8 +68,11 @@ class VacancyFragment : Fragment() {
         setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
 
         val id = arguments?.getString(SELECTED_VACANCY) ?: ""
+        vacancyViewModel.getVacancy(id)
         setContent {
-            VacancyScreen(vacancyViewModel = koinViewModel(), id)
+            AndroidDiplomaTheme {
+                VacancyScreen(vacancyViewModel = koinViewModel(), onBack = { findNavController().navigateUp() })
+            }
         }
     }
 
@@ -74,40 +84,45 @@ class VacancyFragment : Fragment() {
 }
 
 @Composable
-private fun VacancyScreen(vacancyViewModel: VacancyViewModel, id: String) {
-    vacancyViewModel.getVacancy(id)
-    when (val state = vacancyViewModel.state.collectAsState().value) {
-        is VacancyDetailsState.Loading -> {
-            // Состояние загрузки
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                LoadingView()
+private fun VacancyScreen(vacancyViewModel: VacancyViewModel, onBack: () -> Unit) {
+    val likeButtonState = vacancyViewModel.stateLike.collectAsState().value
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 20.dp)
+    ) {
+        ToolBar(likeButtonState, vacancyViewModel, onBack)
+
+        when (val state = vacancyViewModel.state.collectAsState().value) {
+            is VacancyDetailsState.Loading -> {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    LoadingView()
+                }
             }
-        }
 
-        is VacancyDetailsState.NotFound -> {
-            ErrorNotFound()
-        }
+            is VacancyDetailsState.NotFound -> {
+                ErrorNotFound()
+            }
 
-        is VacancyDetailsState.ServerError -> {
-            ErrorServer()
-        }
+            is VacancyDetailsState.ServerError -> {
+                ErrorServer()
+            }
 
-        is VacancyDetailsState.NoInternet -> {
-            ErrorNoInternet()
-        }
+            is VacancyDetailsState.NoInternet -> {
+                ErrorNoInternet()
+            }
 
-        is VacancyDetailsState.Content -> {
-            // Успешно загруженные данные
-            VacancyDetailContent(
-                vacancy = state.details,
-                /*onBackPressed = { *//* ... */
-                /* },
-                                onShare = { */
-                /* ... *//* }*/
-            )
+            is VacancyDetailsState.Content -> {
+                // Успешно загруженные данные
+                VacancyDetailContent(
+                    vacancy = state.details,
+                    sendMail = { data -> vacancyViewModel.sendMail(data) },
+                    onCall = { number -> vacancyViewModel.callNumber(number) }
+                )
+            }
         }
     }
 }
@@ -122,7 +137,6 @@ private fun LoadingView() {
             modifier = Modifier
                 .size(44.dp),
             color = LocalAndroidDiplomaScheme.current.vacancy.progress,
-            strokeWidth = 4.dp,
         )
     }
 }
@@ -224,12 +238,25 @@ private fun ErrorNoInternet() {
 }
 
 @Composable
-private fun VacancyDetailContent(vacancy: Vacancy) {
+private fun VacancyDetailContent(vacancy: Vacancy, sendMail: (MailData) -> Unit, onCall: (String) -> Unit) {
     Column(modifier = Modifier.fillMaxSize()) {
-        ToolBar()
         Title(vacancy)
         EmployerInfo(vacancy)
-        VacancyInfo(vacancy)
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+        ) {
+            VacancyInfo(vacancy)
+            if (vacancy.contacts != null) {
+                Contacts(vacancy.contacts, vacancy.name, sendMail, onCall)
+            }
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(Dimens.padding62)
+            )
+        }
     }
 }
 
@@ -343,40 +370,42 @@ private fun VacancyInfo(vacancy: Vacancy) {
             color = LocalAndroidDiplomaScheme.current.topBar.text,
             style = LocalAndroidDiplomaTypography.current.medium16
         )
-        Text(
-            text = stringResource(R.string.required_experience),
-            modifier = Modifier
-                .wrapContentWidth(),
-            color = LocalAndroidDiplomaScheme.current.topBar.text,
-            style = LocalAndroidDiplomaTypography.current.regular16
-        )
+        vacancy.experience?.let {
+            Text(
+                text = it,
+                modifier = Modifier
+                    .wrapContentWidth(),
+                color = LocalAndroidDiplomaScheme.current.topBar.text,
+                style = LocalAndroidDiplomaTypography.current.regular16
+            )
+        }
 
-        Text(
-            text = "Полная занятость, полный день",
-            modifier = Modifier
-                .wrapContentWidth()
-                .padding(top = Dimens.padding8),
-            color = LocalAndroidDiplomaScheme.current.topBar.text,
-            style = LocalAndroidDiplomaTypography.current.regular16
-        )
-
-        Text(
-            text = stringResource(R.string.key_skills),
-            modifier = Modifier
-                .wrapContentWidth()
-                .padding(top = Dimens.padding24),
-            color = LocalAndroidDiplomaScheme.current.topBar.text,
-            style = LocalAndroidDiplomaTypography.current.medium22
-        )
+        vacancy.employment?.let {
+            Text(
+                text = it,
+                modifier = Modifier
+                    .wrapContentWidth()
+                    .padding(top = Dimens.padding8),
+                color = LocalAndroidDiplomaScheme.current.topBar.text,
+                style = LocalAndroidDiplomaTypography.current.regular16
+            )
+        }
 
         if (vacancy.description != null) {
             Description(vacancy.description)
         }
 
         if (vacancy.skills != null) {
+            Text(
+                text = stringResource(R.string.key_skills),
+                modifier = Modifier
+                    .wrapContentWidth()
+                    .padding(top = Dimens.padding24),
+                color = LocalAndroidDiplomaScheme.current.topBar.text,
+                style = LocalAndroidDiplomaTypography.current.medium22
+            )
             Skills(vacancy.skills)
         }
-
     }
 }
 
@@ -402,43 +431,66 @@ private fun Description(description: String) {
 }
 
 @Composable
-private fun Contacts(contacts: Contacts) {
-    Text(
-        text = stringResource(R.string.contacts),
-        modifier = Modifier
-            .wrapContentWidth()
-            .padding(top = Dimens.padding32),
-        color = LocalAndroidDiplomaScheme.current.topBar.text,
-        style = LocalAndroidDiplomaTypography.current.medium22
-    )
+private fun Contacts(contacts: Contacts, topic: String, sendMail: (MailData) -> Unit, onCall: (String) -> Unit) {
+    Column(
+        modifier = Modifier.padding(horizontal = Dimens.padding16)
+    ) {
+        Text(
+            text = stringResource(R.string.contacts),
+            modifier = Modifier
+                .wrapContentWidth()
+                .padding(top = Dimens.padding32),
+            color = LocalAndroidDiplomaScheme.current.topBar.text,
+            style = LocalAndroidDiplomaTypography.current.medium22
+        )
 
-    Text(
-        text = contacts.name,
-        modifier = Modifier
-            .wrapContentWidth()
-            .padding(top = Dimens.padding16),
-        color = LocalAndroidDiplomaScheme.current.topBar.text,
-        style = LocalAndroidDiplomaTypography.current.regular16
-    )
+        Text(
+            text = contacts.name,
+            modifier = Modifier
+                .wrapContentWidth()
+                .padding(top = Dimens.padding16),
+            color = LocalAndroidDiplomaScheme.current.topBar.text,
+            style = LocalAndroidDiplomaTypography.current.regular16
+        )
 
-    Text(
-        text = listOf(stringResource(R.string.email), contacts.email).joinToString(" "),
-        modifier = Modifier
-            .wrapContentWidth()
-            .padding(top = Dimens.padding16),
-        color = LocalAndroidDiplomaScheme.current.topBar.text,
-        style = LocalAndroidDiplomaTypography.current.regular16
-    )
-
-    contacts.phone.forEach { phone ->
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
+        if (!contacts.email.isEmpty()) {
             Text(
-                text = phone,
-                color = LocalAndroidDiplomaScheme.current.topBar.text,
+                text = contacts.email,
+                modifier = Modifier
+                    .wrapContentWidth()
+                    .clickable { sendMail(MailData(topic = topic, email = contacts.email)) }
+                    .padding(top = Dimens.padding8),
+                color = LocalAndroidDiplomaScheme.current.vacancy.progress,
                 style = LocalAndroidDiplomaTypography.current.regular16
             )
+        }
+
+        contacts.phone.forEach { phone ->
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                phone.comment?.let {
+                    Text(
+                        text = it,
+                        modifier = Modifier
+                            .wrapContentWidth()
+                            .padding(top = Dimens.padding8),
+                        color = LocalAndroidDiplomaScheme.current.topBar.text,
+                        style = LocalAndroidDiplomaTypography.current.regular16
+                    )
+                }
+                phone.phone?.let {
+                    Text(
+                        text = it,
+                        modifier = Modifier
+                            .wrapContentWidth()
+                            .clickable { onCall(it) }
+                            .padding(top = Dimens.padding8),
+                        color = LocalAndroidDiplomaScheme.current.topBar.text,
+                        style = LocalAndroidDiplomaTypography.current.regular16
+                    )
+                }
+            }
         }
     }
 }
@@ -470,7 +522,7 @@ private fun Skills(skills: List<String>) {
 }
 
 @Composable
-private fun ToolBar() {
+private fun ToolBar(likeState: LikeButtonState, vacancyViewModel: VacancyViewModel, onBack: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -484,6 +536,7 @@ private fun ToolBar() {
             tint = LocalAndroidDiplomaScheme.current.topBar.text,
             modifier = Modifier
                 .wrapContentWidth()
+                .clickable { onBack() }
         )
 
         Text(
@@ -503,14 +556,23 @@ private fun ToolBar() {
             tint = LocalAndroidDiplomaScheme.current.topBar.text,
             modifier = Modifier
                 .wrapContentWidth()
+                .clickable { vacancyViewModel.shareLink() }
         )
         Icon(
-            painter = painterResource(R.drawable.ic_favourite),
+            painter = when (likeState) {
+                LikeButtonState.Like -> painterResource(R.drawable.ic_favorites)
+                LikeButtonState.UnLike -> painterResource(R.drawable.ic_favourite)
+            },
             contentDescription = null,
-            tint = LocalAndroidDiplomaScheme.current.topBar.text,
+            tint = when (likeState) {
+                LikeButtonState.Like -> LocalAndroidDiplomaScheme.current.vacancy.like
+                LikeButtonState.UnLike -> LocalAndroidDiplomaScheme.current.topBar.text
+            },
             modifier = Modifier
                 .wrapContentWidth()
+                .clickable { vacancyViewModel.like() }
         )
+
     }
 }
 

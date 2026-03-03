@@ -13,7 +13,7 @@ fun ContactsDto.toContacts(): Contacts {
     return Contacts(
         name = name,
         email = email ?: "",
-        phone = phones?.mapNotNull { it.phone } ?: emptyList()
+        phone = phones?.map { it.toPhone() } ?: emptyList()
     )
 }
 

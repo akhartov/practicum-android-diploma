@@ -40,6 +40,7 @@ import ru.practicum.android.diploma.ui.theme.AndroidDiplomaTheme
 import ru.practicum.android.diploma.ui.theme.Dimens
 import ru.practicum.android.diploma.ui.theme.LocalAndroidDiplomaScheme
 import ru.practicum.android.diploma.ui.theme.LocalAndroidDiplomaTypography
+import ru.practicum.android.diploma.ui.vacancy.VacancyFragment
 import ru.practicum.android.diploma.util.debounce
 
 class FavoritesFragment : Fragment() {
@@ -47,7 +48,7 @@ class FavoritesFragment : Fragment() {
         debounce<String>(CLICK_DEBOUNCE_DELAY, lifecycleScope, true) { vacancyId ->
             findNavController().navigate(
                 R.id.action_favoritesFragment_to_vacancyFragment,
-                bundleOf(VACANCY_ID to vacancyId)
+                VacancyFragment.createArgs(vacancyId)
             )
         }
     private val favoritesViewModel: FavoritesViewModel by viewModel()
