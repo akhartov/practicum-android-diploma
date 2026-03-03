@@ -22,6 +22,7 @@
     <string name="from">от</string>
     <string name="to">до</string>
     <string name="search_vacancies">Поиск вакансий</string>
+    <string name="empty_list">Список пуст</string>
     <string name="filter_settings">Настройки фильтрации</string>
     <string name="vacancies_not_found">Вакансия не найдена или\nудалена</string>
     <string name="no_salary">Зарплата не указана</string>

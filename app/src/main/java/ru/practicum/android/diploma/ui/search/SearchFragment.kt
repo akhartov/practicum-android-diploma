@@ -1,39 +1,40 @@
 package ru.practicum.android.diploma.ui.search
 
-import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
-import ru.practicum.android.diploma.domain.models.VacancyShort
-import ru.practicum.android.diploma.ui.common.SearchTextField
-import ru.practicum.android.diploma.ui.common.VacancyItem
+import ru.practicum.android.diploma.presentation.search.SearchViewModel
 import ru.practicum.android.diploma.ui.theme.AndroidDiplomaTheme
-import ru.practicum.android.diploma.ui.theme.Dimens
+import ru.practicum.android.diploma.util.debounce
 
 class SearchFragment : Fragment() {
+
+    private val viewModel: SearchViewModel by viewModel()
+
+    private val vacancyClickDebounce = debounce<String>(
+        CLICK_VACANCY_DEBOUNCE_DELAY,
+        lifecycleScope,
+        true
+    ) { vacancyId ->
+        findNavController().navigate(
+            R.id.action_searchFragment_to_vacancyFragment,
+//            VacancyFragment.createArgs(vacancyId)
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,103 +52,31 @@ class SearchFragment : Fragment() {
 
     @Composable
     fun SearchScreenContent() {
+        val state by viewModel.state.collectAsState()
+
         var searchQuery by remember { mutableStateOf("") }
 
         SearchScreen(
-            searchQuery,
+            state = state,
+            searchQuery = searchQuery,
             onQueryChange = { newQuery ->
                 searchQuery = newQuery
+                viewModel.onSearchTextDebounce(newQuery)
             },
             onFilterIconClick = {
                 findNavController().navigate(R.id.action_searchFragment_to_filterSettingsFragment)
             },
-            onVacancyItemClick = {
-                findNavController().navigate(R.id.action_searchFragment_to_vacancyFragment)
-            }
+            onVacancyItemClick = { vacancyId ->
+                vacancyClickDebounce(vacancyId)
+            },
+            onLoadNextPage = {
+                viewModel.onLoadNextPage()
+            },
+            isSearchInProgress = viewModel.isSearchInProgress
         )
     }
-}
 
-@Composable
-fun SearchScreen(
-    searchQuery: String,
-    onQueryChange: (String) -> Unit,
-    onFilterIconClick: () -> Unit,
-    onVacancyItemClick: () -> Unit
-) {
-    val vacancies: List<VacancyShort> = listOf(
-        VacancyShort(
-            id = "1",
-            vacancyTitle = "Андроид-разработчик, Москва",
-            employerName = "Еда",
-            employerLogoUrl = null,
-            salaryString = "от 100 000 ₽"
-        ),
-        VacancyShort(
-            id = "2",
-            vacancyTitle = "Разработчик на С++ в команду внутренних сервисов, Москва",
-            employerName = "Google",
-            employerLogoUrl = null,
-            salaryString = "от 40 000 до 80 000 ₽"
-        ),
-        VacancyShort(
-            id = "3",
-            vacancyTitle = "Разработчик платформы данных, Санкт-Петербург",
-            employerName = "Алиса",
-            employerLogoUrl = "https://cdn.weatherapi.com/weather/64x64/day/116.png",
-            salaryString = "Зарплата не указана"
-        ),
-        VacancyShort(
-            id = "4",
-            vacancyTitle = "Разработчик бэкенда, Москва",
-            employerName = "Авто.ру",
-            employerLogoUrl = null,
-            salaryString = "от 1500 $"
-        )
-    )
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = Dimens.padding16)
-    ) {
-        Text(stringResource(R.string.search_vacancies))
-        Button(
-            onClick = onFilterIconClick,
-            content = { Text(stringResource(R.string.filter_settings)) },
-        )
-        Button(
-            onClick = onVacancyItemClick,
-            content = { Text(stringResource(R.string.vacancy)) },
-        )
-        SearchTextField(
-            searchQuery = searchQuery,
-            placeholder = stringResource(R.string.enter_search_query),
-            onQueryChange = onQueryChange,
-        )
-
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight()
-        ) {
-            itemsIndexed(vacancies) { _, vacancy ->
-                VacancyItem(vacancy = vacancy, onClick = {})
-            }
-        }
-    }
-}
-
-@Preview(name = "Light", showBackground = true)
-@Preview(name = "Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-fun SearchScreenEmptyPreview() {
-    AndroidDiplomaTheme {
-        SearchScreen(
-            searchQuery = "",
-            onQueryChange = {},
-            onFilterIconClick = {},
-            onVacancyItemClick = {},
-        )
+    companion object {
+        private const val CLICK_VACANCY_DEBOUNCE_DELAY = 300L
     }
 }
