@@ -34,7 +34,7 @@ fun FilterIcon(
             contentAlignment = Alignment.Center
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_filter_icon),
+                painter = painterResource(id = R.drawable.ic_filter),
                 contentDescription = "",
                 tint = filterIconConfig.hint,
             )
