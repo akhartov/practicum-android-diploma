@@ -21,7 +21,6 @@ object Dimens {
     // Высоты элементов
     val spacer8 = 8.dp
     val spacer24 = 24.dp
-    val searchBarHeight = 56.dp
     val searchBarHeight = 64.dp
     val headerHeight = 64.dp
     val buttonHeight = 60.dp
