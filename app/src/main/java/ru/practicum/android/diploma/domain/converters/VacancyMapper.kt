@@ -4,6 +4,8 @@ import ru.practicum.android.diploma.data.db.entity.VacancyEntity
 import ru.practicum.android.diploma.data.dto.VacancyResponse
 import ru.practicum.android.diploma.data.dto.vacancy.SalaryDto
 import ru.practicum.android.diploma.data.dto.vacancy.VacancyDto
+import ru.practicum.android.diploma.data.dto.vacancy.toContacts
+import ru.practicum.android.diploma.domain.models.Contacts
 import ru.practicum.android.diploma.domain.models.Vacancy
 import ru.practicum.android.diploma.domain.models.VacancyShort
 import ru.practicum.android.diploma.domain.models.VacancyShortResponse
@@ -18,6 +20,7 @@ class VacancyMapper(
             insertTime = insertTime,
             vacancyName = vacancyDto.name,
             employerCity = vacancyDto.address?.city,
+            address = (if (vacancyDto.address != null) vacancyDto.address.raw else vacancyDto.area) as String?,
             employerName = vacancyDto.employer?.name,
             employerLogoUrl = vacancyDto.employer?.logoUrl,
             salaryString = getSalarySting(vacancyDto.salary),
@@ -41,7 +44,9 @@ class VacancyMapper(
             employerName = vacancyDto.employer?.name,
             employerLogoUrl = vacancyDto.employer?.logoUrl,
             employerCity = vacancyDto.address?.city,
+            address = (if (vacancyDto.address != null) vacancyDto.address.raw else vacancyDto.area) as String?,
             description = vacancyDto.description,
+            contacts = vacancyDto.contacts?.toContacts(),
             skills = vacancyDto.skills,
             url = vacancyDto.url,
         )
@@ -53,6 +58,7 @@ class VacancyMapper(
             insertTime = insertTime,
             vacancyName = vacancy.name,
             employerCity = vacancy.employerCity,
+            address = vacancy.address,
             employerName = vacancy.employerName,
             employerLogoUrl = vacancy.employerLogoUrl,
             salaryString = vacancy.salaryString,
@@ -61,6 +67,9 @@ class VacancyMapper(
             employment = vacancy.employment,
             description = vacancy.description,
             skills = vacancy.skills,
+            contactsName = vacancy.contacts?.name,
+            contactsEmail = vacancy.contacts?.email,
+            contactsPhones = vacancy.contacts?.phone,
             url = vacancy.url
         )
     }
@@ -73,12 +82,17 @@ class VacancyMapper(
             experience = vacancyEntity.experience,
             schedule = vacancyEntity.schedule,
             employment = vacancyEntity.employment,
+            address = vacancyEntity.address,
             employerName = vacancyEntity.employerName,
             employerLogoUrl = vacancyEntity.employerLogoUrl,
             employerCity = vacancyEntity.employerCity,
             description = vacancyEntity.description,
             skills = vacancyEntity.skills,
-            url = vacancyEntity.url,
+            contacts = if (vacancyEntity.contactsName != null || vacancyEntity.contactsEmail != null || vacancyEntity.contactsPhones != null) Contacts(
+                name = vacancyEntity.contactsName ?: "",
+                email = vacancyEntity.contactsEmail ?: "",
+                phone = vacancyEntity.contactsPhones ?: emptyList()
+            ) else null
         )
     }
 

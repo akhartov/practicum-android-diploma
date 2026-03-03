@@ -12,8 +12,4 @@ class SearchVacanciesInteractorImpl(private val searchRepository: SearchVacancie
     override fun searchVacancies(options: HashMap<String, String>): Flow<Resource<VacancyShortResponse>> {
         return searchRepository.searchVacancies(options)
     }
-
-    override fun getVacancyById(id: String): Flow<Resource<Vacancy>> {
-        return searchRepository.getVacancy(id)
-    }
 }

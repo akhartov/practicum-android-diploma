@@ -35,21 +35,4 @@ class SearchVacanciesRepositoryImpl(
                 }
             }
         }
-
-    override fun getVacancy(id: String): Flow<Resource<Vacancy>> = flow {
-        val response = apiClient.getVacancyById(id)
-        when (response.resultCode) {
-            NetworkResponseStatus.NO_INTERNET -> {
-                emit(Resource.Error(NetworkResponseStatus.NO_INTERNET))
-            }
-
-            NetworkResponseStatus.SUCCESS -> {
-                emit(Resource.Success(mapper.mapToVancancy(response as VacancyDto)))
-            }
-
-            else -> {
-                emit(Resource.Error(NetworkResponseStatus.SERVER_ERROR))
-            }
-        }
-    }
 }
