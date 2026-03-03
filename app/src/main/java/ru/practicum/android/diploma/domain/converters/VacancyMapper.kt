@@ -20,7 +20,11 @@ class VacancyMapper(
             insertTime = insertTime,
             vacancyName = vacancyDto.name,
             employerCity = vacancyDto.address?.city,
-            address = (if (vacancyDto.address != null) vacancyDto.address.raw else vacancyDto.area) as String?,
+            address = (if (vacancyDto.address != null) {
+                vacancyDto.address.raw
+            } else {
+                vacancyDto.area
+            }) as? String,
             employerName = vacancyDto.employer?.name,
             employerLogoUrl = vacancyDto.employer?.logoUrl,
             salaryString = getSalarySting(vacancyDto.salary),
@@ -44,7 +48,11 @@ class VacancyMapper(
             employerName = vacancyDto.employer?.name,
             employerLogoUrl = vacancyDto.employer?.logoUrl,
             employerCity = vacancyDto.address?.city,
-            address = (if (vacancyDto.address != null) vacancyDto.address.raw else vacancyDto.area) as String?,
+            address = (if (vacancyDto.address != null) {
+                vacancyDto.address.raw
+            } else {
+                vacancyDto.area
+            })  as? String,
             description = vacancyDto.description,
             contacts = vacancyDto.contacts?.toContacts(),
             skills = vacancyDto.skills,
@@ -88,11 +96,15 @@ class VacancyMapper(
             employerCity = vacancyEntity.employerCity,
             description = vacancyEntity.description,
             skills = vacancyEntity.skills,
-            contacts = if (vacancyEntity.contactsName != null || vacancyEntity.contactsEmail != null || vacancyEntity.contactsPhones != null) Contacts(
-                name = vacancyEntity.contactsName ?: "",
-                email = vacancyEntity.contactsEmail ?: "",
-                phone = vacancyEntity.contactsPhones ?: emptyList()
-            ) else null
+            contacts = if (vacancyEntity.contactsName != null || vacancyEntity.contactsEmail != null || vacancyEntity.contactsPhones != null) {
+                Contacts(
+                    name = vacancyEntity.contactsName ?: "",
+                    email = vacancyEntity.contactsEmail ?: "",
+                    phone = vacancyEntity.contactsPhones ?: emptyList()
+                )
+            } else {
+                null
+            }
         )
     }
 

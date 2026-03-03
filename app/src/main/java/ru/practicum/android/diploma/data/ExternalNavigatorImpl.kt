@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import androidx.core.net.toUri
 import ru.practicum.android.diploma.domain.api.ExternalNavigator
 import ru.practicum.android.diploma.domain.models.MailData
@@ -20,9 +21,7 @@ class ExternalNavigatorImpl(private val context: Context) : ExternalNavigator {
         try {
             context.startActivity(shareIntent)
         } catch (ex: ActivityNotFoundException) {
-            ex.printStackTrace()
-        } catch (ex: RuntimeException) {
-            ex.printStackTrace()
+            Log.e("ExternalNavigatorImpl", "Activity not found for share intent", ex)
         }
     }
 
@@ -35,9 +34,7 @@ class ExternalNavigatorImpl(private val context: Context) : ExternalNavigator {
         try {
             context.startActivity(callIntent)
         } catch (ex: ActivityNotFoundException) {
-            ex.printStackTrace()
-        } catch (ex: RuntimeException) {
-            ex.printStackTrace()
+            Log.e("ExternalNavigatorImpl", "Activity not found for share intent", ex)
         }
     }
 

@@ -23,6 +23,6 @@ val domainModule = module {
     single<LikeInteractor> { LikeInteractorImpl(get()) }
     single<VacancyInteractor> { VacancyInteractorImpl(get()) }
 
-    single<SharingInteractor>{ SharingInteractorImpl(get())}
+    single<SharingInteractor> { SharingInteractorImpl(get()) }
     single<FavoritesInteractor> { FavoritesInteractorImpl(get()) }
 }
