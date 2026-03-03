@@ -10,30 +10,27 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import ru.practicum.android.diploma.domain.SearchPageInteractor
 import ru.practicum.android.diploma.domain.api.SearchVacanciesInteractor
-import ru.practicum.android.diploma.domain.models.SearchParams
 import ru.practicum.android.diploma.domain.models.VacancyShortResponse
 import ru.practicum.android.diploma.presentation.model.VacanciesState
 import ru.practicum.android.diploma.util.NetworkResponseStatus
 import ru.practicum.android.diploma.util.Resource
-import java.util.concurrent.atomic.AtomicInteger
 
 @OptIn(FlowPreview::class)
-class SearchViewModel(private val searchVacanciesInteractor: SearchVacanciesInteractor) : ViewModel() {
-    private var currentPage = AtomicInteger(FIRST_PAGE_INDEX)
+class SearchViewModel(
+    private val searchVacanciesInteractor: SearchVacanciesInteractor,
+    private val searchPageInteractor: SearchPageInteractor
+) : ViewModel() {
     private var lastSuccesResult = VacancyShortResponse.Empty
-
     private val _state = MutableStateFlow<VacanciesState>(VacanciesState.Empty)
     val state: StateFlow<VacanciesState> = _state.asStateFlow()
-    private val _searchParams = MutableStateFlow(SearchParams(text = "", page = 0))
-    val searchParams: StateFlow<SearchParams> = _searchParams.asStateFlow()
     private val _isSearchInProgress = MutableStateFlow(false)
     val isSearchInProgress: StateFlow<Boolean> = _isSearchInProgress.asStateFlow()
 
     init {
-        searchParams.debounce(SEARCH_DEBOUNCE_DELAY) // пауза
+        searchPageInteractor.searchParams.debounce(SEARCH_DEBOUNCE_DELAY) // пауза
             .distinctUntilChanged() // ограничиваем если есть новый поиск
             .onEach { searchParams -> searchVacancies(searchParams.text, searchParams.page) }
             .launchIn(viewModelScope)
@@ -48,7 +45,7 @@ class SearchViewModel(private val searchVacanciesInteractor: SearchVacanciesInte
 
         _isSearchInProgress.value = true
 
-        if (page == 0) {
+        if (searchPageInteractor.isFirstSearch()) {
             lastSuccesResult = VacancyShortResponse.Empty
             _state.value = VacanciesState.Loading
         } else {
@@ -83,7 +80,7 @@ class SearchViewModel(private val searchVacanciesInteractor: SearchVacanciesInte
             data == null -> _state.value = VacanciesState.NotFound
             data.found == 0 -> _state.value = VacanciesState.NotFound
             else -> {
-                currentPage.incrementAndGet() // увеличиваем счетчик страниц, только когда что-то нашли
+                searchPageInteractor.prepareNextSearch()
                 lastSuccesResult = VacancyShortResponse(
                     found = data.found,
                     pages = data.pages,
@@ -106,17 +103,14 @@ class SearchViewModel(private val searchVacanciesInteractor: SearchVacanciesInte
     }
 
     fun onSearchTextDebounce(text: String) {
-        currentPage.set(FIRST_PAGE_INDEX)
-        _searchParams.update { it.copy(text = text, page = currentPage.get()) }
+        searchPageInteractor.search(text)
     }
 
     fun onLoadNextPage() {
-        _searchParams.update { it.copy(text = it.text, page = currentPage.get() + PAGE_INCREMENT) }
+        searchPageInteractor.searchNextPage()
     }
 
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
-        private const val FIRST_PAGE_INDEX = 1
-        private const val PAGE_INCREMENT = 1
     }
 }

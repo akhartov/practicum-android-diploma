@@ -1,14 +1,18 @@
 package ru.practicum.android.diploma.di
 
 import org.koin.dsl.module
+import ru.practicum.android.diploma.data.impl.FavoritesRepositoryImpl
+import ru.practicum.android.diploma.data.repository.FavoritesRepository
 import ru.practicum.android.diploma.domain.FavoritesInteractor
 import ru.practicum.android.diploma.domain.LikeInteractor
+import ru.practicum.android.diploma.domain.SearchPageInteractor
 import ru.practicum.android.diploma.domain.api.SearchVacanciesInteractor
 import ru.practicum.android.diploma.domain.api.SharingInteractor
 import ru.practicum.android.diploma.domain.api.VacancyInteractor
 import ru.practicum.android.diploma.domain.converters.VacancyMapper
 import ru.practicum.android.diploma.domain.impl.FavoritesInteractorImpl
 import ru.practicum.android.diploma.domain.impl.LikeInteractorImpl
+import ru.practicum.android.diploma.domain.impl.SearchPageInteractorImpl
 import ru.practicum.android.diploma.domain.impl.SearchVacanciesInteractorImpl
 import ru.practicum.android.diploma.domain.impl.SharingInteractorImpl
 import ru.practicum.android.diploma.domain.impl.VacancyInteractorImpl
@@ -20,6 +24,9 @@ val domainModule = module {
         SearchVacanciesInteractorImpl(get())
     }
 
+    single<SearchPageInteractor> { SearchPageInteractorImpl() }
+
+    single<FavoritesRepository> { FavoritesRepositoryImpl(get(), get()) }
     single<LikeInteractor> { LikeInteractorImpl(get()) }
     single<VacancyInteractor> { VacancyInteractorImpl(get()) }
 
