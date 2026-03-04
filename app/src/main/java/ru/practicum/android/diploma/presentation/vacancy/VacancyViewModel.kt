@@ -48,7 +48,7 @@ class VacancyViewModel(
         viewModelScope.launch {
             vacancyInteractor.getVacancyById(id)
                 .collect { resource ->
-                    processResult(resource.data, resource.error)
+                    processResult(id, resource.data, resource.error)
                 }
             if (likeInteractor.isLiked(id)) {
                 _stateLike.value = LikeButtonState.Like
@@ -78,11 +78,16 @@ class VacancyViewModel(
         }
     }
 
-    private fun processResult(vacancy: Vacancy?, error: Int?) {
+    private fun processResult(initialVacancyId: String, vacancy: Vacancy?, error: Int?) {
         if (error != null) {
             when (error) {
                 NetworkResponseStatus.NO_INTERNET -> _state.value = VacancyDetailsState.NoInternet
-                NetworkResponseStatus.NOT_FOUND -> _state.value = VacancyDetailsState.NotFound
+                NetworkResponseStatus.NOT_FOUND -> {
+                    _state.value = VacancyDetailsState.NotFound
+                    viewModelScope.launch {
+                        likeInteractor.dislike(initialVacancyId)
+                    }
+                }
                 else -> _state.value = VacancyDetailsState.ServerError
             }
         } else if (vacancy != null) {
