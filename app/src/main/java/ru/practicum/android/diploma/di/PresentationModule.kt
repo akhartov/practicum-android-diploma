@@ -18,7 +18,7 @@ import ru.practicum.android.diploma.util.SalaryMapper
 val presentationModule = module {
 
     viewModel {
-        SearchViewModel(get(), get())
+        SearchViewModel(get())
     }
 
     viewModel {

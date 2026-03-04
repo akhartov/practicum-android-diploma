@@ -10,20 +10,24 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import ru.practicum.android.diploma.domain.SearchPageInteractor
 import ru.practicum.android.diploma.domain.api.SearchVacanciesInteractor
+import ru.practicum.android.diploma.domain.models.SearchParams
 import ru.practicum.android.diploma.domain.models.VacancyShortResponse
 import ru.practicum.android.diploma.presentation.model.ToastState
 import ru.practicum.android.diploma.presentation.model.VacanciesState
 import ru.practicum.android.diploma.util.NetworkResponseStatus
 import ru.practicum.android.diploma.util.Resource
+import java.util.concurrent.atomic.AtomicInteger
 
 @OptIn(FlowPreview::class)
 class SearchViewModel(
     private val searchVacanciesInteractor: SearchVacanciesInteractor,
-    private val searchPageInteractor: SearchPageInteractor
 ) : ViewModel() {
+    private val _searchParams = MutableStateFlow(SearchParams(text = "", page = FIRST_PAGE_INDEX))
+    val searchParams: StateFlow<SearchParams> = _searchParams.asStateFlow()
+    private var currentPage = AtomicInteger(FIRST_PAGE_INDEX)
     private var lastSuccesResult = VacancyShortResponse.Empty
     private val _state = MutableStateFlow<VacanciesState>(VacanciesState.Empty)
     val state: StateFlow<VacanciesState> = _state.asStateFlow()
@@ -34,7 +38,7 @@ class SearchViewModel(
     val toastState: StateFlow<ToastState> = _toastState.asStateFlow()
 
     init {
-        searchPageInteractor.searchParams.debounce(SEARCH_DEBOUNCE_DELAY) // пауза
+        searchParams.debounce(SEARCH_DEBOUNCE_DELAY) // пауза
             .distinctUntilChanged() // ограничиваем если есть новый поиск
             .onEach { searchParams -> searchVacancies(searchParams.text, searchParams.page) }
             .launchIn(viewModelScope)
@@ -53,7 +57,7 @@ class SearchViewModel(
 
         _isSearchInProgress.value = true
 
-        if (searchPageInteractor.isFirstSearch()) {
+        if (isFirstSearch()) {
             lastSuccesResult = VacancyShortResponse.Empty
             _state.value = VacanciesState.Loading
         } else {
@@ -88,7 +92,7 @@ class SearchViewModel(
             data == null -> _state.value = VacanciesState.NotFound
             data.found == 0 -> _state.value = VacanciesState.NotFound
             else -> {
-                searchPageInteractor.prepareNextSearch()
+                prepareNextSearch()
                 lastSuccesResult = VacancyShortResponse(
                     found = data.found,
                     pages = data.pages,
@@ -102,7 +106,7 @@ class SearchViewModel(
     }
 
     private fun handleError(errorCode: Int?) {
-        if (searchPageInteractor.isFirstSearch()) {
+        if (isFirstSearch()) {
             _state.value = when (errorCode) {
                 NetworkResponseStatus.NO_INTERNET -> VacanciesState.NoInternet
                 NetworkResponseStatus.SERVER_ERROR -> VacanciesState.ServerError
@@ -129,14 +133,32 @@ class SearchViewModel(
     }
 
     fun onSearchTextDebounce(text: String) {
-        searchPageInteractor.search(text)
+        currentPage.set(FIRST_PAGE_INDEX)
+        _searchParams.update { it.copy(text = text, page = currentPage.get()) }
+    }
+
+    fun clearSearchQuery() {
+        lastSuccesResult = VacancyShortResponse.Empty
+        _state.value = VacanciesState.Empty
     }
 
     fun onLoadNextPage() {
-        searchPageInteractor.searchNextPage()
+        viewModelScope.launch {
+            searchVacancies(searchParams.value.text, currentPage.get() + PAGE_INCREMENT)
+        }
+    }
+
+    private fun isFirstSearch(): Boolean {
+        return currentPage.get() <= FIRST_PAGE_INDEX
+    }
+
+    private fun prepareNextSearch() {
+        currentPage.incrementAndGet()
     }
 
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
+        private const val FIRST_PAGE_INDEX = 1
+        private const val PAGE_INCREMENT = 1
     }
 }

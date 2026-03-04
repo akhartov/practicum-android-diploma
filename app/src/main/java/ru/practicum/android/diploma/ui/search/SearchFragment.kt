@@ -85,6 +85,10 @@ class SearchFragment : Fragment() {
                 searchQuery = newQuery
                 viewModel.onSearchTextDebounce(newQuery)
             },
+            onClearQuery = {
+                searchQuery = ""
+                viewModel.clearSearchQuery()
+            },
             onFilterIconClick = {
                 findNavController().navigate(R.id.action_searchFragment_to_filterSettingsFragment)
             },
@@ -101,4 +105,5 @@ class SearchFragment : Fragment() {
     companion object {
         private const val CLICK_VACANCY_DEBOUNCE_DELAY = 300L
     }
+
 }
