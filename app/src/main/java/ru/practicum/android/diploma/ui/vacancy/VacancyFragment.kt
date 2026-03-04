@@ -38,6 +38,3 @@ class VacancyFragment : Fragment() {
         fun createArgs(id: String): Bundle = bundleOf(SELECTED_VACANCY to id)
     }
 }
-
-
-
