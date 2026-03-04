@@ -113,8 +113,8 @@ private fun ErrorServer() {
                     .align(Alignment.CenterHorizontally),
                 text = stringResource(R.string.server_error),
                 textAlign = TextAlign.Center,
-                color = LocalAndroidDiplomaScheme.current.vacancy.company,
-                style = LocalAndroidDiplomaTypography.current.medium16
+                color = LocalAndroidDiplomaScheme.current.vacancy.title,
+                style = LocalAndroidDiplomaTypography.current.medium22
             )
         }
     }
@@ -145,8 +145,8 @@ private fun ErrorNotFound() {
                     .align(Alignment.CenterHorizontally),
                 text = stringResource(R.string.vacancies_not_found),
                 textAlign = TextAlign.Center,
-                color = LocalAndroidDiplomaScheme.current.vacancy.company,
-                style = LocalAndroidDiplomaTypography.current.medium16
+                color = LocalAndroidDiplomaScheme.current.vacancy.title,
+                style = LocalAndroidDiplomaTypography.current.medium22
             )
         }
     }
@@ -177,8 +177,8 @@ private fun ErrorNoInternet() {
                     .align(Alignment.CenterHorizontally),
                 text = stringResource(R.string.no_internet),
                 textAlign = TextAlign.Center,
-                color = LocalAndroidDiplomaScheme.current.vacancy.company,
-                style = LocalAndroidDiplomaTypography.current.medium16
+                color = LocalAndroidDiplomaScheme.current.vacancy.title,
+                style = LocalAndroidDiplomaTypography.current.medium22
             )
         }
     }
@@ -224,7 +224,7 @@ private fun ToolBar(likeState: LikeButtonState, vacancyViewModel: VacancyViewMod
         Icon(
             painter = when (likeState) {
                 LikeButtonState.Like -> painterResource(R.drawable.ic_favorites)
-                LikeButtonState.UnLike -> painterResource(R.drawable.ic_favourite)
+                LikeButtonState.UnLike -> painterResource(R.drawable.ic_favorite)
             },
             contentDescription = null,
             tint = when (likeState) {
