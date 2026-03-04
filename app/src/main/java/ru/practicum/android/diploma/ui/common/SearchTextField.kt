@@ -28,6 +28,7 @@ fun SearchTextField(
     searchQuery: String,
     placeholder: String,
     onQueryChange: (String) -> Unit,
+    onClearQuery: () -> Unit,
     searchTextFieldType: SearchTextFieldType = SearchTextFieldType.Primary
 ) {
     val customSearchTextFieldColors = LocalAndroidDiplomaScheme.current.searchField
@@ -82,7 +83,7 @@ fun SearchTextField(
                         contentDescription = null,
                         modifier = Modifier
                             .padding(start = Dimens.padding20)
-                            .clickable { onQueryChange("") },
+                            .clickable { onClearQuery() },
                         tint = searchTextFieldColors.iconColor
                     )
                 }

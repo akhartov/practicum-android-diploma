@@ -8,5 +8,8 @@ sealed interface VacanciesState {
     object Loading : VacanciesState // Идет поиск вакансий
     object NoInternet : VacanciesState // Нет интернета
     object ServerError : VacanciesState // Ошибка сервера
-    class Content(val vacancies: VacancyShortResponse) : VacanciesState // результат поиска
+    class Content(
+        val vacancies: VacancyShortResponse,
+        val inProgress: Boolean = false
+    ) : VacanciesState // результат поиска
 }

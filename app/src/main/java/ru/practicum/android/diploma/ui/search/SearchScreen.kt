@@ -35,6 +35,7 @@ fun SearchScreen(
     state: VacanciesState,
     searchQuery: String,
     onQueryChange: (String) -> Unit,
+    onClearQuery: () -> Unit,
     onFilterIconClick: () -> Unit,
     onVacancyItemClick: (String) -> Unit,
     onLoadNextPage: () -> Unit,
@@ -58,6 +59,7 @@ fun SearchScreen(
                 searchQuery = searchQuery,
                 placeholder = stringResource(R.string.enter_search_query),
                 onQueryChange = onQueryChange,
+                onClearQuery = onClearQuery
             )
             Spacer(modifier = Modifier.height(Dimens.padding2))
 

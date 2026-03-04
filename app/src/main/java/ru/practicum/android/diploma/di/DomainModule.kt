@@ -2,6 +2,8 @@ package ru.practicum.android.diploma.di
 
 import org.koin.dsl.module
 import ru.practicum.android.diploma.domain.GetVacanciesFlowUseCase
+import ru.practicum.android.diploma.data.impl.FavoritesRepositoryImpl
+import ru.practicum.android.diploma.data.repository.FavoritesRepository
 import ru.practicum.android.diploma.domain.LikeInteractor
 import ru.practicum.android.diploma.domain.api.SearchVacanciesInteractor
 import ru.practicum.android.diploma.domain.api.SharingInteractor
@@ -19,6 +21,7 @@ val domainModule = module {
         SearchVacanciesInteractorImpl(get())
     }
 
+    single<FavoritesRepository> { FavoritesRepositoryImpl(get(), get()) }
     single<LikeInteractor> { LikeInteractorImpl(get()) }
     single<VacancyInteractor> { VacancyInteractorImpl(get()) }
 
