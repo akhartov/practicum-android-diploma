@@ -10,9 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.ViewCompositionStrategy
@@ -59,9 +56,7 @@ class SearchFragment : Fragment() {
     @Composable
     fun SearchScreenContent(context: Context) {
         val state by viewModel.state.collectAsState()
-
-        var searchQuery by remember { mutableStateOf("") }
-
+        val searchQuery by viewModel.query.collectAsState()
         val toastEvent by viewModel.toastState.collectAsState()
 
         LaunchedEffect(toastEvent) {
@@ -82,11 +77,9 @@ class SearchFragment : Fragment() {
             state = state,
             searchQuery = searchQuery,
             onQueryChange = { newQuery ->
-                searchQuery = newQuery
                 viewModel.onSearchTextDebounce(newQuery)
             },
             onClearQuery = {
-                searchQuery = ""
                 viewModel.clearSearchQuery()
             },
             onFilterIconClick = {
