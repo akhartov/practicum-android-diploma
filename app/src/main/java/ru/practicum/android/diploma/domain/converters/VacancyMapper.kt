@@ -96,16 +96,22 @@ class VacancyMapper(
             employerCity = vacancyEntity.employerCity,
             description = vacancyEntity.description,
             skills = vacancyEntity.skills,
-            contacts = if (vacancyEntity.contactsName != null || vacancyEntity.contactsEmail != null || vacancyEntity.contactsPhones != null) {
-                Contacts(
-                    name = vacancyEntity.contactsName ?: "",
-                    email = vacancyEntity.contactsEmail ?: "",
-                    phone = vacancyEntity.contactsPhones ?: emptyList()
-                )
-            } else {
-                null
-            }
+            contacts = createContactsIfNeeded(vacancyEntity)
         )
+    }
+
+    private fun createContactsIfNeeded(entity: VacancyEntity): Contacts? {
+        return if (entity.contactsName != null ||
+            entity.contactsEmail != null ||
+            entity.contactsPhones != null) {
+            Contacts(
+                name = entity.contactsName ?: "",
+                email = entity.contactsEmail ?: "",
+                phone = entity.contactsPhones ?: emptyList()
+            )
+        } else {
+            null
+        }
     }
 
     fun entityToVacancyShort(vacancyEntity: VacancyEntity): VacancyShort {

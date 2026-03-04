@@ -11,7 +11,9 @@ import ru.practicum.android.diploma.domain.models.MailData
 
 class ExternalNavigatorImpl(private val context: Context) : ExternalNavigator {
     override fun shareLink(link: String) {
-        val shareIntent = Intent(Intent.ACTION_SEND)
+        val shareIntent = Intent(Intent.ACTION_SEND).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        }
         shareIntent.type = "text/plain"
         shareIntent.putExtra(
             Intent.EXTRA_TEXT,
@@ -29,6 +31,7 @@ class ExternalNavigatorImpl(private val context: Context) : ExternalNavigator {
         val callIntent = Intent(Intent.ACTION_DIAL)
             .apply {
                 data = "tel:$phoneNumber".toUri()
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK
             }
 
         try {

@@ -581,7 +581,7 @@ private fun ToolBar(likeState: LikeButtonState, vacancyViewModel: VacancyViewMod
 @Composable
 private fun VacancyScreenPreview() {
     AndroidDiplomaTheme {
-        //VacancyScreen()
+        // VacancyScreen()
     }
 }
 
