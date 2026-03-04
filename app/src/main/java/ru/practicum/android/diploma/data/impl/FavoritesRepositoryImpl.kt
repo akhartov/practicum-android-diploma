@@ -1,5 +1,7 @@
 package ru.practicum.android.diploma.data.impl
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import ru.practicum.android.diploma.data.db.dao.VacancyDao
 import ru.practicum.android.diploma.data.repository.FavoritesRepository
 import ru.practicum.android.diploma.domain.converters.VacancyMapper
@@ -40,4 +42,9 @@ class FavoritesRepositoryImpl(
     override suspend fun deleteVacancyById(id: String) {
         vacancyDao.deleteVacancyId(id)
     }
+
+    override fun getVacanciesFlow(): Flow<List<VacancyShort>> =
+        vacancyDao.getVacanciesFlow().map { entities ->
+            entities.map { entity -> vacancyMapper.entityToVacancyShort(entity) }
+        }
 }
