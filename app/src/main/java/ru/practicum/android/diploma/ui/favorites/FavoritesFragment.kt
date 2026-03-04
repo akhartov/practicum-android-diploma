@@ -70,7 +70,7 @@ class FavoritesFragment : Fragment() {
     }
 
     companion object {
-        private const val CLICK_DEBOUNCE_DELAY = 2000L
+        private const val CLICK_DEBOUNCE_DELAY = 300L
     }
 }
 
