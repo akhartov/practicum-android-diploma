@@ -7,11 +7,7 @@ import ru.practicum.android.diploma.domain.models.Filters
 import ru.practicum.android.diploma.ui.filter.workplace.FilterIconType
 
 class FilterInteractorImpl : FilterInteractor {
-    override fun searchWithFilters(filters: Filters): HashMap<String, String> {
-        return HashMap()
-    }
-
-    override fun searchWithoutFilters(): HashMap<String, String> {
+    override fun prepareQueryParams(filters: Filters): HashMap<String, String> {
         return HashMap()
     }
 
