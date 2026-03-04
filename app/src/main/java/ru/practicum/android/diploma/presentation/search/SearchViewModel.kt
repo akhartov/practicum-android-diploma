@@ -40,6 +40,10 @@ class SearchViewModel(
             .launchIn(viewModelScope)
     }
 
+    fun clearToast() {
+        _toastState.value = ToastState.NoProblem
+    }
+
     fun searchVacancies(text: String, page: Int) {
         if (text.isBlank()) {
             lastSuccesResult = VacancyShortResponse.Empty

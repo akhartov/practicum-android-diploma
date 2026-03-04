@@ -74,6 +74,8 @@ class SearchFragment : Fragment() {
             if (toastText.isNotBlank()) {
                 Toast.makeText(context, toastText, Toast.LENGTH_SHORT).show()
             }
+
+            viewModel.clearToast()
         }
 
         SearchScreen(
