@@ -38,8 +38,8 @@ class VacancyViewModel(
     }
 
     fun shareLink() {
-        if (currentVacancy != null && currentVacancy?.url != null) {
-            sharingInteractor.shareVacancy(currentVacancy?.url ?: "")
+        currentVacancy?.url?.let { url ->
+            sharingInteractor.shareVacancy(url)
         }
     }
 
