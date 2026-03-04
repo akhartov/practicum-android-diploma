@@ -38,6 +38,8 @@
     <string name="cant_get_vacancies">Не удалось получить\nсписок вакансий</string>
     <string name="dont_show_without_salary">Не показывать без зарплаты</string>
     <string name="no_vacancies">Таких вакансий нет</string>
+    <string name="check_connection">Проверьте подключение к интернету</string>
+    <string name="error_happened">Произошла ошибка</string>
     <string name="enter_search_query">Введите запрос</string>
     <string name="dot">•</string>
 

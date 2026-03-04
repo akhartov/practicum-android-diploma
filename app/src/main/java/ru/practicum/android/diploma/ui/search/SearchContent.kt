@@ -72,7 +72,7 @@ fun SearchContent(
                     onClick = { onVacancyItemClick(vacancy.id) }
                 )
             }
-            if (isSearchInProgress.value) {
+            if (state.inProgress) {
                 item(key = "loading_indicator") {
                     Box(
                         modifier = Modifier

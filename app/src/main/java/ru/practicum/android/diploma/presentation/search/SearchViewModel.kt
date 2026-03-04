@@ -14,6 +14,7 @@ import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.SearchPageInteractor
 import ru.practicum.android.diploma.domain.api.SearchVacanciesInteractor
 import ru.practicum.android.diploma.domain.models.VacancyShortResponse
+import ru.practicum.android.diploma.presentation.model.ToastState
 import ru.practicum.android.diploma.presentation.model.VacanciesState
 import ru.practicum.android.diploma.util.NetworkResponseStatus
 import ru.practicum.android.diploma.util.Resource
@@ -28,6 +29,9 @@ class SearchViewModel(
     val state: StateFlow<VacanciesState> = _state.asStateFlow()
     private val _isSearchInProgress = MutableStateFlow(false)
     val isSearchInProgress: StateFlow<Boolean> = _isSearchInProgress.asStateFlow()
+
+    private val _toastState = MutableStateFlow<ToastState>(ToastState.NoProblem)
+    val toastState: StateFlow<ToastState> = _toastState.asStateFlow()
 
     init {
         searchPageInteractor.searchParams.debounce(SEARCH_DEBOUNCE_DELAY) // пауза
@@ -49,7 +53,7 @@ class SearchViewModel(
             lastSuccesResult = VacancyShortResponse.Empty
             _state.value = VacanciesState.Loading
         } else {
-            _state.value = VacanciesState.Content(lastSuccesResult)
+            _state.value = VacanciesState.Content(lastSuccesResult, inProgress = true)
         }
 
         viewModelScope.launch {
@@ -94,11 +98,29 @@ class SearchViewModel(
     }
 
     private fun handleError(errorCode: Int?) {
-        _state.value = when (errorCode) {
-            NetworkResponseStatus.NO_INTERNET -> VacanciesState.NoInternet
-            NetworkResponseStatus.SERVER_ERROR -> VacanciesState.ServerError
-            NetworkResponseStatus.NOT_FOUND -> VacanciesState.NotFound
-            else -> VacanciesState.ServerError // или другая ошибка по умолчанию
+        if (searchPageInteractor.isFirstSearch()) {
+            _state.value = when (errorCode) {
+                NetworkResponseStatus.NO_INTERNET -> VacanciesState.NoInternet
+                NetworkResponseStatus.SERVER_ERROR -> VacanciesState.ServerError
+                else -> VacanciesState.ServerError // или другая ошибка по умолчанию
+            }
+        } else {
+            when (errorCode) {
+                NetworkResponseStatus.NO_INTERNET -> {
+                    _toastState.value = ToastState.NoInternet
+                    _state.value = VacanciesState.Content(lastSuccesResult)
+                }
+
+                NetworkResponseStatus.SERVER_ERROR -> {
+                    _toastState.value = ToastState.ServerError
+                    VacanciesState.Content(lastSuccesResult)
+                }
+
+                else -> { // или другая ошибка по умолчанию
+                    _toastState.value = ToastState.ServerError
+                    VacanciesState.Content(lastSuccesResult)
+                }
+            }
         }
     }
 
