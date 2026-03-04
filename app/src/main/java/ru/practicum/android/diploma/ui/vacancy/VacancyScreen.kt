@@ -223,8 +223,8 @@ private fun ToolBar(likeState: LikeButtonState, vacancyViewModel: VacancyViewMod
         )
         Icon(
             painter = when (likeState) {
-                LikeButtonState.Like -> painterResource(R.drawable.ic_favorites)
-                LikeButtonState.UnLike -> painterResource(R.drawable.ic_favorite)
+                LikeButtonState.Like -> painterResource(R.drawable.ic_favorite)
+                LikeButtonState.UnLike -> painterResource(R.drawable.ic_favourite)
             },
             contentDescription = null,
             tint = when (likeState) {
