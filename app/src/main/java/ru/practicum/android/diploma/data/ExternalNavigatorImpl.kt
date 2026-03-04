@@ -47,9 +47,7 @@ class ExternalNavigatorImpl(private val context: Context) : ExternalNavigator {
         }
         mailIntent.data = Uri.parse("mailto:")
         mailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(data.email))
-        mailIntent.putExtra(
-            Intent.EXTRA_SUBJECT, data.topic
-        )
+        mailIntent.putExtra(Intent.EXTRA_SUBJECT, data.topic)
         context.startActivity(mailIntent)
     }
 

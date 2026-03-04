@@ -52,7 +52,7 @@ class VacancyMapper(
                 vacancyDto.address.raw
             } else {
                 vacancyDto.area
-            })  as? String,
+            }) as? String,
             description = vacancyDto.description,
             contacts = vacancyDto.contacts?.toContacts(),
             skills = vacancyDto.skills,
