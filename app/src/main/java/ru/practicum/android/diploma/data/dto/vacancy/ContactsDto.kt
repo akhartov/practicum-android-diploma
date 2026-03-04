@@ -16,4 +16,3 @@ fun ContactsDto.toContacts(): Contacts {
         phone = phones?.map { it.toPhone() } ?: emptyList()
     )
 }
-

@@ -60,4 +60,3 @@ class SalaryMapper(
         const val SAMPLE_TWO_LIMIT = "%s %s %s"
     }
 }
-

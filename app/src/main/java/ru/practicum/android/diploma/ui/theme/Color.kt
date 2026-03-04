@@ -15,4 +15,3 @@ const val HEX_BLUE = 0xFF3772E7
 const val HEX_RED = 0xFFF56B6C
 const val HEX_GRAY = 0xFFAEAFB4
 const val HEX_LIGHT_GRAY = 0xFFE6E8EB
-
