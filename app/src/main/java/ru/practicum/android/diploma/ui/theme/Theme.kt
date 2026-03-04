@@ -51,6 +51,16 @@ private val LightCustomScheme = AndroidDiplomaScheme(
     results = ResultsColors(
         background = Blue,
         text = White
+    ),
+    filterIcon = FilterIconColors(
+        hasFilterIcon = FilterIconState(
+            background = Blue,
+            hint = White
+        ),
+        noFilterIcon = FilterIconState(
+            background = White,
+            hint = Black
+        )
     )
 )
 
@@ -78,14 +88,35 @@ private val DarkCustomScheme = AndroidDiplomaScheme(
     results = ResultsColors(
         background = Blue,
         text = White
+    ),
+    filterIcon = FilterIconColors(
+        hasFilterIcon = FilterIconState(
+            background = Blue,
+            hint = White
+        ),
+        noFilterIcon = FilterIconState(
+            background = Black,
+            hint = White
+        )
     )
+)
+
+data class FilterIconColors(
+    val hasFilterIcon: FilterIconState,
+    val noFilterIcon: FilterIconState
+)
+
+data class FilterIconState(
+    val background: Color,
+    val hint: Color
 )
 
 data class AndroidDiplomaScheme(
     val topBar: TopBarStateColors,
     val searchField: SearchFieldColors,
     val vacancy: VacancyColors,
-    val results: ResultsColors
+    val results: ResultsColors,
+    val filterIcon: FilterIconColors
 )
 
 // Результат поиска(количество найденных вакансий)

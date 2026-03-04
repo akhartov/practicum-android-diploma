@@ -20,6 +20,7 @@ object Dimens {
     val padding186 = 186.dp
 
     // Углы
+    val cornerRadius4 = 4.dp
     val cornerRadius12 = 12.dp
 
     // Высоты элементов
@@ -39,6 +40,7 @@ object Dimens {
     val teamTitleHeight = 92.dp
     val logoSize = 48.dp
     val logoBorderThickness = 1.dp
+    val filterIconSize = 24.dp
     val imageSize = 48.dp
     val progressIndicatorSize = 36.dp
 }
