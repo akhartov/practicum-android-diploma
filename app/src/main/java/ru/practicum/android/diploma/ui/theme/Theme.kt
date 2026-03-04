@@ -42,7 +42,11 @@ private val LightCustomScheme = AndroidDiplomaScheme(
     vacancy = VacancyColors(
         title = Black,
         subTitle = Black,
-        logo = LightGray
+        logo = LightGray,
+        employerBg = LightGray,
+        company = Black,
+        progress = Blue,
+        like = Red
     ),
     results = ResultsColors(
         background = Blue,
@@ -75,7 +79,11 @@ private val DarkCustomScheme = AndroidDiplomaScheme(
     vacancy = VacancyColors(
         title = White,
         subTitle = White,
-        logo = LightGray
+        logo = LightGray,
+        employerBg = LightGray,
+        company = Black,
+        progress = Blue,
+        like = Red
     ),
     results = ResultsColors(
         background = Blue,
@@ -120,7 +128,11 @@ data class ResultsColors(
 data class VacancyColors(
     val title: Color,
     val subTitle: Color,
-    val logo: Color
+    val logo: Color,
+    val employerBg: Color,
+    val company: Color,
+    val progress: Color,
+    val like: Color
 )
 
 data class SearchFieldColors(

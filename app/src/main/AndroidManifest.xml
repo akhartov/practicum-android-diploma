@@ -16,6 +16,7 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/Theme.PracticumAndroidDiploma"
+        android:usesCleartextTraffic="true"
         tools:ignore="DiscouragedApi"
         tools:targetApi="31">
         <activity
