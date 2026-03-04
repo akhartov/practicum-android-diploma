@@ -86,13 +86,13 @@ fun FavoritesScreen(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(top = Dimens.padding20, start = Dimens.padding16, end = Dimens.padding16)
+            .padding(start = Dimens.padding16, end = Dimens.padding16)
     ) {
         Text(
             modifier = Modifier
                 .align(Alignment.Start)
                 .height(Dimens.headerHeight)
-                .padding(top = Dimens.padding16),
+                .padding(top = Dimens.padding20),
             text = header,
             textAlign = TextAlign.Left,
             color = LocalAndroidDiplomaScheme.current.vacancy.title,
