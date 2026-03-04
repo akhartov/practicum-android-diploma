@@ -100,6 +100,7 @@ class SearchViewModel(private val searchVacanciesInteractor: SearchVacanciesInte
         _state.value = when (errorCode) {
             NetworkResponseStatus.NO_INTERNET -> VacanciesState.NoInternet
             NetworkResponseStatus.SERVER_ERROR -> VacanciesState.ServerError
+            NetworkResponseStatus.NOT_FOUND -> VacanciesState.NotFound
             else -> VacanciesState.ServerError // или другая ошибка по умолчанию
         }
     }

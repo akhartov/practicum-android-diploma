@@ -11,6 +11,8 @@ data class Vacancy(
     val employerName: String? = null, // Работодатель название ("Еда")
     val employerLogoUrl: String? = null, // Работодатель логотип
     val employerCity: String? = null, // Работодатель город ("Москва")
+    val address: String? = null, // Если адреса нет, то должно отображаться название региона
     val skills: List<String>? = null, // Ключевые навыки, список полученый из VacancyDetailDto.skills
+    val contacts: Contacts? = null, // Если нет данных о контактах, то раздел «Контакты» не должен отображаться
     val url: String? = null, // Ссылка, чтобы поделиться
 )

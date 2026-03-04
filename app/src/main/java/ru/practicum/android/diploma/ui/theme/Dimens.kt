@@ -14,6 +14,10 @@ object Dimens {
     val padding20 = 20.dp
     val padding24 = 24.dp
     val padding38 = 38.dp
+    val padding32 = 32.dp
+    val padding200 = 200.dp
+    val padding62 = 62.dp
+    val padding186 = 186.dp
 
     // Углы
     val cornerRadius12 = 12.dp
@@ -26,14 +30,15 @@ object Dimens {
     val headerHeight = 64.dp
     val buttonHeight = 60.dp
     val salaryBarHeight = 56.dp
-    val toolBarHeight = 56.dp
+    val toolBarHeight = 64.dp
     val navigationBarHeight = 58.dp
-    val companyBarHeight = 58.dp
+    val companyBarHeight = 80.dp
     val industryItemHeight = 60.dp
     val itemHeight = 60.dp
     val teamScreenTitleHeight = 64.dp
     val teamTitleHeight = 92.dp
     val logoSize = 48.dp
     val logoBorderThickness = 1.dp
+    val imageSize = 48.dp
     val progressIndicatorSize = 36.dp
 }
