@@ -33,7 +33,8 @@ class SearchViewModel(
     val state: StateFlow<VacanciesState> = _state.asStateFlow()
     private val _isSearchInProgress = MutableStateFlow(false)
     val isSearchInProgress: StateFlow<Boolean> = _isSearchInProgress.asStateFlow()
-
+    private val _query = MutableStateFlow<String>("")
+    val query: StateFlow<String> = _query.asStateFlow()
     private val _toastState = MutableStateFlow<ToastState>(ToastState.NoProblem)
     val toastState: StateFlow<ToastState> = _toastState.asStateFlow()
 
@@ -133,11 +134,13 @@ class SearchViewModel(
     }
 
     fun onSearchTextDebounce(text: String) {
+        _query.value = text
         currentPage.set(FIRST_PAGE_INDEX)
         _searchParams.update { it.copy(text = text, page = currentPage.get()) }
     }
 
     fun clearSearchQuery() {
+        _query.value = ""
         lastSuccesResult = VacancyShortResponse.Empty
         _state.value = VacanciesState.Empty
     }
