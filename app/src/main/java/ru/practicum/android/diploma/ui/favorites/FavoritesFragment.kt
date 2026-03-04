@@ -10,14 +10,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
@@ -25,12 +21,12 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.domain.models.VacancyShort
 import ru.practicum.android.diploma.presentation.favorites.FavoritesState
 import kotlin.getValue
 import ru.practicum.android.diploma.presentation.favorites.FavoritesViewModel
@@ -75,7 +71,6 @@ class FavoritesFragment : Fragment() {
 
     companion object {
         private const val CLICK_DEBOUNCE_DELAY = 2000L
-        private const val VACANCY_ID = "VACANCY_ID"
     }
 }
 
@@ -104,45 +99,33 @@ fun FavoritesScreen(
             style = LocalAndroidDiplomaTypography.current.medium22
         )
 
-        when {
-            state.fail -> FailState()
-            state.vacancies.isEmpty() -> NoVacanciesState()
-            else -> WithVacanciesState(favoritesViewModel, state, navigateToVacancy)
+        state?.let {
+            when (it) {
+                is FavoritesState.Content -> {
+                    if (it.vacancies.isEmpty()) {
+                        NoVacanciesState()
+                    } else {
+                        WithVacanciesState(it.vacancies, navigateToVacancy)
+                    }
+                }
+
+                FavoritesState.Fail -> FailState()
+            }
         }
     }
 }
 
 @Composable
 fun WithVacanciesState(
-    favoritesViewModel: FavoritesViewModel,
-    state: FavoritesState,
+    vacancies: List<VacancyShort>,
     navigateToVacancy: (vacancyId: String) -> Unit
 ) {
-    val listState = rememberLazyListState()
-    val isLoading = favoritesViewModel.isLoading
-
-    val shouldLoadNext = remember {
-        derivedStateOf {
-            val lastVisibleItemIndex = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index
-            val totalItemsCount = listState.layoutInfo.totalItemsCount
-
-            lastVisibleItemIndex != null && lastVisibleItemIndex >= totalItemsCount - 1
-        }
-    }
-
-    LaunchedEffect(shouldLoadNext.value) {
-        if (shouldLoadNext.value && !isLoading.value) {
-            favoritesViewModel.loadMoreItems()
-        }
-    }
-
     LazyColumn(
         Modifier
             .fillMaxWidth()
             .padding(top = Dimens.padding8),
-        state = listState,
     ) {
-        items(state.vacancies) { vacancy ->
+        items(vacancies) { vacancy ->
             VacancyItem(
                 vacancy,
                 { navigateToVacancy(vacancy.id) },

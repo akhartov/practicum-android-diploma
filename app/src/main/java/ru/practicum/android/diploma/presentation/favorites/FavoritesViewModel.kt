@@ -6,37 +6,24 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import ru.practicum.android.diploma.domain.FavoritesInteractor
+import ru.practicum.android.diploma.domain.GetVacanciesFlowUseCase
 
 class FavoritesViewModel(
-    private val favoritesInteractor: FavoritesInteractor,
+    private val getVacanciesFlowUseCase: GetVacanciesFlowUseCase,
 ) : ViewModel() {
-    private val _isLoading = MutableStateFlow(false)
-    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
-    private val _stateFlow = MutableStateFlow(FavoritesState())
-    fun stateFlow(): StateFlow<FavoritesState> = _stateFlow.asStateFlow()
+    private val _stateFlow = MutableStateFlow<FavoritesState?>(null)
+    fun stateFlow(): StateFlow<FavoritesState?> = _stateFlow.asStateFlow()
 
     init {
-        loadMoreItems()
-    }
-
-    fun loadMoreItems() {
         viewModelScope.launch {
-            _isLoading.value = true
             runCatching {
-                val newItems = favoritesInteractor.getNewVacancies(DEFAULT_PAGE_SIZE)
-                _stateFlow.value = FavoritesState(_stateFlow.value.vacancies + newItems.toMutableList())
+                getVacanciesFlowUseCase.getVacanciesFlow().collect { vacancies ->
+                    _stateFlow.emit(FavoritesState.Content(vacancies))
+                }
             }.onFailure {
-                _stateFlow.value = FavoritesState(_stateFlow.value.vacancies, true)
+                _stateFlow.emit(FavoritesState.Fail)
             }
-
-            _isLoading.value = false
-
         }
-    }
-
-    companion object {
-        const val DEFAULT_PAGE_SIZE = 15
     }
 }

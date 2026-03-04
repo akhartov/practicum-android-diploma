@@ -2,7 +2,7 @@ package ru.practicum.android.diploma.presentation.favorites
 
 import ru.practicum.android.diploma.domain.models.VacancyShort
 
-data class FavoritesState(
-    val vacancies: List<VacancyShort> = listOf(),
-    val fail: Boolean = false
-)
+sealed interface FavoritesState {
+    data object Fail : FavoritesState
+    data class Content(val vacancies: List<VacancyShort> = listOf()) : FavoritesState
+}

@@ -318,4 +318,3 @@ private fun Skills(skills: List<String>) {
         }
     }
 }
-
