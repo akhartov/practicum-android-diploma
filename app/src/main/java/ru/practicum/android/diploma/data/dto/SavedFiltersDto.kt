@@ -9,11 +9,10 @@ data class SavedFiltersDto(
     val isIncludeSalary: String
 )
 
-fun SavedFiltersDto.toFilters(): Filters {
-    return Filters(
-        area = if (this.area == "") null else this.area.toInt(),
-        industry = if (this.industry == "") null else this.industry.toInt(),
-        salary = if (this.salary == "") null else this.salary.toInt(),
+fun SavedFiltersDto.toFilters(): Filters =
+    Filters(
+        area = if (area.isEmpty()) null else area.toInt(),
+        industry = if (industry.isEmpty()) null else industry.toInt(),
+        salary = if (salary.isEmpty()) null else salary.toInt(),
         isIncludeSalary = this.isIncludeSalary.toBoolean()
     )
-}
