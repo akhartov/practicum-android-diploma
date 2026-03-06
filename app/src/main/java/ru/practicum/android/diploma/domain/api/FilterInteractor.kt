@@ -5,6 +5,9 @@ import ru.practicum.android.diploma.domain.models.Filters
 import ru.practicum.android.diploma.ui.filter.workplace.FilterIconType
 
 interface FilterInteractor {
+    fun getFilters(): Filters
+    fun setFilters(filters: Filters)
+    fun resetFilters()
     fun prepareQueryParams(filters: Filters): HashMap<String, String>
     fun getFilterIconState(): Flow<FilterIconType>
 }

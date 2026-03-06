@@ -5,9 +5,11 @@ import ru.practicum.android.diploma.domain.GetVacanciesFlowUseCase
 import ru.practicum.android.diploma.data.impl.FavoritesRepositoryImpl
 import ru.practicum.android.diploma.data.repository.FavoritesRepository
 import ru.practicum.android.diploma.domain.LikeInteractor
+import ru.practicum.android.diploma.domain.api.FilterInteractor
 import ru.practicum.android.diploma.domain.api.SearchVacanciesInteractor
 import ru.practicum.android.diploma.domain.api.SharingInteractor
 import ru.practicum.android.diploma.domain.api.VacancyInteractor
+import ru.practicum.android.diploma.domain.impl.FilterInteractorImpl
 import ru.practicum.android.diploma.domain.impl.LikeInteractorImpl
 import ru.practicum.android.diploma.domain.impl.SearchVacanciesInteractorImpl
 import ru.practicum.android.diploma.domain.impl.SharingInteractorImpl
@@ -25,4 +27,6 @@ val domainModule = module {
 
     single<SharingInteractor> { SharingInteractorImpl(get()) }
     single { GetVacanciesFlowUseCase(get()) }
+
+    single<FilterInteractor> { FilterInteractorImpl(get()) }
 }
