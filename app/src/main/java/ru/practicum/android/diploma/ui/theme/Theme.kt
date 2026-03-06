@@ -39,11 +39,15 @@ private val LightCustomScheme = AndroidDiplomaScheme(
         cursor = Blue,
         icon = Black
     ),
-    buttonColors = ActionButtonColors(
-        approveBackground = Blue,
-        approveText = White,
-        declineBackground = White,
-        declineText = Red,
+    buttonColors = ButtonColors(
+        approve = ButtonElementColors(
+            background = Blue,
+            text = White
+        ),
+        decline = ButtonElementColors(
+            background = White,
+            text = Red
+        ),
     ),
     vacancy = VacancyColors(
         title = Black,
@@ -82,11 +86,15 @@ private val DarkCustomScheme = AndroidDiplomaScheme(
         cursor = Blue,
         icon = Black
     ),
-    buttonColors = ActionButtonColors(
-        approveBackground = Blue,
-        approveText = White,
-        declineBackground = Black,
-        declineText = Red,
+    buttonColors = ButtonColors(
+        approve = ButtonElementColors(
+            background = Blue,
+            text = White
+        ),
+        decline = ButtonElementColors(
+            background = Black,
+            text = Red
+        ),
     ),
     vacancy = VacancyColors(
         title = White,
@@ -126,17 +134,20 @@ data class FilterIconState(
 data class AndroidDiplomaScheme(
     val topBar: TopBarStateColors,
     val searchField: SearchFieldColors,
-    val buttonColors: ActionButtonColors,
+    val buttonColors: ButtonColors,
     val vacancy: VacancyColors,
     val results: ResultsColors,
     val filterIcon: FilterIconColors
 )
 
-data class ActionButtonColors(
-    val approveBackground: Color,
-    val approveText: Color,
-    val declineBackground: Color,
-    val declineText: Color,
+data class ButtonColors(
+    val approve: ButtonElementColors,
+    val decline: ButtonElementColors,
+)
+
+data class ButtonElementColors(
+    val background: Color,
+    val text: Color
 )
 
 // Результат поиска(количество найденных вакансий)

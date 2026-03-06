@@ -12,8 +12,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_NIGHT_NO
 import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_NIGHT_YES
 import androidx.compose.ui.tooling.preview.Preview
-import ru.practicum.android.diploma.ui.theme.ActionButtonColors
 import ru.practicum.android.diploma.ui.theme.AndroidDiplomaTheme
+import ru.practicum.android.diploma.ui.theme.ButtonColors
 import ru.practicum.android.diploma.ui.theme.Dimens
 import ru.practicum.android.diploma.ui.theme.LocalAndroidDiplomaScheme
 import ru.practicum.android.diploma.ui.theme.LocalAndroidDiplomaTypography
@@ -48,22 +48,22 @@ fun ButtonControl(
 }
 
 sealed class ButtonControlType {
-    abstract fun getConfig(customButtonColors: ActionButtonColors): Config
+    abstract fun getConfig(customButtonColors: ButtonColors): Config
 
     data object Approve : ButtonControlType() {
-        override fun getConfig(customButtonColors: ActionButtonColors): Config {
+        override fun getConfig(customButtonColors: ButtonColors): Config {
             return Config(
-                backgroundColor = customButtonColors.approveBackground,
-                textColor = customButtonColors.approveText,
+                backgroundColor = customButtonColors.approve.background,
+                textColor = customButtonColors.approve.text,
             )
         }
     }
 
     data object Decline : ButtonControlType() {
-        override fun getConfig(customButtonColors: ActionButtonColors): Config {
+        override fun getConfig(customButtonColors: ButtonColors): Config {
             return Config(
-                backgroundColor = customButtonColors.declineBackground,
-                textColor = customButtonColors.declineText,
+                backgroundColor = customButtonColors.decline.background,
+                textColor = customButtonColors.decline.text,
             )
         }
     }
