@@ -1,8 +1,10 @@
 package ru.practicum.android.diploma.data.dto
 
 data class SavedFiltersDto(
-    val areaId: Int?,
-    val industryId: Int?,
-    val salary: Int?,
-    val isIncludeSalary: Boolean
+    val area: String,
+    val areaId: String,
+    val industry: String,
+    val industryId: String,
+    val salary: String,
+    val isIncludeSalary: String
 )

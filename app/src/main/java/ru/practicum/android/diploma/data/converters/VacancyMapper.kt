@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.domain.converters
+package ru.practicum.android.diploma.data.converters
 
 import ru.practicum.android.diploma.data.db.entity.VacancyEntity
 import ru.practicum.android.diploma.data.dto.VacancyResponse
