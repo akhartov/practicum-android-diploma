@@ -15,7 +15,6 @@ import ru.practicum.android.diploma.domain.impl.SharingInteractorImpl
 import ru.practicum.android.diploma.domain.impl.VacancyInteractorImpl
 
 val domainModule = module {
-    single { VacancyMapper(get()) }
 
     single<SearchVacanciesInteractor> {
         SearchVacanciesInteractorImpl(get())

@@ -12,6 +12,8 @@ import ru.practicum.android.diploma.BuildConfig
 import ru.practicum.android.diploma.data.ExternalNavigatorImpl
 import ru.practicum.android.diploma.data.SearchVacanciesRepositoryImpl
 import ru.practicum.android.diploma.data.VacancyRepositoryImpl
+import ru.practicum.android.diploma.data.converters.FiltersMapper
+import ru.practicum.android.diploma.data.converters.VacancyMapper
 import ru.practicum.android.diploma.data.db.AppDatabase
 import ru.practicum.android.diploma.data.db.dao.VacancyDao
 import ru.practicum.android.diploma.data.impl.FavoritesRepositoryImpl
@@ -71,4 +73,8 @@ val dataModule = module {
     single<SearchVacanciesRepository> {
         SearchVacanciesRepositoryImpl(get(), get())
     }
+
+    single { VacancyMapper(get()) }
+
+    single { FiltersMapper() }
 }
