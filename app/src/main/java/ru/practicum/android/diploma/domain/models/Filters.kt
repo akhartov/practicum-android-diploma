@@ -1,8 +1,10 @@
 package ru.practicum.android.diploma.domain.models
 
 data class Filters(
-    val area: Area?,
-    val industry: Industry?,
-    val preferSalary: String?,
-    val isIncludeSalary: Boolean?
+    val area: String?,
+    val areaId: Int?,
+    val industry: String?,
+    val industryId: Int?,
+    val salary: Int?,
+    val isIncludeSalary: Boolean
 )
