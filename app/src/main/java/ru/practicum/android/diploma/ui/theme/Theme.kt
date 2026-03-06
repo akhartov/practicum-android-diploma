@@ -41,11 +41,26 @@ private val LightCustomScheme = AndroidDiplomaScheme(
     ),
     vacancy = VacancyColors(
         title = Black,
-        subTitle = Black
+        subTitle = Black,
+        logo = LightGray,
+        employerBg = LightGray,
+        company = Black,
+        progress = Blue,
+        like = Red
     ),
     results = ResultsColors(
         background = Blue,
         text = White
+    ),
+    filterIcon = FilterIconColors(
+        hasFilterIcon = FilterIconState(
+            background = Blue,
+            hint = White
+        ),
+        noFilterIcon = FilterIconState(
+            background = White,
+            hint = Black
+        )
     )
 )
 
@@ -59,23 +74,49 @@ private val DarkCustomScheme = AndroidDiplomaScheme(
         text = Black,
         hint = White,
         cursor = Blue,
-        icon = Blue
+        icon = Black
     ),
     vacancy = VacancyColors(
         title = White,
-        subTitle = White
+        subTitle = White,
+        logo = LightGray,
+        employerBg = LightGray,
+        company = Black,
+        progress = Blue,
+        like = Red
     ),
     results = ResultsColors(
         background = Blue,
         text = White
+    ),
+    filterIcon = FilterIconColors(
+        hasFilterIcon = FilterIconState(
+            background = Blue,
+            hint = White
+        ),
+        noFilterIcon = FilterIconState(
+            background = Black,
+            hint = White
+        )
     )
+)
+
+data class FilterIconColors(
+    val hasFilterIcon: FilterIconState,
+    val noFilterIcon: FilterIconState
+)
+
+data class FilterIconState(
+    val background: Color,
+    val hint: Color
 )
 
 data class AndroidDiplomaScheme(
     val topBar: TopBarStateColors,
     val searchField: SearchFieldColors,
     val vacancy: VacancyColors,
-    val results: ResultsColors
+    val results: ResultsColors,
+    val filterIcon: FilterIconColors
 )
 
 // Результат поиска(количество найденных вакансий)
@@ -86,7 +127,12 @@ data class ResultsColors(
 
 data class VacancyColors(
     val title: Color,
-    val subTitle: Color
+    val subTitle: Color,
+    val logo: Color,
+    val employerBg: Color,
+    val company: Color,
+    val progress: Color,
+    val like: Color
 )
 
 data class SearchFieldColors(
@@ -111,7 +157,7 @@ val LocalAndroidDiplomaTypography = staticCompositionLocalOf<AndroidDiplomaTypog
 }
 
 @Composable
-fun AndoroidDiplomaTheme(
+fun AndroidDiplomaTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {

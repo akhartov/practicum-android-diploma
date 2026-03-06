@@ -5,6 +5,7 @@ import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import org.koin.java.KoinJavaComponent.getKoin
+import ru.practicum.android.diploma.domain.models.Phones
 import kotlin.getValue
 
 class Converters {
@@ -28,6 +29,20 @@ class Converters {
 
     @TypeConverter
     fun toString(list: List<String>?): String? {
-        return gson.toJson(list)
+        return list?.let { gson.toJson(list) }
+    }
+
+    @TypeConverter
+    fun fromPhonesList(phones: List<Phones>?): String? {
+        if (phones == null) return null
+        val type = object : TypeToken<List<Phones>>() {}.type
+        return Gson().toJson(phones, type)
+    }
+
+    @TypeConverter
+    fun toPhonesList(phonesString: String?): List<Phones>? {
+        if (phonesString == null) return null
+        val type = object : TypeToken<List<Phones>>() {}.type
+        return Gson().fromJson(phonesString, type)
     }
 }

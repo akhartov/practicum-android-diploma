@@ -10,6 +10,8 @@
     <string name="requirements">Требования</string>
     <string name="conditions">Условия</string>
     <string name="key_skills">Ключевые навыки</string>
+    <string name="contacts">Контакты</string>
+    <string name="email">Почта</string>
     <string name="select">Выбрать</string>
     <string name="apply">Применить</string>
     <string name="reset">Сбросить</string>
@@ -20,6 +22,7 @@
     <string name="from">от</string>
     <string name="to">до</string>
     <string name="search_vacancies">Поиск вакансий</string>
+    <string name="empty_list">Список пуст</string>
     <string name="filter_settings">Настройки фильтрации</string>
     <string name="vacancies_not_found">Вакансия не найдена или\nудалена</string>
     <string name="no_salary">Зарплата не указана</string>
@@ -35,6 +38,10 @@
     <string name="cant_get_vacancies">Не удалось получить\nсписок вакансий</string>
     <string name="dont_show_without_salary">Не показывать без зарплаты</string>
     <string name="no_vacancies">Таких вакансий нет</string>
+    <string name="check_connection">Проверьте подключение к интернету</string>
+    <string name="error_happened">Произошла ошибка</string>
+    <string name="enter_search_query">Введите запрос</string>
+    <string name="dot">•</string>
 
     <string name="team">Команда</string>
     <string name="developers">Над приложением работали</string>

@@ -66,6 +66,7 @@ dependencies {
     implementation(libs.coil)
     implementation(libs.kotlinx.coroutines)
     implementation(libs.koin)
+    implementation(libs.koin.androidx.compose)
 
     annotationProcessor(libs.glidecompiler)
 

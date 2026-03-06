@@ -9,11 +9,19 @@ import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.practicum.android.diploma.BuildConfig
+import ru.practicum.android.diploma.data.ExternalNavigatorImpl
+import ru.practicum.android.diploma.data.SearchVacanciesRepositoryImpl
+import ru.practicum.android.diploma.data.VacancyRepositoryImpl
 import ru.practicum.android.diploma.data.db.AppDatabase
 import ru.practicum.android.diploma.data.db.dao.VacancyDao
+import ru.practicum.android.diploma.data.impl.FavoritesRepositoryImpl
 import ru.practicum.android.diploma.data.network.VacancyApi
 import ru.practicum.android.diploma.data.network.VacancyApiClient
 import ru.practicum.android.diploma.data.network.VacancyApiClientImpl
+import ru.practicum.android.diploma.data.repository.FavoritesRepository
+import ru.practicum.android.diploma.domain.api.ExternalNavigator
+import ru.practicum.android.diploma.domain.api.SearchVacanciesRepository
+import ru.practicum.android.diploma.domain.api.VacancyRepository
 
 val dataModule = module {
 
@@ -27,7 +35,13 @@ val dataModule = module {
         ).build()
     }
 
+    single<VacancyRepository> {
+        VacancyRepositoryImpl(get(), get())
+    }
+
     single<VacancyDao> { get<AppDatabase>().vacancyDao() }
+
+    single<FavoritesRepository> { FavoritesRepositoryImpl(get(), get()) }
 
     single<VacancyApi> {
         val headerInterceptor = Interceptor { chain ->
@@ -50,6 +64,11 @@ val dataModule = module {
             .build()
             .create(VacancyApi::class.java)
     }
+    single<ExternalNavigator> { ExternalNavigatorImpl(get()) }
 
-    factory<VacancyApiClient> { VacancyApiClientImpl(get()) }
+    factory<VacancyApiClient> { VacancyApiClientImpl(get(), get()) }
+
+    single<SearchVacanciesRepository> {
+        SearchVacanciesRepositoryImpl(get(), get())
+    }
 }

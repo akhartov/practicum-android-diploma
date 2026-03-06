@@ -1,0 +1,7 @@
+package ru.practicum.android.diploma.domain.models
+
+data class Contacts(
+    val name: String,
+    val email: String,
+    val phone: List<Phones>
+)
