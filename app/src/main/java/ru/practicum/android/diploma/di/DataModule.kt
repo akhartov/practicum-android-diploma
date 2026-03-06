@@ -16,11 +16,13 @@ import ru.practicum.android.diploma.data.converters.FiltersMapper
 import ru.practicum.android.diploma.data.converters.VacancyMapper
 import ru.practicum.android.diploma.data.db.AppDatabase
 import ru.practicum.android.diploma.data.db.dao.VacancyDao
+import ru.practicum.android.diploma.data.impl.AreaRepositoryImpl
 import ru.practicum.android.diploma.data.impl.FavoritesRepositoryImpl
 import ru.practicum.android.diploma.data.network.VacancyApi
 import ru.practicum.android.diploma.data.network.VacancyApiClient
 import ru.practicum.android.diploma.data.network.VacancyApiClientImpl
 import ru.practicum.android.diploma.data.repository.FavoritesRepository
+import ru.practicum.android.diploma.domain.api.AreaRepository
 import ru.practicum.android.diploma.domain.api.ExternalNavigator
 import ru.practicum.android.diploma.domain.api.SearchVacanciesRepository
 import ru.practicum.android.diploma.domain.api.VacancyRepository
@@ -77,4 +79,6 @@ val dataModule = module {
     single { VacancyMapper(get()) }
 
     single { FiltersMapper() }
+
+    single<AreaRepository> { AreaRepositoryImpl(get(), get()) }
 }

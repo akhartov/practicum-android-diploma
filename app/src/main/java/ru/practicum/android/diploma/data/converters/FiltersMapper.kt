@@ -1,6 +1,8 @@
 package ru.practicum.android.diploma.data.converters
 
+import ru.practicum.android.diploma.data.dto.FilterAreaDto
 import ru.practicum.android.diploma.data.dto.SavedFiltersDto
+import ru.practicum.android.diploma.domain.models.Area
 import ru.practicum.android.diploma.domain.models.Filters
 
 class FiltersMapper {
@@ -22,5 +24,13 @@ class FiltersMapper {
             industryId = if (savedFiltersDto.industryId.isEmpty()) null else savedFiltersDto.industryId.toInt(),
             salary = if (savedFiltersDto.salary.isEmpty()) null else savedFiltersDto.salary.toInt(),
             isIncludeSalary = savedFiltersDto.isIncludeSalary.toBoolean()
+        )
+
+    fun mapToArea(dto: FilterAreaDto): Area =
+        Area(
+            id = dto.id,
+            name = dto.name,
+            parentId = dto.parentId,
+            areas = dto.areas?.map { mapToArea(it) } ?: emptyList()
         )
 }
