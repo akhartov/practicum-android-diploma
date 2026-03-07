@@ -49,6 +49,26 @@ private val LightCustomScheme = AndroidDiplomaScheme(
             text = Red
         ),
     ),
+    filterSelectionColors = FilterSelectionColors(
+        presents = FilterSelectionElementColors(
+            background = White,
+            text = Black,
+            icon = Black,
+            hint = Gray,
+        ),
+        absent = FilterSelectionElementColors(
+            background = White,
+            text = Gray,
+            icon = Black,
+            hint = Gray,
+        ),
+        fixed = FilterSelectionElementColors(
+            background = White,
+            text = Black,
+            icon = Black,
+            hint = Black,
+        ),
+    ),
     vacancy = VacancyColors(
         title = Black,
         subTitle = Black,
@@ -96,6 +116,26 @@ private val DarkCustomScheme = AndroidDiplomaScheme(
             text = Red
         ),
     ),
+    filterSelectionColors = FilterSelectionColors(
+        presents = FilterSelectionElementColors(
+            background = Black,
+            text = White,
+            icon = White,
+            hint = Gray,
+        ),
+        absent = FilterSelectionElementColors(
+            background = Black,
+            text = White,
+            icon = White,
+            hint = Gray
+        ),
+        fixed = FilterSelectionElementColors(
+            background = Black,
+            text = White,
+            icon = White,
+            hint = White,
+        ),
+    ),
     vacancy = VacancyColors(
         title = White,
         subTitle = White,
@@ -135,6 +175,7 @@ data class AndroidDiplomaScheme(
     val topBar: TopBarStateColors,
     val searchField: SearchFieldColors,
     val buttonColors: ButtonColors,
+    val filterSelectionColors: FilterSelectionColors,
     val vacancy: VacancyColors,
     val results: ResultsColors,
     val filterIcon: FilterIconColors
@@ -148,6 +189,19 @@ data class ButtonColors(
 data class ButtonElementColors(
     val background: Color,
     val text: Color
+)
+
+data class FilterSelectionColors(
+    val presents: FilterSelectionElementColors, // фильтр указан
+    val absent: FilterSelectionElementColors, // фильтр не указан
+    val fixed: FilterSelectionElementColors, // не фильтр, а пункт меню фильтрации
+)
+
+data class FilterSelectionElementColors(
+    val background: Color,
+    val text: Color,
+    val icon: Color,
+    val hint: Color,
 )
 
 // Результат поиска(количество найденных вакансий)

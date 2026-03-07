@@ -41,6 +41,7 @@ object Dimens {
     val logoSize = 48.dp
     val logoBorderThickness = 1.dp
     val filterIconSize = 24.dp
+    val filterElementHeight = 48.dp
     val imageSize = 48.dp
     val progressIndicatorSize = 36.dp
 }

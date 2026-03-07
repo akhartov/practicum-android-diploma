@@ -27,7 +27,7 @@ val Typography = AndroidDiplomaTypography(
     ),
     regular12 = TextStyle(
         fontFamily = YandexDisplayFontFamily,
-        fontWeight = FontWeight.Bold,
+        fontWeight = FontWeight.Normal,
         fontSize = 12.sp
     ),
 
