@@ -91,6 +91,7 @@ fun IndustryFilterScreen(viewModel: IndustryFilterViewModel, onBackClick: () -> 
                         ) {
                             items((filterState as IndustryFilterState.Content).industries) { industry ->
                                 TextWithRadioButton(
+                                    Modifier,
                                     text = industry.name,
                                     isSelected = selectedIndustryId == industry.id,
                                     onSelectionChange = {
