@@ -72,7 +72,7 @@ fun CountryFilterScreen(
                             modifier = Modifier.fillMaxSize()
                         ) {
                             items(state.countries) { country ->
-                                CountryItem(
+                                FilterSelectionControl(
                                     onClick = onBackClick,
                                     text = country.name
                                 )

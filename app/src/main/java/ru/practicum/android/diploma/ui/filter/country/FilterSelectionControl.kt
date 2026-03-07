@@ -21,7 +21,7 @@ import ru.practicum.android.diploma.ui.theme.Dimens
 import ru.practicum.android.diploma.ui.theme.LocalAndroidDiplomaTypography
 
 @Composable
-fun CountryItem(
+fun FilterSelectionControl(
     onClick: () -> Unit,
     text: String
 ) {
@@ -61,7 +61,7 @@ fun CountryItem(
 @Composable
 fun PreviewCountryDay() {
     AndroidDiplomaTheme {
-        CountryItem(
+        FilterSelectionControl(
             { },
             "Россия"
         )
@@ -75,7 +75,7 @@ fun PreviewCountryDay() {
 @Composable
 fun PreviewCountryNight() {
     AndroidDiplomaTheme {
-        CountryItem(
+        FilterSelectionControl(
             { },
             "Россия"
         )
