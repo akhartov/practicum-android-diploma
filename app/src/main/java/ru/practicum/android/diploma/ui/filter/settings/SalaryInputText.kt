@@ -39,7 +39,7 @@ import ru.practicum.android.diploma.ui.theme.LocalAndroidDiplomaScheme
 import ru.practicum.android.diploma.ui.theme.LocalAndroidDiplomaTypography
 
 @Composable
-private fun SearchTextField(
+fun SearchTextField(
     salaryText: String, onTextChange: (String) -> Unit
 ) {
     var isFocused by remember { mutableStateOf(false) }
@@ -64,7 +64,6 @@ private fun SearchTextField(
             Row(
                 modifier = Modifier
                     .height(52.dp)
-                    .padding(horizontal = Dimens.padding16)
                     .clip(RoundedCornerShape(Dimens.cornerRadius12))
                     .background(LocalAndroidDiplomaScheme.current.salaryInput.background),
                 verticalAlignment = Alignment.CenterVertically
