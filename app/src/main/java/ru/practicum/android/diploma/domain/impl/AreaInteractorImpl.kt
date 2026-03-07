@@ -23,7 +23,6 @@ class AreaInteractorImpl(
                                 name = area.name
                             )
                         } ?: emptyList()
-
                     Resource.Success(countries)
                 }
                 is Resource.Error -> {
@@ -32,12 +31,20 @@ class AreaInteractorImpl(
             }
         }
 
-    override fun getRegions(countryId: Int): Flow<Resource<List<AreaShort>>> =
+    // Если нужно полный списко регионов страны, то в параметры regionName передаём null
+    // Если нужно найти конкретный регион в стране, то передаём его имя
+    override fun getRegions(countryId: Int, regionName: String?): Flow<Resource<List<AreaShort>>> =
         areaRepository.getAreas().map { resource ->
             when (resource) {
                 is Resource.Success -> {
-                    val regions = resource.data
-                        ?.filter { area -> area.parentId == countryId }
+                    val area = resource.data
+                        ?.find { area ->
+                            area.id == countryId
+                        }
+                        ?.areas
+                        ?.filter { area ->
+                            regionName == null || area.name.contains(regionName, ignoreCase = true)
+                        }
                         ?.map { area ->
                             AreaShort(
                                 id = area.id,
@@ -45,7 +52,7 @@ class AreaInteractorImpl(
                             )
                         } ?: emptyList()
 
-                    Resource.Success(regions)
+                    Resource.Success(area)
                 }
                 is Resource.Error -> {
                     Resource.Error(resource.error ?: NetworkResponseStatus.SERVER_ERROR)

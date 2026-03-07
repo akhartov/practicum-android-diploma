@@ -16,26 +16,16 @@ class AreaRepositoryImpl(
     override fun getAreas(): Flow<Resource<List<Area>>> =
         flow {
             val response = apiClient.getFilterAreas()
-            when (response.resultCode) {
-                NetworkResponseStatus.NO_INTERNET -> {
-                    emit(Resource.Error(NetworkResponseStatus.NO_INTERNET))
-                }
-
-                NetworkResponseStatus.SUCCESS -> {
-                    emit(
-                        Resource.Success(
-                            data = response.areas.map { mapper.mapToArea(it) }
-                        )
+            if (response.isNotEmpty()) {
+                emit(
+                    Resource.Success(
+                        data = response.map {
+                            mapper.mapToArea(it)
+                        }
                     )
-                }
-
-                NetworkResponseStatus.NOT_FOUND -> {
-                    emit(Resource.Error(NetworkResponseStatus.NOT_FOUND))
-                }
-
-                else -> {
-                    emit(Resource.Error(NetworkResponseStatus.SERVER_ERROR))
-                }
+                )
+            } else {
+                emit(Resource.Error(error = NetworkResponseStatus.SERVER_ERROR))
             }
         }
 }
