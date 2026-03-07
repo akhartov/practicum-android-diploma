@@ -17,6 +17,10 @@ class FilterSettingsViewModel(
     private val _filters = MutableStateFlow(FilterSettingsState())
     val filters: StateFlow<FilterSettingsState> = _filters.asStateFlow()
 
+    var preparedCountryName: String? = null
+    var preparedAreaName: String? = null
+    var preparedAreaId: Int? = null
+
     private var filtersDataFlow = MutableStateFlow(Filters())
 
     init {
@@ -37,11 +41,23 @@ class FilterSettingsViewModel(
     }
 
     fun changeIndustry(industryId: Int?, industryName: String?) {
-        filtersDataFlow.value = filtersDataFlow.value.copy(industryId = industryId, industry = industryName)
+        filtersDataFlow.value = filtersDataFlow.value.copy(industryId = industryId, industryName = industryName)
     }
 
-    fun changeArea(areaId: Int?, areaName: String?) {
-        filtersDataFlow.value = filtersDataFlow.value.copy(areaId = areaId, area = areaName)
+    fun prepareCountry(countryId: Int?, countryName: String?) {
+        preparedCountryName = countryName
+        preparedAreaName = null
+        preparedAreaId = null
+    }
+
+    fun prepareArea(areaId: Int?, areaName: String?) {
+        preparedAreaName = areaName
+        preparedAreaId = areaId
+    }
+
+    fun applyWorkplace() {
+        val workplaceName = preparedCountryName?.let { "$it, $preparedAreaName" } ?: preparedAreaName
+        filtersDataFlow.value = filtersDataFlow.value.copy(workplaceName = workplaceName, areaId = preparedAreaId)
     }
 
     fun saveFilter() {

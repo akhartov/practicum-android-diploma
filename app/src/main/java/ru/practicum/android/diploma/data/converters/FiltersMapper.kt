@@ -6,9 +6,9 @@ import ru.practicum.android.diploma.domain.models.Filters
 class FiltersMapper {
     fun mapToSavedFiltersDto(filters: Filters): SavedFiltersDto =
         SavedFiltersDto(
-            area = filters.area?.toString() ?: "",
+            area = filters.workplaceName ?: "",
             areaId = filters.areaId?.toString() ?: "",
-            industry = filters.industry?.toString() ?: "",
+            industry = filters.industryName ?: "",
             industryId = filters.industryId?.toString() ?: "",
             salary = filters.salary?.toString() ?: "",
             isIncludeSalary = filters.isIncludeSalary.toString()
@@ -16,9 +16,9 @@ class FiltersMapper {
 
     fun mapToFilters(savedFiltersDto: SavedFiltersDto): Filters =
         Filters(
-            area = if (savedFiltersDto.area.isEmpty()) null else savedFiltersDto.area,
+            workplaceName = savedFiltersDto.area.ifEmpty { null },
             areaId = if (savedFiltersDto.areaId.isEmpty()) null else savedFiltersDto.areaId.toInt(),
-            industry = if (savedFiltersDto.industry.isEmpty()) null else savedFiltersDto.industry,
+            industryName = savedFiltersDto.industry.ifEmpty { null },
             industryId = if (savedFiltersDto.industryId.isEmpty()) null else savedFiltersDto.industryId.toInt(),
             salary = if (savedFiltersDto.salary.isEmpty()) null else savedFiltersDto.salary.toInt(),
             isIncludeSalary = savedFiltersDto.isIncludeSalary.toBoolean()

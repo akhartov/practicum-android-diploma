@@ -65,6 +65,7 @@ class FilterSettingsFragment : Fragment() {
                     navigateToIndustryFilter = {
                         findNavController().navigate(R.id.action_filterSettingsFragment_to_industryFilterFragment)
                     },
+                    onBackClick = { findNavController().popBackStack() },
                     filters = filterViewModel.filters,
                     changeWithSalaryOnly = { filterViewModel.changeWithSalaryOnly() },
                 )
@@ -77,6 +78,7 @@ class FilterSettingsFragment : Fragment() {
 fun FilterSettingsScreen(
     navigateToWorkplaceFilter: () -> Unit,
     navigateToIndustryFilter: () -> Unit,
+    onBackClick: () -> Unit,
     saveFilter: () -> Unit,
     resetFilter: () -> Unit,
     filters: StateFlow<FilterSettingsState>,
@@ -88,7 +90,7 @@ fun FilterSettingsScreen(
         topBar = {
             FilterTopAppBar(
                 title = stringResource(R.string.filter_settings),
-                onBackClick = { }
+                onBackClick = onBackClick
             )
         }
     ) { paddingValues ->
@@ -163,6 +165,7 @@ fun PreviewScreenDay() {
         FilterSettingsScreen(
             navigateToWorkplaceFilter = {},
             navigateToIndustryFilter = {},
+            onBackClick = {},
             saveFilter = {},
             resetFilter = {},
             filters = stateFlow.asStateFlow(),
@@ -183,6 +186,7 @@ fun PreviewScreenNight() {
         FilterSettingsScreen(
             navigateToWorkplaceFilter = {},
             navigateToIndustryFilter = {},
+            onBackClick = {},
             saveFilter = {},
             resetFilter = {},
             filters = stateFlow.asStateFlow(),

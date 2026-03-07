@@ -6,8 +6,8 @@ import ru.practicum.android.diploma.presentation.filter.settings.FilterSettingsS
 class UiFiltersMapper {
     fun map(filters: Filters): FilterSettingsState {
         return FilterSettingsState(
-            workplace = filters.area, // здесь должно быть "Страна, Город"
-            industry = filters.industry,
+            workplace = filters.workplaceName,
+            industry = filters.industryName,
             salary = filters.salary,
             isIncludeSalary = filters.isIncludeSalary,
         )
