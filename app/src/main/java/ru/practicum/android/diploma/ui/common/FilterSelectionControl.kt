@@ -45,7 +45,6 @@ fun FilterSelectionControl(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = Dimens.padding16),
         ) {
             Box(
                 Modifier
@@ -164,7 +163,8 @@ private const val PREVIEW_APRELEVKA = "Апрелевка"
 fun PreviewPresentsFilterItemDay() {
     AndroidDiplomaTheme {
         FilterSelectionControl(
-            Modifier,
+            Modifier
+                .padding(start = Dimens.padding16),
             {},
             FilterSectionControlType.Presents,
             title = PREVIEW_WORKPLACE,
@@ -182,7 +182,8 @@ fun PreviewPresentsFilterItemDay() {
 fun PreviewAbsentFilterItemDay() {
     AndroidDiplomaTheme {
         FilterSelectionControl(
-            Modifier,
+            Modifier
+                .padding(start = Dimens.padding16),
             {},
             FilterSectionControlType.Absent,
             text = PREVIEW_WORKPLACE
@@ -199,7 +200,8 @@ fun PreviewAbsentFilterItemDay() {
 fun PreviewPresentsFilterItemNight() {
     AndroidDiplomaTheme {
         FilterSelectionControl(
-            Modifier,
+            Modifier
+                .padding(start = Dimens.padding16),
             {},
             FilterSectionControlType.Presents,
             title = PREVIEW_WORKPLACE,
@@ -217,7 +219,8 @@ fun PreviewPresentsFilterItemNight() {
 fun PreviewAbsentFilterItemNight() {
     AndroidDiplomaTheme {
         FilterSelectionControl(
-            Modifier,
+            Modifier
+                .padding(start = Dimens.padding16),
             {},
             FilterSectionControlType.Absent,
             text = PREVIEW_WORKPLACE,
@@ -234,7 +237,8 @@ fun PreviewAbsentFilterItemNight() {
 fun PreviewPresentsFilterItemNightSmall() {
     AndroidDiplomaTheme {
         FilterSelectionControl(
-            Modifier,
+            Modifier
+                .padding(start = Dimens.padding16),
             {},
             FilterSectionControlType.Presents,
             title = PREVIEW_WORKPLACE,
@@ -252,7 +256,8 @@ fun PreviewPresentsFilterItemNightSmall() {
 fun PreviewFixedFilterItemDay() {
     AndroidDiplomaTheme {
         FilterSelectionControl(
-            Modifier,
+            Modifier
+                .padding(start = Dimens.padding16),
             {},
             FilterSectionControlType.FixedMenu,
             text = PREVIEW_APRELEVKA
@@ -269,7 +274,8 @@ fun PreviewFixedFilterItemDay() {
 fun PreviewFixedFilterItemNight() {
     AndroidDiplomaTheme {
         FilterSelectionControl(
-            Modifier,
+            Modifier
+                .padding(start = Dimens.padding16),
             {},
             FilterSectionControlType.FixedMenu,
             text = PREVIEW_APRELEVKA,
