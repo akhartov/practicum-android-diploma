@@ -3,6 +3,7 @@ package ru.practicum.android.diploma.data.impl
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.data.converters.FiltersMapper
+import ru.practicum.android.diploma.data.dto.AreaResponse
 import ru.practicum.android.diploma.data.network.VacancyApiClient
 import ru.practicum.android.diploma.domain.api.AreaRepository
 import ru.practicum.android.diploma.domain.models.Area
@@ -16,16 +17,27 @@ class AreaRepositoryImpl(
     override fun getAreas(): Flow<Resource<List<Area>>> =
         flow {
             val response = apiClient.getFilterAreas()
-            if (response.isNotEmpty()) {
-                emit(
-                    Resource.Success(
-                        data = response.map {
-                            mapper.mapToArea(it)
-                        }
+            when (response.resultCode) {
+                NetworkResponseStatus.NO_INTERNET -> {
+                    emit(Resource.Error(NetworkResponseStatus.NO_INTERNET))
+                }
+
+                NetworkResponseStatus.SUCCESS -> {
+                    emit(
+                        Resource.Success(
+                            data = (response as AreaResponse).areas.map {
+                                mapper.mapToArea(it)
+                            }
+                        )
                     )
-                )
-            } else {
-                emit(Resource.Error(error = NetworkResponseStatus.SERVER_ERROR))
+                }
+
+                NetworkResponseStatus.NOT_FOUND -> {
+                    emit(Resource.Error(NetworkResponseStatus.NOT_FOUND))
+                }
+                else -> {
+                    emit(Resource.Error(NetworkResponseStatus.SERVER_ERROR))
+                }
             }
         }
 }
