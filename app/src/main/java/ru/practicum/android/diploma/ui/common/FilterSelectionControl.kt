@@ -35,43 +35,51 @@ fun FilterSelectionControl(
     text: String? = null,
 ) {
     val filterColors = filterSectionControlType.getConfig(LocalAndroidDiplomaScheme.current.filterSelectionColors)
-    Row(
+
+    Box(
         modifier = modifier
             .fillMaxWidth()
-            .padding(start = Dimens.padding16),
+            .height(Dimens.itemHeight),
+        contentAlignment = Alignment.CenterStart,
     ) {
-        Box(
-            Modifier
-                .height(Dimens.filterElementHeight)
-                .weight(1f),
-            contentAlignment = Alignment.CenterStart,
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = Dimens.padding16),
         ) {
-            Column {
-                filterColors.textColor?.let { color ->
-                    title?.let { FilterSelectionTitle(title, color) }
-                    text?.let { FilterSelectionText(text, color) }
-                }
+            Box(
+                Modifier
+                    .height(Dimens.filterElementHeight)
+                    .weight(1f),
+                contentAlignment = Alignment.CenterStart,
+            ) {
+                Column {
+                    filterColors.textColor?.let { color ->
+                        title?.let { FilterSelectionTitle(title, color) }
+                        text?.let { FilterSelectionText(text, color) }
+                    }
 
-                filterColors.hintColor?.let { color ->
-                    title?.let { FilterSelectionTitle(title, color) }
-                    text?.let { FilterSelectionText(text, color) }
+                    filterColors.hintColor?.let { color ->
+                        title?.let { FilterSelectionTitle(title, color) }
+                        text?.let { FilterSelectionText(text, color) }
+                    }
                 }
             }
-        }
 
-        Box(
-            Modifier
-                .height(Dimens.filterElementHeight)
-                .width(Dimens.filterElementHeight),
-            contentAlignment = Alignment.Center,
-        ) {
-            Icon(
-                painter = painterResource(filterColors.icondId),
-                contentDescription = null,
-                tint = filterColors.iconColor,
-                modifier = modifier
-                    .clickable { onClick() },
-            )
+            Box(
+                Modifier
+                    .height(Dimens.filterElementHeight)
+                    .width(Dimens.filterElementHeight),
+                contentAlignment = Alignment.Center,
+            ) {
+                Icon(
+                    painter = painterResource(filterColors.icondId),
+                    contentDescription = null,
+                    tint = filterColors.iconColor,
+                    modifier = modifier
+                        .clickable { onClick() },
+                )
+            }
         }
     }
 }
