@@ -1,7 +1,10 @@
 package ru.practicum.android.diploma.di
 
+import android.content.Context
+import android.content.SharedPreferences
 import androidx.room.Room
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import org.koin.android.ext.koin.androidContext
@@ -11,19 +14,24 @@ import retrofit2.converter.gson.GsonConverterFactory
 import ru.practicum.android.diploma.BuildConfig
 import ru.practicum.android.diploma.data.ExternalNavigatorImpl
 import ru.practicum.android.diploma.data.SearchVacanciesRepositoryImpl
+import ru.practicum.android.diploma.data.StorageClient
 import ru.practicum.android.diploma.data.VacancyRepositoryImpl
 import ru.practicum.android.diploma.data.converters.FiltersMapper
 import ru.practicum.android.diploma.data.converters.VacancyMapper
 import ru.practicum.android.diploma.data.db.AppDatabase
 import ru.practicum.android.diploma.data.db.dao.VacancyDao
 import ru.practicum.android.diploma.data.impl.AreaRepositoryImpl
+import ru.practicum.android.diploma.data.dto.SavedFiltersDto
 import ru.practicum.android.diploma.data.impl.FavoritesRepositoryImpl
+import ru.practicum.android.diploma.data.impl.FilterRepositoryImpl
 import ru.practicum.android.diploma.data.network.VacancyApi
 import ru.practicum.android.diploma.data.network.VacancyApiClient
 import ru.practicum.android.diploma.data.network.VacancyApiClientImpl
 import ru.practicum.android.diploma.data.repository.FavoritesRepository
 import ru.practicum.android.diploma.domain.api.AreaRepository
+import ru.practicum.android.diploma.data.storage.CommonPrefsStorageClient
 import ru.practicum.android.diploma.domain.api.ExternalNavigator
+import ru.practicum.android.diploma.domain.api.FilterRepository
 import ru.practicum.android.diploma.domain.api.SearchVacanciesRepository
 import ru.practicum.android.diploma.domain.api.VacancyRepository
 
@@ -81,4 +89,21 @@ val dataModule = module {
     single { FiltersMapper() }
 
     single<AreaRepository> { AreaRepositoryImpl(get(), get()) }
+    single<SharedPreferences> {
+        androidContext()
+            .getSharedPreferences("ANDROID_DIPLOMA_PREFERENCES", Context.MODE_PRIVATE)
+    }
+
+    single<StorageClient<SavedFiltersDto>> {
+        CommonPrefsStorageClient(
+            prefs = get(),
+            gson = get(),
+            dataKey = "FILTERS",
+            type = object : TypeToken<SavedFiltersDto>() {}.type
+        )
+    }
+
+    single<FilterRepository> {
+        FilterRepositoryImpl(get(), get())
+    }
 }
