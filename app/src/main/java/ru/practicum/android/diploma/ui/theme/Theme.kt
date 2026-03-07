@@ -78,6 +78,10 @@ private val LightCustomScheme = AndroidDiplomaScheme(
         progress = Blue,
         like = Red
     ),
+    radioButton = RadioButtonColors(
+        text = Black,
+        tint = Blue
+    ),
     results = ResultsColors(
         background = Blue,
         text = White
@@ -145,6 +149,10 @@ private val DarkCustomScheme = AndroidDiplomaScheme(
         progress = Blue,
         like = Red
     ),
+    radioButton = RadioButtonColors(
+        text = White,
+        tint = Blue
+    ),
     results = ResultsColors(
         background = Blue,
         text = White
@@ -177,6 +185,7 @@ data class AndroidDiplomaScheme(
     val buttonColors: ButtonColors,
     val filterSelectionColors: FilterSelectionColors,
     val vacancy: VacancyColors,
+    val radioButton: RadioButtonColors,
     val results: ResultsColors,
     val filterIcon: FilterIconColors
 )
@@ -226,6 +235,11 @@ data class SearchFieldColors(
     val hint: Color,
     val cursor: Color,
     val icon: Color
+)
+
+data class RadioButtonColors(
+    val text: Color,
+    val tint: Color,
 )
 
 data class TopBarStateColors(
