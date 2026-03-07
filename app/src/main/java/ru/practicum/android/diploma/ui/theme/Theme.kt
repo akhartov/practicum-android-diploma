@@ -49,6 +49,13 @@ private val LightCustomScheme = AndroidDiplomaScheme(
             text = Red
         ),
     ),
+    checkboxColors = CheckboxColors(
+        filter = CheckboxElementColors(
+            text = Black,
+            tint = Blue,
+            checkmark = White
+        )
+    ),
     filterSelectionColors = FilterSelectionColors(
         presents = FilterSelectionElementColors(
             background = White,
@@ -120,6 +127,13 @@ private val DarkCustomScheme = AndroidDiplomaScheme(
             text = Red
         ),
     ),
+    checkboxColors = CheckboxColors(
+        filter = CheckboxElementColors(
+            text = White,
+            tint = Blue,
+            checkmark = Black,
+        )
+    ),
     filterSelectionColors = FilterSelectionColors(
         presents = FilterSelectionElementColors(
             background = Black,
@@ -183,6 +197,7 @@ data class AndroidDiplomaScheme(
     val topBar: TopBarStateColors,
     val searchField: SearchFieldColors,
     val buttonColors: ButtonColors,
+    val checkboxColors: CheckboxColors,
     val filterSelectionColors: FilterSelectionColors,
     val vacancy: VacancyColors,
     val radioButton: RadioButtonColors,
@@ -198,6 +213,16 @@ data class ButtonColors(
 data class ButtonElementColors(
     val background: Color,
     val text: Color
+)
+
+data class CheckboxColors(
+    val filter: CheckboxElementColors,
+)
+
+data class CheckboxElementColors(
+    val text: Color,
+    val tint: Color,
+    val checkmark: Color,
 )
 
 data class FilterSelectionColors(

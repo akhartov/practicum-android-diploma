@@ -13,9 +13,14 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.presentation.filter.settings.FilterSettingsViewModel
+import kotlin.getValue
 
 class WorkplaceFilterFragment : Fragment() {
+
+    val filterSettingsViewModel: FilterSettingsViewModel by activityViewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
