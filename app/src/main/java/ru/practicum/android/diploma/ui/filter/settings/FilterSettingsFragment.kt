@@ -113,7 +113,7 @@ fun FilterSettingsScreen(
                     text = stringResource(R.string.industry),
                 )
                 Spacer(modifier = Modifier.height(Dimens.padding24))
-                SearchTextField(
+                SalaryTextField(
                     salaryText = salaryInputted,
                     onTextChange = { newText ->
                         salaryInputted = newText

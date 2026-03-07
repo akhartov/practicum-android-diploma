@@ -39,8 +39,9 @@ import ru.practicum.android.diploma.ui.theme.LocalAndroidDiplomaScheme
 import ru.practicum.android.diploma.ui.theme.LocalAndroidDiplomaTypography
 
 @Composable
-fun SearchTextField(
-    salaryText: String, onTextChange: (String) -> Unit
+fun SalaryTextField(
+    salaryText: String,
+    onTextChange: (String) -> Unit
 ) {
     var isFocused by remember { mutableStateOf(false) }
     BasicTextField(
@@ -97,33 +98,46 @@ fun SearchTextField(
                             .weight(1f)
                             .padding(end = Dimens.padding16)
                     ) {
-                        // Placeholder
-                        if (salaryText.isEmpty()) {
-                            Text(
-                                text = stringResource(R.string.enter_amount),
-                                style = LocalAndroidDiplomaTypography.current.regular16,
-                                color = LocalAndroidDiplomaScheme.current.salaryInput.placeHolder
-                            )
-                        }
+                        PlaceholderText(salaryText.isEmpty())
+
                         innerTextField()
                     }
                 }
-                // Кнопка очистки
-                if (salaryText.isNotEmpty()) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_close),
-                        contentDescription = null,
-                        tint = LocalAndroidDiplomaScheme.current.salaryInput.clearIcon,
-                        modifier = Modifier
-                            .wrapContentSize()
-                            .padding(end = Dimens.padding16)
-                            .clickable {
-                                onTextChange("")
-                            })
-                }
+                ClearButton(salaryText.isNotEmpty(), onClearClick = { onTextChange("") })
             }
+        }
+    )
+}
 
-        })
+@Composable
+private fun PlaceholderText(
+    show: Boolean
+) {
+    if (show) {
+        Text(
+            text = stringResource(R.string.enter_amount),
+            style = LocalAndroidDiplomaTypography.current.regular16,
+            color = LocalAndroidDiplomaScheme.current.salaryInput.placeHolder
+        )
+    }
+}
+
+@Composable
+private fun ClearButton(
+    show: Boolean,
+    onClearClick: () -> Unit
+) {
+    if (show) {
+        Icon(
+            painter = painterResource(id = R.drawable.ic_close),
+            contentDescription = null,
+            tint = LocalAndroidDiplomaScheme.current.salaryInput.clearIcon,
+            modifier = Modifier
+                .wrapContentSize()
+                .padding(end = Dimens.padding16)
+                .clickable { onClearClick() }
+        )
+    }
 }
 
 @Preview(uiMode = UI_MODE_NIGHT_YES, showBackground = true)
@@ -131,7 +145,7 @@ fun SearchTextField(
 fun PreviewApproveButtonDay() {
     var text by remember { mutableStateOf("") }
     AndroidDiplomaTheme {
-        SearchTextField(
+        SalaryTextField(
             salaryText = text,
             onTextChange = { newText ->
                 text = newText
