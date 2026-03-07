@@ -30,34 +30,15 @@ class VacancyApiClientImpl(private val api: VacancyApi, private val context: Con
 
     override suspend fun getFilterAreas(): Response {
         return withContext(Dispatchers.IO) {
-            withNetworkErrorHandlingForList(
-                block = { api.getFilterAreas() },
-                responseFactory = { areas -> AreaResponse(areas = areas) }
-            )
+            withNetworkErrorHandling {
+                AreaResponse(api.getFilterAreas())
+            }
         }
     }
 
     override suspend fun getFilterIndustries(): List<FilterIndustryDto> {
         return withContext(Dispatchers.IO) {
             api.getFilterIndustries()
-        }
-    }
-
-    private suspend fun <T, R : Response> withNetworkErrorHandlingForList(
-        block: suspend () -> List<T>,
-        responseFactory: (List<T>) -> R
-    ): Response {
-        return runCatching {
-            if (!NetworkChecker.isConnected(context)) {
-                return Response().apply { resultCode = NetworkResponseStatus.NO_INTERNET }
-            }
-
-            val data = block()
-            responseFactory(data).apply {
-                resultCode = NetworkResponseStatus.SUCCESS
-            }
-        }.getOrElse { exception ->
-            throwableToResponse(exception) as R
         }
     }
 
