@@ -117,7 +117,8 @@ fun FilterSettingsScreen(
                     salaryText = salaryInputted,
                     onTextChange = { newText ->
                         salaryInputted = newText
-                    })
+                    }
+                )
                 Spacer(modifier = Modifier.height(Dimens.padding24))
                 // Insert amount control here
                 CheckboxControl(

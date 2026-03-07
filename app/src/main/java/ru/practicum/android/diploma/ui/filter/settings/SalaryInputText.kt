@@ -58,7 +58,8 @@ fun SalaryTextField(
         cursorBrush = SolidColor(Blue),
         textStyle = LocalAndroidDiplomaTypography.current.regular16,
         keyboardOptions = KeyboardOptions.Default.copy(
-            keyboardType = KeyboardType.Number, imeAction = ImeAction.Search
+            keyboardType = KeyboardType.Number,
+            imeAction = ImeAction.Search
         ),
 
         decorationBox = { innerTextField ->
@@ -142,13 +143,14 @@ private fun ClearButton(
 
 @Preview(uiMode = UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
-fun PreviewApproveButtonDay() {
+private fun PreviewApproveButtonDay() {
     var text by remember { mutableStateOf("") }
     AndroidDiplomaTheme {
         SalaryTextField(
             salaryText = text,
             onTextChange = { newText ->
                 text = newText
-            })
+            }
+        )
     }
 }
