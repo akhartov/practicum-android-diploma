@@ -33,22 +33,25 @@ class AreaInteractorImpl(
 
     // Если нужно полный списко регионов страны, то в параметры regionName передаём null
     // Если нужно найти конкретный регион в стране, то передаём его имя
-    override fun getRegions(countryId: Int, regionName: String?): Flow<Resource<List<AreaShort>>> =
+    override fun getRegions(countryName: String?, regionName: String?): Flow<Resource<List<AreaShort>>> =
         areaRepository.getAreas().map { resource ->
             when (resource) {
                 is Resource.Success -> {
+                    var parentCountryName = ""
                     val area = resource.data
-                        ?.find { area ->
-                            area.id == countryId
+                        ?.find { country ->
+                            parentCountryName = country.name
+                            countryName.isNullOrEmpty() || country.name.equals(countryName)
                         }
                         ?.areas
-                        ?.filter { area ->
-                            regionName == null || area.name.contains(regionName, ignoreCase = true)
+                        ?.filter { region ->
+                            regionName.isNullOrEmpty() || region.name.contains(regionName, ignoreCase = true)
                         }
-                        ?.map { area ->
+                        ?.map { region ->
                             AreaShort(
-                                id = area.id,
-                                name = area.name
+                                parentName = parentCountryName,
+                                id = region.id,
+                                name = region.name
                             )
                         } ?: emptyList()
 
