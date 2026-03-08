@@ -21,6 +21,7 @@ import ru.practicum.android.diploma.data.converters.VacancyMapper
 import ru.practicum.android.diploma.data.db.AppDatabase
 import ru.practicum.android.diploma.data.db.dao.VacancyDao
 import ru.practicum.android.diploma.data.dto.SavedFiltersDto
+import ru.practicum.android.diploma.data.impl.AreaRepositoryImpl
 import ru.practicum.android.diploma.data.impl.FavoritesRepositoryImpl
 import ru.practicum.android.diploma.data.impl.FilterRepositoryImpl
 import ru.practicum.android.diploma.data.network.VacancyApi
@@ -28,6 +29,7 @@ import ru.practicum.android.diploma.data.network.VacancyApiClient
 import ru.practicum.android.diploma.data.network.VacancyApiClientImpl
 import ru.practicum.android.diploma.data.repository.FavoritesRepository
 import ru.practicum.android.diploma.data.storage.CommonPrefsStorageClient
+import ru.practicum.android.diploma.domain.api.AreaRepository
 import ru.practicum.android.diploma.domain.api.ExternalNavigator
 import ru.practicum.android.diploma.domain.api.FilterRepository
 import ru.practicum.android.diploma.domain.api.SearchVacanciesRepository
@@ -86,6 +88,7 @@ val dataModule = module {
 
     single { FiltersMapper() }
 
+    single<AreaRepository> { AreaRepositoryImpl(get(), get()) }
     single<SharedPreferences> {
         androidContext()
             .getSharedPreferences("ANDROID_DIPLOMA_PREFERENCES", Context.MODE_PRIVATE)
