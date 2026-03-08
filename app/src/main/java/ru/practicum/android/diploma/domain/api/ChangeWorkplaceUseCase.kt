@@ -1,11 +1,16 @@
 package ru.practicum.android.diploma.domain.api
 
+import kotlinx.coroutines.flow.StateFlow
+import ru.practicum.android.diploma.domain.models.Area
 import ru.practicum.android.diploma.domain.models.Workplace
 
 class ChangeWorkplaceUseCase(
     private val workplaceRepository: WorkplaceCachingRepository,
     private val filterRepository: FilterCachingRepository,
 ) {
+    val area: StateFlow<Area?> = workplaceRepository.area
+    val country: StateFlow<Area?> = workplaceRepository.country
+
     fun applyWorkplace() {
         buildCombinedName(
             workplaceRepository.country.value?.name,
