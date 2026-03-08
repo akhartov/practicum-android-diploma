@@ -13,6 +13,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.practicum.android.diploma.BuildConfig
 import ru.practicum.android.diploma.data.ExternalNavigatorImpl
+import ru.practicum.android.diploma.data.IndustryRepositoryImpl
 import ru.practicum.android.diploma.data.SearchVacanciesRepositoryImpl
 import ru.practicum.android.diploma.data.StorageClient
 import ru.practicum.android.diploma.data.VacancyRepositoryImpl
@@ -32,6 +33,7 @@ import ru.practicum.android.diploma.data.storage.CommonPrefsStorageClient
 import ru.practicum.android.diploma.domain.api.AreaRepository
 import ru.practicum.android.diploma.domain.api.ExternalNavigator
 import ru.practicum.android.diploma.domain.api.FilterRepository
+import ru.practicum.android.diploma.domain.api.IndustryRepository
 import ru.practicum.android.diploma.domain.api.SearchVacanciesRepository
 import ru.practicum.android.diploma.domain.api.VacancyRepository
 
@@ -82,6 +84,10 @@ val dataModule = module {
 
     single<SearchVacanciesRepository> {
         SearchVacanciesRepositoryImpl(get(), get())
+    }
+
+    single<IndustryRepository> {
+        IndustryRepositoryImpl(get(), get())
     }
 
     single { VacancyMapper(get()) }

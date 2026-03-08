@@ -39,7 +39,7 @@ val presentationModule = module {
     }
 
     viewModel {
-        IndustryFilterViewModel()
+        IndustryFilterViewModel(get())
     }
 
     viewModel {
