@@ -49,6 +49,13 @@ private val LightCustomScheme = AndroidDiplomaScheme(
             text = Red
         ),
     ),
+    checkboxColors = CheckboxColors(
+        filter = CheckboxElementColors(
+            text = Black,
+            tint = Blue,
+            checkmark = White
+        )
+    ),
     filterSelectionColors = FilterSelectionColors(
         presents = FilterSelectionElementColors(
             background = White,
@@ -95,6 +102,12 @@ private val LightCustomScheme = AndroidDiplomaScheme(
             background = White,
             hint = Black
         )
+    ),
+    salaryInput = SalaryInputColors(
+        background = LightGray,
+        clearIcon = Black,
+        placeHolder = Gray,
+        brush = Blue
     )
 )
 
@@ -119,6 +132,13 @@ private val DarkCustomScheme = AndroidDiplomaScheme(
             background = Black,
             text = Red
         ),
+    ),
+    checkboxColors = CheckboxColors(
+        filter = CheckboxElementColors(
+            text = White,
+            tint = Blue,
+            checkmark = Black,
+        )
     ),
     filterSelectionColors = FilterSelectionColors(
         presents = FilterSelectionElementColors(
@@ -166,12 +186,25 @@ private val DarkCustomScheme = AndroidDiplomaScheme(
             background = Black,
             hint = White
         )
+    ),
+    salaryInput = SalaryInputColors(
+        background = Gray,
+        clearIcon = Black,
+        placeHolder = White,
+        brush = Blue
     )
 )
 
 data class FilterIconColors(
     val hasFilterIcon: FilterIconState,
     val noFilterIcon: FilterIconState
+)
+
+data class SalaryInputColors(
+    val background: Color,
+    val clearIcon: Color,
+    val placeHolder: Color,
+    val brush: Color
 )
 
 data class FilterIconState(
@@ -183,11 +216,13 @@ data class AndroidDiplomaScheme(
     val topBar: TopBarStateColors,
     val searchField: SearchFieldColors,
     val buttonColors: ButtonColors,
+    val checkboxColors: CheckboxColors,
     val filterSelectionColors: FilterSelectionColors,
     val vacancy: VacancyColors,
     val radioButton: RadioButtonColors,
     val results: ResultsColors,
-    val filterIcon: FilterIconColors
+    val filterIcon: FilterIconColors,
+    val salaryInput: SalaryInputColors
 )
 
 data class ButtonColors(
@@ -198,6 +233,16 @@ data class ButtonColors(
 data class ButtonElementColors(
     val background: Color,
     val text: Color
+)
+
+data class CheckboxColors(
+    val filter: CheckboxElementColors,
+)
+
+data class CheckboxElementColors(
+    val text: Color,
+    val tint: Color,
+    val checkmark: Color,
 )
 
 data class FilterSelectionColors(
