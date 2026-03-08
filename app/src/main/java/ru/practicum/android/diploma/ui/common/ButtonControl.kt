@@ -31,7 +31,7 @@ fun ButtonControl(
         modifier = modifier
             .fillMaxWidth()
             .height(Dimens.buttonHeight),
-        onClick = { onClick },
+        onClick = { onClick() },
         content = {
             Text(
                 text,

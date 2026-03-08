@@ -12,7 +12,9 @@ import ru.practicum.android.diploma.domain.api.SharingInteractor
 import ru.practicum.android.diploma.domain.api.VacancyInteractor
 import ru.practicum.android.diploma.domain.impl.AreaInteractorImpl
 import ru.practicum.android.diploma.data.converters.IndustryMapper
+import ru.practicum.android.diploma.domain.api.IndustryInteractor
 import ru.practicum.android.diploma.domain.impl.FilterInteractorImpl
+import ru.practicum.android.diploma.domain.impl.IndustryInteractorImpl
 import ru.practicum.android.diploma.domain.impl.LikeInteractorImpl
 import ru.practicum.android.diploma.domain.impl.SearchVacanciesInteractorImpl
 import ru.practicum.android.diploma.domain.impl.SharingInteractorImpl
@@ -24,7 +26,9 @@ val domainModule = module {
     single<SearchVacanciesInteractor> {
         SearchVacanciesInteractorImpl(get())
     }
-
+    single<IndustryInteractor> {
+        IndustryInteractorImpl(get())
+    }
     single<FavoritesRepository> { FavoritesRepositoryImpl(get(), get()) }
     single<LikeInteractor> { LikeInteractorImpl(get()) }
     single<VacancyInteractor> { VacancyInteractorImpl(get()) }
