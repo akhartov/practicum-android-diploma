@@ -22,9 +22,6 @@ class FilterSettingsViewModel(
     private var _filtersStateFlow = MutableStateFlow(Filters())
 
     init {
-        // Первое обновление данных фильтра из хранилища
-        _filtersStateFlow.value = filterInteractor.getFilters()
-
         // Поток обновления UI при изменении внутри FilterSettingsViewModel
         viewModelScope.launch {
             _filtersStateFlow.collect {
@@ -47,6 +44,9 @@ class FilterSettingsViewModel(
                 _filtersUiState.value = _filtersUiState.value.copy(industry = industry?.name)
             }
         }
+
+        // Первое обновление данных фильтра из хранилища
+        _filtersStateFlow.value = filterInteractor.getFilters()
     }
 
     fun changeWithSalaryOnly() {
