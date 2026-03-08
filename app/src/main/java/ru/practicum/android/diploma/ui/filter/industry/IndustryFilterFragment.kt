@@ -106,10 +106,24 @@ fun IndustryFilterScreen(viewModel: IndustryFilterViewModel, onBackClick: () -> 
                         }
                     }
 
-                    IndustryFilterState.Fail -> {
+                    IndustryFilterState.NotFound -> {
                         PlaceholderState(
                             painterResource(id = R.drawable.placeholder_region_error),
                             stringResource(R.string.region_selection_error)
+                        )
+                    }
+
+                    IndustryFilterState.NoInternet -> {
+                        PlaceholderState(
+                            painterResource(id = R.drawable.placeholder_no_internet),
+                            stringResource(R.string.no_internet)
+                        )
+                    }
+
+                    IndustryFilterState.ServerError -> {
+                        PlaceholderState(
+                            painterResource(id = R.drawable.placeholder_server_error),
+                            stringResource(R.string.server_error)
                         )
                     }
                 }
