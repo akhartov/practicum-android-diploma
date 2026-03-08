@@ -24,12 +24,17 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.presentation.filter.country.CountryFilterState
 import ru.practicum.android.diploma.presentation.filter.country.CountryFilterViewModel
+import ru.practicum.android.diploma.presentation.filter.settings.FilterSettingsViewModel
+import ru.practicum.android.diploma.ui.common.FilterSectionControlType
+import ru.practicum.android.diploma.ui.common.FilterSelectionControl
 import ru.practicum.android.diploma.ui.common.FilterTopAppBar
 import ru.practicum.android.diploma.ui.common.PlaceholderState
 import ru.practicum.android.diploma.ui.theme.AndroidDiplomaTheme
+import ru.practicum.android.diploma.ui.theme.Dimens
 
 class CountryFilterFragment : Fragment() {
     val countryFilterViewModel: CountryFilterViewModel by viewModel()
+    val filterSettingsViewModel: FilterSettingsViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,7 +48,10 @@ class CountryFilterFragment : Fragment() {
                 CountryFilterScreen(
                     viewModel = countryFilterViewModel,
                     onBackClick = { findNavController().navigateUp() },
-                    { }
+                    onItemClick = { countryId, countryName ->
+                        filterSettingsViewModel.prepareCountry(countryId, countryName)
+                        findNavController().navigateUp()
+                    }
                 )
             }
         }
@@ -54,7 +62,7 @@ class CountryFilterFragment : Fragment() {
 fun CountryFilterScreen(
     viewModel: CountryFilterViewModel,
     onBackClick: () -> Unit,
-    onItemClick: () -> Unit
+    onItemClick: (countryId: Int, countryName: String) -> Unit
 ) {
     val countryState by viewModel.countryFilterState.collectAsState()
     Scaffold(
@@ -76,7 +84,10 @@ fun CountryFilterScreen(
                         ) {
                             items(state.countries) { country ->
                                 FilterSelectionControl(
-                                    onClick = onItemClick,
+                                    modifier = Modifier
+                                        .padding(start = Dimens.padding16, end = Dimens.padding4),
+                                    onClick = { onItemClick(country.id, country.name) },
+                                    FilterSectionControlType.FixedMenu,
                                     text = country.name
                                 )
                             }
