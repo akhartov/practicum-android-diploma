@@ -2,21 +2,25 @@ package ru.practicum.android.diploma.presentation.filter.industry
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.api.IndustryInteractor
+import ru.practicum.android.diploma.domain.models.Industry
 import ru.practicum.android.diploma.domain.models.IndustryResponse
 import ru.practicum.android.diploma.util.NetworkResponseStatus
 import ru.practicum.android.diploma.util.Resource
 
+@OptIn(FlowPreview::class)
 class IndustryFilterViewModel(
     private val industryInteractor: IndustryInteractor
 ) : ViewModel() {
-    // private val client: VacancyApiClient,
-    // private val mapper: IndustryMapper,
-
     private val _filterState = MutableStateFlow<IndustryFilterState?>(null)
     val filterState: StateFlow<IndustryFilterState?> = _filterState.asStateFlow()
 
@@ -26,26 +30,14 @@ class IndustryFilterViewModel(
     private val _selectedIndustryId = MutableStateFlow<Int?>(null)
     val selectedIndustryId: StateFlow<Int?> = _selectedIndustryId.asStateFlow()
 
+    var allIndustries = listOf<Industry>()
+
     fun selectIndustry(id: Int?) {
         _selectedIndustryId.value = id
     }
 
     init {
         viewModelScope.launch {
-//            withContext(Dispatchers.IO) {
-//                runCatching {
-//                    val industries = client.getFilterIndustries().map { dtoItem ->
-//                        mapper.map(dtoItem)
-//                    }
-//
-//                    _filterState.value = IndustryFilterState.Content(industries)
-//                }.onFailure { throwable ->
-//                    throwable.message?.let { message -> Log.e("IndustryFilterViewModel", message) }
-//
-//                    _filterState.value = IndustryFilterState.Fail
-//                }
-//
-//            }
 
             industryInteractor.getIndustries()
                 .collect { resource ->
@@ -60,13 +52,36 @@ class IndustryFilterViewModel(
                     }
                 }
         }
+
+        viewModelScope.launch {
+            query.debounce(DEBOUNCE_DELAY) // пауза
+                .distinctUntilChanged() // ограничиваем если есть новый поиск
+                .onEach {
+                    if (_filterState.value is IndustryFilterState.Content) {
+                        _filterState.value = IndustryFilterState.Content(
+                            getFilteredIndustries(query.value)
+                        )
+                    }
+                }
+                .launchIn(viewModelScope)
+        }
+    }
+
+    private fun getFilteredIndustries(industryQueryString: String): List<Industry> {
+        val trimmedQuery = industryQueryString.trim()
+        return if (trimmedQuery.isEmpty()) {
+            allIndustries
+        } else {
+            return allIndustries.filter { it.name.contains(query.value.trim(), ignoreCase = true) }
+        }
     }
 
     private fun handleSuccess(data: IndustryResponse?) {
         when {
             data == null -> _filterState.value = IndustryFilterState.NotFound
             else -> {
-                _filterState.value = IndustryFilterState.Content(data.items)
+                allIndustries = data.items
+                _filterState.value = IndustryFilterState.Content(allIndustries)
             }
         }
     }
@@ -86,5 +101,9 @@ class IndustryFilterViewModel(
 
     fun clearSearchQuery() {
         _query.value = ""
+    }
+
+    companion object {
+        const val DEBOUNCE_DELAY = 300L
     }
 }
