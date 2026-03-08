@@ -19,6 +19,7 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.presentation.filter.country.CountryFilterState
@@ -41,7 +42,8 @@ class CountryFilterFragment : Fragment() {
             AndroidDiplomaTheme {
                 CountryFilterScreen(
                     viewModel = countryFilterViewModel,
-                    onBackClick = { }
+                    onBackClick = { findNavController().navigateUp() },
+                    { }
                 )
             }
         }
@@ -51,7 +53,8 @@ class CountryFilterFragment : Fragment() {
 @Composable
 fun CountryFilterScreen(
     viewModel: CountryFilterViewModel,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onItemClick: () -> Unit
 ) {
     val countryState by viewModel.countryFilterState.collectAsState()
     Scaffold(
@@ -73,7 +76,7 @@ fun CountryFilterScreen(
                         ) {
                             items(state.countries) { country ->
                                 FilterSelectionControl(
-                                    onClick = onBackClick,
+                                    onClick = onItemClick,
                                     text = country.name
                                 )
                             }
