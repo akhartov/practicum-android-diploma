@@ -96,6 +96,7 @@ class RegionFilterViewModel(
 
     companion object {
         const val DEBOUNCE_DELAY = 300L
+
         // временная заглушка для поиска регионов
         const val METHOD_STUB_COUNTRY = "Россия"
         val METHOD_STUB_AREA = null
