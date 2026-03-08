@@ -94,14 +94,14 @@ fun CountryFilterScreen(
                         }
                     }
 
-                    is CountryFilterState.Fail -> {
+                    is CountryFilterState.Loading -> { }
+
+                    else -> {
                         PlaceholderState(
                             painter = painterResource(id = R.drawable.placeholder_region_error),
                             text = stringResource(id = R.string.region_selection_error)
                         )
                     }
-
-                    is CountryFilterState.Loading -> { }
                 }
             }
         }

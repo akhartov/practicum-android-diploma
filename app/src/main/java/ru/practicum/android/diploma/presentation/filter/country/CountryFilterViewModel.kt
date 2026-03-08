@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.api.AreaInteractor
 import ru.practicum.android.diploma.domain.models.AreaShort
+import ru.practicum.android.diploma.util.NetworkResponseStatus
 import ru.practicum.android.diploma.util.Resource
 
 class CountryFilterViewModel(
@@ -27,13 +28,29 @@ class CountryFilterViewModel(
     private fun proccesResult(result: Resource<List<AreaShort>>) {
         when (result) {
             is Resource.Success -> {
-                _countryFilterState.value = CountryFilterState.Content(
-                    result.data?.moveOtherRegionsToEnd() ?: emptyList()
-                )
+                handleSuccess(result.data)
             }
             is Resource.Error -> {
-                _countryFilterState.value = CountryFilterState.Fail
+                handleError(result.error)
             }
+        }
+    }
+
+    private fun handleSuccess(data: List<AreaShort>?) {
+        when {
+            data == null -> _countryFilterState.value = CountryFilterState.NotFound
+            else -> {
+                _countryFilterState.value = CountryFilterState.Content(data.moveOtherRegionsToEnd())
+            }
+        }
+    }
+
+    private fun handleError(errorCode: Int?) {
+        _countryFilterState.value = when (errorCode) {
+            NetworkResponseStatus.NOT_FOUND -> CountryFilterState.NotFound
+            NetworkResponseStatus.NO_INTERNET -> CountryFilterState.NoInternet
+            NetworkResponseStatus.SERVER_ERROR -> CountryFilterState.ServerError
+            else -> CountryFilterState.ServerError // или другая ошибка по умолчанию
         }
     }
 
