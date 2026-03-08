@@ -58,7 +58,7 @@ class IndustryFilterFragment : Fragment() {
 fun IndustryFilterScreen(viewModel: IndustryFilterViewModel, onBackClick: () -> Unit) {
     val searchQuery by viewModel.query.collectAsState()
     val filterState by viewModel.filterState.collectAsState()
-    val selectedIndustryId by viewModel.selectedIndustryId.collectAsState()
+    val selectedIndustry by viewModel.selectedIndustry.collectAsState()
 
     Scaffold(
         topBar = {
@@ -90,16 +90,18 @@ fun IndustryFilterScreen(viewModel: IndustryFilterViewModel, onBackClick: () -> 
                             verticalArrangement = Arrangement.spacedBy(Dimens.padding2)
                         ) {
                             items((filterState as IndustryFilterState.Content).industries) { industry ->
+                                val isSelected = selectedIndustry?.let { it.id == industry.id } ?: false
                                 TextWithRadioButton(
                                     Modifier,
                                     text = industry.name,
-                                    isSelected = selectedIndustryId == industry.id,
+                                    isSelected = isSelected,
                                     onSelectionChange = {
-                                        if (selectedIndustryId == industry.id) {
+                                        if (isSelected) {
                                             viewModel.selectIndustry(null)
                                         } else {
-                                            viewModel.selectIndustry(industry.id)
+                                            viewModel.selectIndustry(industry)
                                         }
+                                        onBackClick()
                                     }
                                 )
                             }

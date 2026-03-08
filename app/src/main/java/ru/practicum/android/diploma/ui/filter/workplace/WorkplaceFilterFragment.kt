@@ -19,9 +19,9 @@ import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_NIGHT_NO
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import org.koin.androidx.viewmodel.ext.android.activityViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
-import ru.practicum.android.diploma.presentation.filter.settings.FilterSettingsViewModel
+import ru.practicum.android.diploma.presentation.filter.WorkplaceFilterViewModel
 import ru.practicum.android.diploma.ui.common.ButtonControl
 import ru.practicum.android.diploma.ui.common.ButtonControlType
 import ru.practicum.android.diploma.ui.common.FilterSectionControlType
@@ -31,8 +31,7 @@ import ru.practicum.android.diploma.ui.theme.AndroidDiplomaTheme
 import ru.practicum.android.diploma.ui.theme.Dimens
 
 class WorkplaceFilterFragment : Fragment() {
-
-    val filterSettingsViewModel: FilterSettingsViewModel by activityViewModel()
+    val viewModel: WorkplaceFilterViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,7 +50,7 @@ class WorkplaceFilterFragment : Fragment() {
                         findNavController().navigate(R.id.action_workplaceFilterFragment_to_regionFilterFragment)
                     },
                     onApply = {
-                        filterSettingsViewModel.applyWorkplace()
+                        viewModel.applyWorkplace()
                         findNavController().popBackStack()
                     },
                     onBackClick = { findNavController().popBackStack() }

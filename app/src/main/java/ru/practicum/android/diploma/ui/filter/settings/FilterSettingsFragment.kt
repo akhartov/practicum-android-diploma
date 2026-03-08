@@ -27,7 +27,7 @@ import androidx.navigation.fragment.findNavController
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import org.koin.androidx.viewmodel.ext.android.activityViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.presentation.filter.settings.FilterSettingsState
 import ru.practicum.android.diploma.presentation.filter.settings.FilterSettingsViewModel
@@ -42,7 +42,7 @@ import ru.practicum.android.diploma.ui.theme.AndroidDiplomaTheme
 import ru.practicum.android.diploma.ui.theme.Dimens
 
 class FilterSettingsFragment : Fragment() {
-    val filterViewModel: FilterSettingsViewModel by activityViewModel()
+    val filterViewModel: FilterSettingsViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -63,7 +63,7 @@ class FilterSettingsFragment : Fragment() {
                         findNavController().navigate(R.id.action_filterSettingsFragment_to_industryFilterFragment)
                     },
                     onBackClick = { findNavController().popBackStack() },
-                    filters = filterViewModel.filters,
+                    filters = filterViewModel.filtersUiState,
                     changeWithSalaryOnly = { filterViewModel.changeWithSalaryOnly() },
                     setSalaryValue = { salary -> filterViewModel.changeSalary(salary) }
                 )
@@ -100,18 +100,39 @@ fun FilterSettingsScreen(
             verticalArrangement = Arrangement.SpaceBetween,
         ) {
             Column(Modifier) {
-                FilterSelectionControl(
-                    Modifier,
-                    onClick = navigateToWorkplaceFilter,
-                    filterSectionControlType = FilterSectionControlType.Absent,
-                    text = stringResource(R.string.workplace),
-                )
-                FilterSelectionControl(
-                    Modifier,
-                    onClick = navigateToIndustryFilter,
-                    filterSectionControlType = FilterSectionControlType.Absent,
-                    text = stringResource(R.string.industry),
-                )
+                if (filtersState.workplace != null) {
+                    FilterSelectionControl(
+                        Modifier,
+                        onClick = navigateToWorkplaceFilter,
+                        filterSectionControlType = FilterSectionControlType.Presents,
+                        title = stringResource(R.string.workplace),
+                        text = filtersState.workplace
+                    )
+                } else {
+                    FilterSelectionControl(
+                        Modifier,
+                        onClick = navigateToWorkplaceFilter,
+                        filterSectionControlType = FilterSectionControlType.Absent,
+                        text = stringResource(R.string.workplace),
+                    )
+                }
+
+                if (filtersState.industry != null) {
+                    FilterSelectionControl(
+                        Modifier,
+                        onClick = navigateToIndustryFilter,
+                        filterSectionControlType = FilterSectionControlType.Presents,
+                        title = stringResource(R.string.industry),
+                        text = filtersState.industry
+                    )
+                } else {
+                    FilterSelectionControl(
+                        Modifier,
+                        onClick = navigateToIndustryFilter,
+                        filterSectionControlType = FilterSectionControlType.Absent,
+                        text = stringResource(R.string.industry),
+                    )
+                }
                 Spacer(modifier = Modifier.height(Dimens.padding24))
                 SalaryTextField(
                     setSalaryValue = setSalaryValue,
@@ -149,6 +170,9 @@ fun FilterSettingsScreen(
     }
 }
 
+private const val PREVIEW_INDUSTRY = "Search for Extraterrestrial Intelligence"
+private const val PREVIEW_WORKPLACE = "Russia, Alaska"
+
 @Preview(
     device = "spec:width=1080px,height=1820px,dpi=420",
     uiMode = UI_MODE_NIGHT_NO,
@@ -157,6 +181,35 @@ fun FilterSettingsScreen(
 @Composable
 private fun PreviewScreenDay() {
     val stateFlow = MutableStateFlow(FilterSettingsState())
+    AndroidDiplomaTheme {
+        FilterSettingsScreen(
+            navigateToWorkplaceFilter = {},
+            navigateToIndustryFilter = {},
+            onBackClick = {},
+            saveFilter = {},
+            resetFilter = {},
+            filters = stateFlow.asStateFlow(),
+            changeWithSalaryOnly = {},
+            setSalaryValue = {}
+        )
+    }
+}
+
+@Preview(
+    device = "spec:width=1080px,height=1820px,dpi=420",
+    uiMode = UI_MODE_NIGHT_NO,
+    showBackground = true
+)
+@Composable
+private fun PreviewScreenSelectedDay() {
+    val stateFlow = MutableStateFlow(
+        FilterSettingsState(
+            workplace = PREVIEW_WORKPLACE,
+            industry = PREVIEW_INDUSTRY,
+            salary = "300000",
+            isIncludeSalary = true,
+        )
+    )
     AndroidDiplomaTheme {
         FilterSettingsScreen(
             navigateToWorkplaceFilter = {},
