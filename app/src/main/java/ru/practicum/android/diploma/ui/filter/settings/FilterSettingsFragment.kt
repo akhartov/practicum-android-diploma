@@ -15,9 +15,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
@@ -68,6 +65,7 @@ class FilterSettingsFragment : Fragment() {
                     onBackClick = { findNavController().popBackStack() },
                     filters = filterViewModel.filters,
                     changeWithSalaryOnly = { filterViewModel.changeWithSalaryOnly() },
+                    setSalaryValue = { salary -> filterViewModel.changeSalary(salary) }
                 )
             }
         }
@@ -83,9 +81,9 @@ fun FilterSettingsScreen(
     resetFilter: () -> Unit,
     filters: StateFlow<FilterSettingsState>,
     changeWithSalaryOnly: () -> Unit,
+    setSalaryValue: (String?) -> Unit
 ) {
     val filtersState by filters.collectAsState()
-    var salaryInputted by remember { mutableStateOf("") }
     Scaffold(
         topBar = {
             FilterTopAppBar(
@@ -116,10 +114,8 @@ fun FilterSettingsScreen(
                 )
                 Spacer(modifier = Modifier.height(Dimens.padding24))
                 SalaryTextField(
-                    salaryText = salaryInputted,
-                    onTextChange = { newText ->
-                        salaryInputted = newText
-                    }
+                    setSalaryValue = setSalaryValue,
+                    salaryText = filtersState.salary ?: ""
                 )
                 Spacer(modifier = Modifier.height(Dimens.padding24))
                 // Insert amount control here
@@ -159,7 +155,7 @@ fun FilterSettingsScreen(
     showBackground = true
 )
 @Composable
-fun PreviewScreenDay() {
+private fun PreviewScreenDay() {
     val stateFlow = MutableStateFlow(FilterSettingsState())
     AndroidDiplomaTheme {
         FilterSettingsScreen(
@@ -170,6 +166,7 @@ fun PreviewScreenDay() {
             resetFilter = {},
             filters = stateFlow.asStateFlow(),
             changeWithSalaryOnly = {},
+            setSalaryValue = {}
         )
     }
 }
@@ -180,7 +177,7 @@ fun PreviewScreenDay() {
     showBackground = true
 )
 @Composable
-fun PreviewScreenNight() {
+private fun PreviewScreenNight() {
     val stateFlow = MutableStateFlow(FilterSettingsState())
     AndroidDiplomaTheme {
         FilterSettingsScreen(
@@ -191,6 +188,7 @@ fun PreviewScreenNight() {
             resetFilter = {},
             filters = stateFlow.asStateFlow(),
             changeWithSalaryOnly = {},
+            setSalaryValue = {}
         )
     }
 }

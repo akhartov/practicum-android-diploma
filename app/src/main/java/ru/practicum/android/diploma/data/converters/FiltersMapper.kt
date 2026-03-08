@@ -12,7 +12,7 @@ class FiltersMapper {
             areaId = filters.areaId?.toString() ?: "",
             industry = filters.industryName ?: "",
             industryId = filters.industryId?.toString() ?: "",
-            salary = filters.salary?.toString() ?: "",
+            salary = filters.salary ?: "",
             isIncludeSalary = filters.isIncludeSalary.toString()
         )
 
@@ -22,7 +22,7 @@ class FiltersMapper {
             areaId = if (savedFiltersDto.areaId.isEmpty()) null else savedFiltersDto.areaId.toInt(),
             industryName = savedFiltersDto.industry.ifEmpty { null },
             industryId = if (savedFiltersDto.industryId.isEmpty()) null else savedFiltersDto.industryId.toInt(),
-            salary = if (savedFiltersDto.salary.isEmpty()) null else savedFiltersDto.salary.toInt(),
+            salary = savedFiltersDto.salary.ifEmpty { null },
             isIncludeSalary = savedFiltersDto.isIncludeSalary.toBoolean()
         )
 

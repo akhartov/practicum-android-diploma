@@ -15,6 +15,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,6 +32,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_NIGHT_YES
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.text.isDigitsOnly
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.ui.theme.AndroidDiplomaTheme
 import ru.practicum.android.diploma.ui.theme.Blue
@@ -40,18 +42,28 @@ import ru.practicum.android.diploma.ui.theme.LocalAndroidDiplomaTypography
 
 @Composable
 fun SalaryTextField(
-    salaryText: String,
-    onTextChange: (String) -> Unit
+    setSalaryValue: (String?) -> Unit,
+    salaryText: String
 ) {
     var isFocused by remember { mutableStateOf(false) }
+    var textState by remember { mutableStateOf(salaryText) }
+
+    LaunchedEffect(salaryText) {
+        if (textState != salaryText) {
+            textState = salaryText
+        }
+    }
+
     BasicTextField(
-        value = salaryText,
+        value = textState,
         onValueChange = { newText ->
-            val filteredText = newText.filter { it.isDigit() }
-            if (filteredText != newText) {
-                onTextChange(filteredText)
-            } else {
-                onTextChange(newText)
+            if (newText.isDigitsOnly()) {
+                textState = newText
+                if (newText.isEmpty()) {
+                    setSalaryValue(null)
+                } else {
+                    setSalaryValue(newText)
+                }
             }
         },
         singleLine = true,
@@ -59,7 +71,7 @@ fun SalaryTextField(
         textStyle = LocalAndroidDiplomaTypography.current.regular16,
         keyboardOptions = KeyboardOptions.Default.copy(
             keyboardType = KeyboardType.Number,
-            imeAction = ImeAction.Search
+            imeAction = ImeAction.Done
         ),
 
         decorationBox = { innerTextField ->
@@ -104,7 +116,13 @@ fun SalaryTextField(
                         innerTextField()
                     }
                 }
-                ClearButton(salaryText.isNotEmpty(), onClearClick = { onTextChange("") })
+                ClearButton(
+                    salaryText.isNotEmpty(),
+                    onClearClick = {
+                        textState = ""
+                        setSalaryValue(null)
+                    }
+                )
             }
         }
     )
@@ -147,10 +165,8 @@ private fun PreviewApproveButtonDay() {
     var text by remember { mutableStateOf("") }
     AndroidDiplomaTheme {
         SalaryTextField(
-            salaryText = text,
-            onTextChange = { newText ->
-                text = newText
-            }
+            {},
+            salaryText = text
         )
     }
 }

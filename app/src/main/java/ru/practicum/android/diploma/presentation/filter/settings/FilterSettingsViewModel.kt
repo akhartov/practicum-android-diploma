@@ -36,7 +36,7 @@ class FilterSettingsViewModel(
         filtersDataFlow.value = filtersDataFlow.value.copy(isIncludeSalary = !filtersDataFlow.value.isIncludeSalary)
     }
 
-    fun changeSalary(salary: Int?) {
+    fun changeSalary(salary: String?) {
         filtersDataFlow.value = filtersDataFlow.value.copy(salary = salary)
     }
 

@@ -5,6 +5,6 @@ data class Filters(
     val areaId: Int? = null,
     val industryName: String? = null,
     val industryId: Int? = null,
-    val salary: Int? = null,
+    val salary: String? = null,
     val isIncludeSalary: Boolean = false
 )
