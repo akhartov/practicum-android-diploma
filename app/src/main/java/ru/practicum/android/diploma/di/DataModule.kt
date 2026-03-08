@@ -87,7 +87,7 @@ val dataModule = module {
     }
 
     single<IndustryRepository> {
-        IndustryRepositoryImpl(get(),get())
+        IndustryRepositoryImpl(get(), get())
     }
 
     single { VacancyMapper(get()) }
