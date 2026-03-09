@@ -26,9 +26,9 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.domain.models.AreaShort
 import ru.practicum.android.diploma.presentation.filter.country.CountryFilterState
 import ru.practicum.android.diploma.presentation.filter.country.CountryFilterViewModel
-import ru.practicum.android.diploma.presentation.filter.settings.FilterSettingsViewModel
 import ru.practicum.android.diploma.ui.common.FilterSectionControlType
 import ru.practicum.android.diploma.ui.common.FilterSelectionControl
 import ru.practicum.android.diploma.ui.common.FilterTopAppBar
@@ -38,7 +38,6 @@ import ru.practicum.android.diploma.ui.theme.Dimens
 
 class CountryFilterFragment : Fragment() {
     val countryFilterViewModel: CountryFilterViewModel by viewModel()
-    val filterSettingsViewModel: FilterSettingsViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,7 +52,7 @@ class CountryFilterFragment : Fragment() {
                     viewModel = countryFilterViewModel,
                     onBackClick = { findNavController().navigateUp() },
                     onItemClick = { countryId, countryName ->
-                        filterSettingsViewModel.prepareCountry(countryId, countryName)
+                        countryFilterViewModel.prepareCountry(AreaShort(countryId, countryName))
                         findNavController().navigateUp()
                     }
                 )
@@ -80,7 +79,7 @@ fun CountryFilterScreen(
         Column(
             modifier = Modifier.padding(paddingValues)
         ) {
-            countryState?.let { state ->
+            countryState.let { state ->
                 when (state) {
                     is CountryFilterState.Content -> {
                         LazyColumn(

@@ -11,17 +11,22 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_NIGHT_NO
+import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_NIGHT_YES
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import org.koin.androidx.viewmodel.ext.android.activityViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
-import ru.practicum.android.diploma.presentation.filter.settings.FilterSettingsViewModel
+import ru.practicum.android.diploma.domain.models.AreaShort
+import ru.practicum.android.diploma.presentation.filter.WorkplaceFilterViewModel
 import ru.practicum.android.diploma.ui.common.ButtonControl
 import ru.practicum.android.diploma.ui.common.ButtonControlType
 import ru.practicum.android.diploma.ui.common.FilterSectionControlType
@@ -31,8 +36,7 @@ import ru.practicum.android.diploma.ui.theme.AndroidDiplomaTheme
 import ru.practicum.android.diploma.ui.theme.Dimens
 
 class WorkplaceFilterFragment : Fragment() {
-
-    val filterSettingsViewModel: FilterSettingsViewModel by activityViewModel()
+    val viewModel: WorkplaceFilterViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,6 +48,8 @@ class WorkplaceFilterFragment : Fragment() {
         setContent {
             AndroidDiplomaTheme {
                 WorkplaceFilterScreen(
+                    country = viewModel.country,
+                    area = viewModel.area,
                     navigateToCountryFilter = {
                         findNavController().navigate(R.id.action_workplaceFilterFragment_to_countryFilterFragment)
                     },
@@ -51,7 +57,7 @@ class WorkplaceFilterFragment : Fragment() {
                         findNavController().navigate(R.id.action_workplaceFilterFragment_to_regionFilterFragment)
                     },
                     onApply = {
-                        filterSettingsViewModel.applyWorkplace()
+                        viewModel.applyWorkplace()
                         findNavController().popBackStack()
                     },
                     onBackClick = { findNavController().popBackStack() }
@@ -63,11 +69,15 @@ class WorkplaceFilterFragment : Fragment() {
 
 @Composable
 fun WorkplaceFilterScreen(
+    country: StateFlow<AreaShort?>,
+    area: StateFlow<AreaShort?>,
     navigateToCountryFilter: () -> Unit,
     navigateToRegionFilter: () -> Unit,
     onApply: () -> Unit,
     onBackClick: () -> Unit,
 ) {
+    val countryState = country.collectAsState()
+    val areaState = area.collectAsState()
     Scaffold(
         topBar = {
             FilterTopAppBar(
@@ -84,30 +94,52 @@ fun WorkplaceFilterScreen(
             verticalArrangement = Arrangement.SpaceBetween,
         ) {
             Column {
-                FilterSelectionControl(
-                    Modifier,
-                    onClick = { navigateToCountryFilter() },
-                    filterSectionControlType = FilterSectionControlType.Absent,
-                    text = stringResource(R.string.country_selection),
-                )
-                FilterSelectionControl(
-                    Modifier,
-                    onClick = { navigateToRegionFilter() },
-                    filterSectionControlType = FilterSectionControlType.Absent,
-                    text = stringResource(R.string.region_selection),
-                )
+                if (countryState.value?.name != null) {
+                    FilterSelectionControl(
+                        Modifier,
+                        onClick = { navigateToCountryFilter() },
+                        filterSectionControlType = FilterSectionControlType.Presents,
+                        title = stringResource(R.string.country_selection),
+                        text = countryState.value?.name
+                    )
+                } else {
+                    FilterSelectionControl(
+                        Modifier,
+                        onClick = { navigateToCountryFilter() },
+                        filterSectionControlType = FilterSectionControlType.Absent,
+                        text = stringResource(R.string.country_selection),
+                    )
+                }
+                if (areaState.value?.name != null) {
+                    FilterSelectionControl(
+                        Modifier,
+                        onClick = { navigateToRegionFilter() },
+                        filterSectionControlType = FilterSectionControlType.Presents,
+                        title = stringResource(R.string.region_selection),
+                        text = areaState.value?.name
+                    )
+                } else {
+                    FilterSelectionControl(
+                        Modifier,
+                        onClick = { navigateToRegionFilter() },
+                        filterSectionControlType = FilterSectionControlType.Absent,
+                        text = stringResource(R.string.region_selection),
+                    )
+                }
             }
 
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(Dimens.padding8)
-            ) {
-                ButtonControl(
-                    Modifier,
-                    text = stringResource(R.string.select),
-                    onClick = { onApply() },
-                    buttonControlType = ButtonControlType.Approve,
-                )
+            if (countryState.value != null || areaState.value != null) {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(Dimens.padding8)
+                ) {
+                    ButtonControl(
+                        Modifier,
+                        text = stringResource(R.string.select),
+                        onClick = { onApply() },
+                        buttonControlType = ButtonControlType.Approve,
+                    )
+                }
             }
         }
     }
@@ -120,8 +152,79 @@ fun WorkplaceFilterScreen(
 )
 @Composable
 fun PreviewScreenDay() {
+    val area = MutableStateFlow<AreaShort?>(null)
+    val country = MutableStateFlow<AreaShort?>(null)
+
     AndroidDiplomaTheme {
         WorkplaceFilterScreen(
+            area,
+            country,
+            {},
+            {},
+            {},
+            {},
+        )
+    }
+}
+
+@Preview(
+    device = "spec:width=1080px,height=1820px,dpi=420",
+    uiMode = UI_MODE_NIGHT_YES,
+    showBackground = true
+)
+@Composable
+fun PreviewScreenNight() {
+    val area = MutableStateFlow<AreaShort?>(null)
+    val country = MutableStateFlow<AreaShort?>(null)
+
+    AndroidDiplomaTheme {
+        WorkplaceFilterScreen(
+            area,
+            country,
+            {},
+            {},
+            {},
+            {},
+        )
+    }
+}
+
+@Preview(
+    device = "spec:width=1080px,height=1820px,dpi=420",
+    uiMode = UI_MODE_NIGHT_YES,
+    showBackground = true
+)
+@Composable
+fun PreviewScreenFilledNight() {
+    val area = MutableStateFlow<AreaShort?>(AreaShort(1, "Area"))
+    val country = MutableStateFlow<AreaShort?>(AreaShort(1, "Country"))
+
+    AndroidDiplomaTheme {
+        WorkplaceFilterScreen(
+            area,
+            country,
+            {},
+            {},
+            {},
+            {},
+        )
+    }
+}
+
+@Preview(
+    device = "spec:width=1080px,height=1820px,dpi=420",
+    uiMode = UI_MODE_NIGHT_NO,
+    showBackground = true
+)
+@Composable
+fun PreviewScreenFilledDay() {
+    val area = MutableStateFlow<AreaShort?>(AreaShort(1, "Area"))
+    val country = MutableStateFlow<AreaShort?>(AreaShort(1, "Country"))
+
+    AndroidDiplomaTheme {
+        WorkplaceFilterScreen(
+            area,
+            country,
             {},
             {},
             {},

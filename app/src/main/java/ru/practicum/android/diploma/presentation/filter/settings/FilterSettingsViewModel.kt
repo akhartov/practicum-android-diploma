@@ -6,66 +6,68 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import ru.practicum.android.diploma.domain.api.ChangeFilterInteractor
 import ru.practicum.android.diploma.domain.api.FilterInteractor
 import ru.practicum.android.diploma.domain.models.Filters
 import ru.practicum.android.diploma.presentation.converters.UiFiltersMapper
 
 class FilterSettingsViewModel(
     private val filterInteractor: FilterInteractor,
+    private val changeFilterInteractor: ChangeFilterInteractor,
     private val filtersMapper: UiFiltersMapper,
 ) : ViewModel() {
-    private val _filters = MutableStateFlow(FilterSettingsState())
-    val filters: StateFlow<FilterSettingsState> = _filters.asStateFlow()
+    private val _filtersUiState = MutableStateFlow(FilterSettingsState())
+    val filtersUiState: StateFlow<FilterSettingsState> = _filtersUiState.asStateFlow()
 
-    var preparedCountryName: String? = null
-    var preparedAreaName: String? = null
-    var preparedAreaId: Int? = null
-
-    private var filtersDataFlow = MutableStateFlow(Filters())
+    private var _filtersStateFlow = MutableStateFlow(Filters())
 
     init {
-        filtersDataFlow.value = filterInteractor.getFilters()
+        // Поток обновления UI при изменении внутри FilterSettingsViewModel
         viewModelScope.launch {
-            filtersDataFlow.collect {
-                _filters.value = filtersMapper.map(it)
+            _filtersStateFlow.collect {
+                _filtersUiState.value = filtersMapper.map(it)
             }
         }
+
+        // Поток обновления UI при применении кешированных значений рабочего места
+        viewModelScope.launch {
+            changeFilterInteractor.workplace.collect { workplace ->
+                if (workplace != null) {
+                    _filtersStateFlow.value =
+                        _filtersStateFlow.value.copy(workplaceName = workplace.workplaceName, areaId = workplace.areaId)
+                } else {
+                    _filtersStateFlow.value = _filtersStateFlow.value.copy(workplaceName = null, areaId = null)
+                }
+            }
+        }
+
+        // Поток обновления UI при применении отрасли
+        viewModelScope.launch {
+            changeFilterInteractor.industry.collect { industry ->
+                _filtersStateFlow.value =
+                    _filtersStateFlow.value.copy(industryName = industry?.name, industryId = industry?.id)
+            }
+        }
+
+        // Первое обновление данных фильтра из хранилища
+        _filtersStateFlow.value = filterInteractor.getFilters()
     }
 
     fun changeWithSalaryOnly() {
-        filtersDataFlow.value = filtersDataFlow.value.copy(isIncludeSalary = !filtersDataFlow.value.isIncludeSalary)
+        _filtersStateFlow.value =
+            _filtersStateFlow.value.copy(isIncludeSalary = !_filtersStateFlow.value.isIncludeSalary)
     }
 
     fun changeSalary(salary: String?) {
-        filtersDataFlow.value = filtersDataFlow.value.copy(salary = salary)
-    }
-
-    fun changeIndustry(industryId: Int?, industryName: String?) {
-        filtersDataFlow.value = filtersDataFlow.value.copy(industryId = industryId, industryName = industryName)
-    }
-
-    fun prepareCountry(countryId: Int?, countryName: String?) {
-        preparedCountryName = countryName
-        preparedAreaName = null
-        preparedAreaId = null
-    }
-
-    fun prepareArea(areaId: Int?, areaName: String?) {
-        preparedAreaName = areaName
-        preparedAreaId = areaId
-    }
-
-    fun applyWorkplace() {
-        val workplaceName = preparedCountryName?.let { "$it, $preparedAreaName" } ?: preparedAreaName
-        filtersDataFlow.value = filtersDataFlow.value.copy(workplaceName = workplaceName, areaId = preparedAreaId)
+        _filtersStateFlow.value = _filtersStateFlow.value.copy(salary = salary)
     }
 
     fun saveFilter() {
-        filterInteractor.setFilters(filtersDataFlow.value)
+        filterInteractor.setFilters(_filtersStateFlow.value)
     }
 
     fun resetFilter() {
-        filterInteractor.setFilters(Filters())
-        filtersDataFlow.value = filterInteractor.getFilters()
+        filterInteractor.resetFilters()
+        _filtersStateFlow.value = filterInteractor.getFilters()
     }
 }
