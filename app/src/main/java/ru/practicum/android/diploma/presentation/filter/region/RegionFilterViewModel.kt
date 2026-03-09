@@ -48,6 +48,8 @@ class RegionFilterViewModel(
             query.debounce(IndustryFilterViewModel.Companion.DEBOUNCE_DELAY) // пауза
                 .distinctUntilChanged() // ограничиваем если есть новый поиск
                 .onEach {
+                    _regionFilterState.value = RegionFilterState.Loading
+
                     if (_regionFilterState.value is RegionFilterState.Content) {
                         _regionFilterState.value = RegionFilterState.Content(
                             getFilteredRegions(query.value)
