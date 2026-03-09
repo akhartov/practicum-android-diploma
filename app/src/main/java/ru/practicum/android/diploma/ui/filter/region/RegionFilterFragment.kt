@@ -8,6 +8,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import ru.practicum.android.diploma.ui.theme.AndroidDiplomaTheme
 
 class RegionFilterFragment : Fragment() {
 
@@ -19,7 +20,9 @@ class RegionFilterFragment : Fragment() {
         setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
 
         setContent {
-            RegionFilterScreen(onBackClick = { findNavController().popBackStack() }, emptyList(), {})
+            AndroidDiplomaTheme {
+                RegionFilterScreen(onBackClick = { findNavController().popBackStack() }, emptyList(), {})
+            }
         }
     }
 }
