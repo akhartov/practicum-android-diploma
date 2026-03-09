@@ -27,12 +27,14 @@ import kotlinx.coroutines.flow.StateFlow
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.presentation.model.VacanciesState
 import ru.practicum.android.diploma.ui.common.SearchTextField
+import ru.practicum.android.diploma.ui.filter.workplace.FilterIconType
 import ru.practicum.android.diploma.ui.theme.Dimens
 import ru.practicum.android.diploma.ui.theme.LocalAndroidDiplomaTypography
 
 @Composable
 fun SearchScreen(
     state: VacanciesState,
+    filterState: FilterIconType,
     searchQuery: String,
     onQueryChange: (String) -> Unit,
     onClearQuery: () -> Unit,
@@ -45,6 +47,7 @@ fun SearchScreen(
         topBar = {
             SearchTopAppBar(
                 title = stringResource(R.string.search_vacancies),
+                filterState = filterState,
                 onFilterIconClick = onFilterIconClick
             )
         }

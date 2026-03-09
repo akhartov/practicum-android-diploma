@@ -13,17 +13,20 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import ru.practicum.android.diploma.domain.api.FilterInteractor
 import ru.practicum.android.diploma.domain.api.SearchVacanciesInteractor
 import ru.practicum.android.diploma.domain.models.SearchParams
 import ru.practicum.android.diploma.domain.models.VacancyShortResponse
 import ru.practicum.android.diploma.presentation.model.ToastState
 import ru.practicum.android.diploma.presentation.model.VacanciesState
+import ru.practicum.android.diploma.ui.filter.workplace.FilterIconType
 import ru.practicum.android.diploma.util.NetworkResponseStatus
 import ru.practicum.android.diploma.util.Resource
 
 @OptIn(FlowPreview::class)
 class SearchViewModel(
     private val searchVacanciesInteractor: SearchVacanciesInteractor,
+    private val filterInteractor : FilterInteractor
 ) : ViewModel() {
     private val _searchParams = MutableStateFlow(SearchParams(text = "", page = FIRST_PAGE_INDEX))
     val searchParams: StateFlow<SearchParams> = _searchParams.asStateFlow()
@@ -36,12 +39,19 @@ class SearchViewModel(
     val query: StateFlow<String> = _query.asStateFlow()
     private val _toastState = MutableStateFlow<ToastState>(ToastState.NoProblem)
     val toastState: StateFlow<ToastState> = _toastState.asStateFlow()
+    private val _filterState = MutableStateFlow<FilterIconType>(FilterIconType.NoFilterIcon)
+    val filterState: StateFlow<FilterIconType> = _filterState.asStateFlow()
+    var options = filterInteractor.prepareQueryParams()
 
     init {
         searchParams.debounce(SEARCH_DEBOUNCE_DELAY) // пауза
             .distinctUntilChanged() // ограничиваем если есть новый поиск
             .onEach { searchParams -> searchVacancies(searchParams.text, searchParams.page) }
             .launchIn(viewModelScope)
+
+        if (filterInteractor.getFilterIconState()) {
+            _filterState.value = FilterIconType.HasFilterIcon
+        }
     }
 
     fun clearToast() {
@@ -65,10 +75,9 @@ class SearchViewModel(
         }
 
         viewModelScope.launch {
-            val options = hashMapOf<String, String>().apply {
-                put("text", text)
-                put("page", page.toString())
-            }
+
+            options["text"] = text
+            options["page"] = page.toString()
 
             searchVacanciesInteractor.searchVacancies(options)
                 .collect { resource ->

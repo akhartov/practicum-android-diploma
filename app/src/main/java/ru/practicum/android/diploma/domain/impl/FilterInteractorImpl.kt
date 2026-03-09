@@ -1,11 +1,8 @@
 package ru.practicum.android.diploma.domain.impl
 
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emptyFlow
 import ru.practicum.android.diploma.domain.api.FilterInteractor
 import ru.practicum.android.diploma.domain.api.FilterRepository
 import ru.practicum.android.diploma.domain.models.Filters
-import ru.practicum.android.diploma.ui.filter.workplace.FilterIconType
 
 class FilterInteractorImpl(private val filterRepository: FilterRepository) : FilterInteractor {
     override fun getFilters(): Filters {
@@ -20,11 +17,30 @@ class FilterInteractorImpl(private val filterRepository: FilterRepository) : Fil
         filterRepository.resetFilters()
     }
 
-    override fun prepareQueryParams(filters: Filters): HashMap<String, String> {
-        return HashMap()
+    override fun prepareQueryParams(): HashMap<String, String> {
+        val filters = getFilters()
+
+        return hashMapOf<String, String>().apply {
+            if (filters.areaId != null) {
+                put("area", filters.areaId.toString())
+            }
+            if (filters.industryId != null) {
+                put("industry", filters.industryId.toString())
+            }
+            if (!filters.salary.isNullOrBlank()) {
+                put("salary", filters.salary)
+            }
+            if (filters.isIncludeSalary) {
+                put("only_with_salary", true.toString())
+            }
+        }
     }
 
-    override fun getFilterIconState(): Flow<FilterIconType> {
-        return emptyFlow()
+    override fun getFilterIconState(): Boolean {
+        val filters = getFilters()
+        return filters.areaId != null
+            || filters.industryId != null
+            || !filters.salary.isNullOrBlank()
+            || filters.isIncludeSalary
     }
 }
