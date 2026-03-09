@@ -230,6 +230,6 @@ private fun PreviewSearchRegion() {
 
     val state = MutableStateFlow<RegionFilterState>(RegionFilterState.Content(regions))
     AndroidDiplomaTheme {
-        RegionFilterScreen({}, state, {}, text,{}, {})
+        RegionFilterScreen({}, state, {}, text, {}, {})
     }
 }
