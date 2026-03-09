@@ -7,6 +7,10 @@ import ru.practicum.android.diploma.data.repository.FavoritesRepository
 import ru.practicum.android.diploma.domain.GetVacanciesFlowUseCase
 import ru.practicum.android.diploma.domain.LikeInteractor
 import ru.practicum.android.diploma.domain.api.AreaInteractor
+import ru.practicum.android.diploma.domain.api.ChangeAreaUseCase
+import ru.practicum.android.diploma.domain.api.ChangeCountryUseCase
+import ru.practicum.android.diploma.domain.api.ChangeFilterInteractor
+import ru.practicum.android.diploma.domain.api.ChangeWorkplaceUseCase
 import ru.practicum.android.diploma.domain.api.FilterInteractor
 import ru.practicum.android.diploma.domain.api.IndustryInteractor
 import ru.practicum.android.diploma.domain.api.SearchVacanciesInteractor
@@ -38,4 +42,9 @@ val domainModule = module {
     single<AreaInteractor> { AreaInteractorImpl(get()) }
 
     single<FilterInteractor> { FilterInteractorImpl(get()) }
+    single { ChangeFilterInteractor(get()) }
+
+    single { ChangeAreaUseCase(get()) }
+    single { ChangeCountryUseCase(get()) }
+    single { ChangeWorkplaceUseCase(get(), get()) }
 }

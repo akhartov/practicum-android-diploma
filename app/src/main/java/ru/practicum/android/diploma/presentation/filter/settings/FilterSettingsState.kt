@@ -6,3 +6,7 @@ data class FilterSettingsState(
     val salary: String? = null,
     val isIncludeSalary: Boolean = false
 )
+
+fun FilterSettingsState.isEmpty(): Boolean {
+    return workplace.isNullOrBlank() && industry.isNullOrBlank() && salary.isNullOrBlank() && !isIncludeSalary
+}
