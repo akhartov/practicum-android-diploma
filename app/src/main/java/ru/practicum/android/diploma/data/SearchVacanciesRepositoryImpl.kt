@@ -1,11 +1,12 @@
 package ru.practicum.android.diploma.data
 
+import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import ru.practicum.android.diploma.data.converters.VacancyMapper
 import ru.practicum.android.diploma.data.dto.VacancyResponse
 import ru.practicum.android.diploma.data.network.VacancyApiClient
 import ru.practicum.android.diploma.domain.api.SearchVacanciesRepository
-import ru.practicum.android.diploma.data.converters.VacancyMapper
 import ru.practicum.android.diploma.domain.models.VacancyShortResponse
 import ru.practicum.android.diploma.util.NetworkResponseStatus
 import ru.practicum.android.diploma.util.Resource
@@ -18,6 +19,7 @@ class SearchVacanciesRepositoryImpl(
         options: Map<String, String>
     ): Flow<Resource<VacancyShortResponse>> =
         flow {
+            Log.d("SearchVacanciesRepositoryImpl", "SEARCH OPTIONS: $options")
             val response = apiClient.getVacancies(options)
             when (response.resultCode) {
                 NetworkResponseStatus.NO_INTERNET -> {

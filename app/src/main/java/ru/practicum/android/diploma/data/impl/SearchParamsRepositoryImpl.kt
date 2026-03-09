@@ -17,19 +17,21 @@ class SearchParamsRepositoryImpl(
     override suspend fun emitSearch(text: String, pageIndex: Int) {
         lastText = text
         val hashMap = filtersMapper.filtersToHashMap(filterRepository.getFilters())
-        hashMap.put("text", lastText)
-        hashMap.put("page", pageIndex.toString())
+        hashMap.put(FIELD_TEXT, lastText)
+        hashMap.put(FIELD_PAGE, pageIndex.toString())
         searchParamsEmitter.emit(hashMap)
     }
 
     override suspend fun emitSearch() {
         val hashMap = filtersMapper.filtersToHashMap(filterRepository.getFilters())
-        hashMap.put("text", lastText)
-        hashMap.put("page", FIRST_PAGE_INDEX.toString())
+        hashMap.put(FIELD_TEXT, lastText)
+        hashMap.put(FIELD_PAGE, FIRST_PAGE_INDEX.toString())
         searchParamsEmitter.emit(hashMap)
     }
 
     companion object {
         const val FIRST_PAGE_INDEX = 1
+        const val FIELD_TEXT = "text"
+        const val FIELD_PAGE = "page"
     }
 }
