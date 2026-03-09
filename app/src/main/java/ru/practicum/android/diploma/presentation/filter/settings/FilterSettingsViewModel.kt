@@ -62,12 +62,18 @@ class FilterSettingsViewModel(
         _filtersStateFlow.value = _filtersStateFlow.value.copy(salary = salary)
     }
 
-    fun saveFilter() {
+    fun applyFilter() {
         filterInteractor.setFilters(_filtersStateFlow.value)
+        viewModelScope.launch {
+            filterInteractor.emitSearch()
+        }
     }
 
     fun resetFilter() {
         filterInteractor.resetFilters()
         _filtersStateFlow.value = filterInteractor.getFilters()
+        viewModelScope.launch {
+            filterInteractor.emitSearch()
+        }
     }
 }

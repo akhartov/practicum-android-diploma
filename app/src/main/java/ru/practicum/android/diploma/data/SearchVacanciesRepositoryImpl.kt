@@ -15,7 +15,7 @@ class SearchVacanciesRepositoryImpl(
     private val mapper: VacancyMapper,
 ) : SearchVacanciesRepository {
     override fun searchVacancies(
-        options: HashMap<String, String>
+        options: Map<String, String>
     ): Flow<Resource<VacancyShortResponse>> =
         flow {
             val response = apiClient.getVacancies(options)

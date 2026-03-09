@@ -55,8 +55,14 @@ class FilterSettingsFragment : Fragment() {
         setContent {
             AndroidDiplomaTheme {
                 FilterSettingsScreen(
-                    saveFilter = { filterViewModel.saveFilter() },
-                    resetFilter = { filterViewModel.resetFilter() },
+                    saveFilter = {
+                        filterViewModel.applyFilter()
+                        findNavController().popBackStack()
+                    },
+                    resetFilter = {
+                        filterViewModel.resetFilter()
+                        findNavController().popBackStack()
+                    },
                     navigateToWorkplaceFilter = {
                         findNavController().navigate(R.id.action_filterSettingsFragment_to_workplaceFilterFragment)
                     },

@@ -8,7 +8,7 @@ import ru.practicum.android.diploma.domain.models.Filters
 
 class FilterRepositoryImpl(
     private val storage: StorageClient<SavedFiltersDto>,
-    private val filtersMapper: FiltersMapper
+    private val filtersMapper: FiltersMapper,
 ) : FilterRepository {
 
     override fun getFilters(): Filters {

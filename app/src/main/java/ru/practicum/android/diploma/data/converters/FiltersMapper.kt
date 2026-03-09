@@ -33,4 +33,18 @@ class FiltersMapper {
             parentId = dto.parentId,
             areas = dto.areas?.map { mapToArea(it) } ?: emptyList()
         )
+
+    fun filtersToHashMap(filters: Filters): HashMap<String, String> {
+        return hashMapOf<String, String>().apply {
+            filters.areaId?.let { put("area", it.toString()) }
+            filters.industryId?.let { put("industry", it.toString()) }
+
+            if (!filters.salary.isNullOrBlank()) {
+                put("salary", filters.salary)
+            }
+            if (filters.isIncludeSalary) {
+                put("only_with_salary", true.toString())
+            }
+        }
+    }
 }

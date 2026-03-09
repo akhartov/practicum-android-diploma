@@ -8,7 +8,7 @@ import ru.practicum.android.diploma.util.Resource
 
 class SearchVacanciesInteractorImpl(private val searchRepository: SearchVacanciesRepository) :
     SearchVacanciesInteractor {
-    override fun searchVacancies(options: HashMap<String, String>): Flow<Resource<VacancyShortResponse>> {
+    override fun searchVacancies(options: Map<String, String>): Flow<Resource<VacancyShortResponse>> {
         return searchRepository.searchVacancies(options)
     }
 }

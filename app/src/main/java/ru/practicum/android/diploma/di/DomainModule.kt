@@ -41,7 +41,7 @@ val domainModule = module {
     single { GetVacanciesFlowUseCase(get()) }
     single<AreaInteractor> { AreaInteractorImpl(get()) }
 
-    single<FilterInteractor> { FilterInteractorImpl(get()) }
+    single<FilterInteractor> { FilterInteractorImpl(get(), get()) }
     single { ChangeFilterInteractor(get()) }
 
     single { ChangeAreaUseCase(get()) }
