@@ -8,5 +8,5 @@ data class FilterSettingsState(
 )
 
 fun FilterSettingsState.isEmpty(): Boolean {
-    return workplace.isNullOrBlank() && industry.isNullOrBlank() && salary.isNullOrBlank()
+    return workplace.isNullOrBlank() && industry.isNullOrBlank() && salary.isNullOrBlank() && !isIncludeSalary
 }
