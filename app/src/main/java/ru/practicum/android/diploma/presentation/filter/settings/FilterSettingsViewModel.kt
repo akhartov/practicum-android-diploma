@@ -32,8 +32,11 @@ class FilterSettingsViewModel(
         // Поток обновления UI при применении кешированных значений рабочего места
         viewModelScope.launch {
             changeFilterInteractor.workplace.collect { workplace ->
-                workplace?.workplaceName.let { workplaceName ->
-                    _filtersUiState.value = _filtersUiState.value.copy(workplace = workplaceName)
+                if (workplace != null) {
+                    _filtersStateFlow.value =
+                        _filtersStateFlow.value.copy(workplaceName = workplace.workplaceName, areaId = workplace.areaId)
+                } else {
+                    _filtersStateFlow.value = _filtersStateFlow.value.copy(workplaceName = null, areaId = null)
                 }
             }
         }
@@ -41,7 +44,8 @@ class FilterSettingsViewModel(
         // Поток обновления UI при применении отрасли
         viewModelScope.launch {
             changeFilterInteractor.industry.collect { industry ->
-                _filtersUiState.value = _filtersUiState.value.copy(industry = industry?.name)
+                _filtersStateFlow.value =
+                    _filtersStateFlow.value.copy(industryName = industry?.name, industryId = industry?.id)
             }
         }
 
@@ -59,12 +63,7 @@ class FilterSettingsViewModel(
     }
 
     fun saveFilter() {
-        filterInteractor.setFilters(
-            _filtersStateFlow.value.copy(
-                industryName = changeFilterInteractor.industry.value?.name,
-                industryId = changeFilterInteractor.industry.value?.id,
-            )
-        )
+        filterInteractor.setFilters(_filtersStateFlow.value)
     }
 
     fun resetFilter() {

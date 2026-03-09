@@ -31,7 +31,7 @@ val presentationModule = module {
     }
 
     viewModel {
-        CountryFilterViewModel(get())
+        CountryFilterViewModel(get(), get())
     }
 
     viewModel {

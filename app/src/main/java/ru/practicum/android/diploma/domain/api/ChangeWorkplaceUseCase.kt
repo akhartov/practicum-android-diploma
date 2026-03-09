@@ -1,32 +1,31 @@
 package ru.practicum.android.diploma.domain.api
 
 import kotlinx.coroutines.flow.StateFlow
-import ru.practicum.android.diploma.domain.models.Area
+import ru.practicum.android.diploma.domain.models.AreaShort
 import ru.practicum.android.diploma.domain.models.Workplace
 
 class ChangeWorkplaceUseCase(
     private val workplaceRepository: WorkplaceCachingRepository,
     private val filterRepository: FilterCachingRepository,
 ) {
-    val area: StateFlow<Area?> = workplaceRepository.area
-    val country: StateFlow<Area?> = workplaceRepository.country
+    val area: StateFlow<AreaShort?> = workplaceRepository.area
+    val country: StateFlow<AreaShort?> = workplaceRepository.country
 
     fun applyWorkplace() {
-        buildCombinedName(
-            workplaceRepository.country.value?.name,
-            workplaceRepository.area.value?.name
-        )?.let { workplaceName ->
-            workplaceRepository.area.value?.id.let { areaId ->
-                filterRepository.cacheWorkplace(Workplace(workplaceName, areaId))
-            }
+        buildWorkplace(
+            workplaceRepository.country.value,
+            workplaceRepository.area.value,
+        )?.let { workplace ->
+            filterRepository.cacheWorkplace(workplace)
         }
     }
 
-    private fun buildCombinedName(countryName: String?, areaName: String?): String? {
+    private fun buildWorkplace(country: AreaShort?, area: AreaShort?): Workplace? {
         return when {
-            !countryName.isNullOrBlank() && !areaName.isNullOrBlank() -> "$countryName, $areaName"
-            !areaName.isNullOrBlank() -> areaName
-            !countryName.isNullOrBlank() -> countryName
+            area == null && country == null -> null
+            area == null && country != null -> Workplace(country.name, country.id)
+            area != null && country != null -> Workplace("${country.name}, ${area.name}", area.id)
+            area != null && country == null -> Workplace(area.name, area.id)
             else -> null
         }
     }

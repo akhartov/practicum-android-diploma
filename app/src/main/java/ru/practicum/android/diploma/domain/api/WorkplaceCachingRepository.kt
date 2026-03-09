@@ -1,12 +1,12 @@
 package ru.practicum.android.diploma.domain.api
 
 import kotlinx.coroutines.flow.StateFlow
-import ru.practicum.android.diploma.domain.models.Area
+import ru.practicum.android.diploma.domain.models.AreaShort
 
 interface WorkplaceCachingRepository {
-    val area: StateFlow<Area?>
-    val country: StateFlow<Area?>
+    val area: StateFlow<AreaShort?>
+    val country: StateFlow<AreaShort?>
 
-    fun cacheCountry(country: Area?)
-    fun cacheArea(country: Area?, area: Area?)
+    fun cacheCountry(country: AreaShort?)
+    fun cacheArea(country: AreaShort?, area: AreaShort?)
 }

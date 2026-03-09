@@ -4,21 +4,21 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import ru.practicum.android.diploma.domain.api.WorkplaceCachingRepository
-import ru.practicum.android.diploma.domain.models.Area
+import ru.practicum.android.diploma.domain.models.AreaShort
 
 class WorkplaceCachingRepositoryImpl : WorkplaceCachingRepository {
-    private val _area = MutableStateFlow<Area?>(null)
-    override val area: StateFlow<Area?> = _area.asStateFlow()
+    private val _area = MutableStateFlow<AreaShort?>(null)
+    override val area: StateFlow<AreaShort?> = _area.asStateFlow()
 
-    private val _country = MutableStateFlow<Area?>(null)
-    override val country: StateFlow<Area?> = _country.asStateFlow()
+    private val _country = MutableStateFlow<AreaShort?>(null)
+    override val country: StateFlow<AreaShort?> = _country.asStateFlow()
 
-    override fun cacheCountry(country: Area?) {
+    override fun cacheCountry(country: AreaShort?) {
         _country.value = country
         _area.value = null
     }
 
-    override fun cacheArea(country: Area?, area: Area?) {
+    override fun cacheArea(country: AreaShort?, area: AreaShort?) {
         _country.value = country
         _area.value = area
     }

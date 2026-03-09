@@ -7,12 +7,14 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.api.AreaInteractor
+import ru.practicum.android.diploma.domain.api.ChangeCountryUseCase
 import ru.practicum.android.diploma.domain.models.AreaShort
 import ru.practicum.android.diploma.util.NetworkResponseStatus
 import ru.practicum.android.diploma.util.Resource
 
 class CountryFilterViewModel(
-    private val areaInteractor: AreaInteractor
+    private val areaInteractor: AreaInteractor,
+    private val changeCountryUseCase: ChangeCountryUseCase,
 ) : ViewModel() {
     private val _countryFilterState = MutableStateFlow<CountryFilterState>(CountryFilterState.Loading)
     val countryFilterState: StateFlow<CountryFilterState> = _countryFilterState.asStateFlow()
@@ -23,6 +25,10 @@ class CountryFilterViewModel(
                 proccesResult(result)
             }
         }
+    }
+
+    fun prepareCountry(country: AreaShort?) {
+        changeCountryUseCase.cacheCountry(country)
     }
 
     private fun proccesResult(result: Resource<List<AreaShort>>) {
