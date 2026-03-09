@@ -5,8 +5,6 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 import ru.practicum.android.diploma.presentation.converters.UiFiltersMapper
 import ru.practicum.android.diploma.presentation.favorites.FavoritesViewModel
-import ru.practicum.android.diploma.presentation.filter.CountryFilterViewModel
-import ru.practicum.android.diploma.presentation.filter.RegionFilterViewModel
 import ru.practicum.android.diploma.presentation.filter.WorkplaceFilterViewModel
 import ru.practicum.android.diploma.presentation.filter.country.CountryFilterViewModel
 import ru.practicum.android.diploma.presentation.filter.industry.IndustryFilterViewModel

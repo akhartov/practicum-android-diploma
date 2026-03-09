@@ -2,6 +2,7 @@ package ru.practicum.android.diploma.presentation.filter.region
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -11,11 +12,12 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.api.AreaInteractor
-import ru.practicum.android.diploma.domain.models.AreaShort
+import ru.practicum.android.diploma.domain.models.Region
 import ru.practicum.android.diploma.presentation.filter.industry.IndustryFilterViewModel
 import ru.practicum.android.diploma.util.NetworkResponseStatus
 import ru.practicum.android.diploma.util.Resource
 
+@OptIn(FlowPreview::class)
 class RegionFilterViewModel(
     private val areaInteractor: AreaInteractor
 ) : ViewModel() {
@@ -25,7 +27,7 @@ class RegionFilterViewModel(
     private val _query = MutableStateFlow<String>("")
     val query: StateFlow<String> = _query.asStateFlow()
 
-    var allRegions = listOf<AreaShort>()
+    var allRegions = listOf<Region>()
 
     init {
         viewModelScope.launch {
@@ -60,16 +62,16 @@ class RegionFilterViewModel(
         }
     }
 
-    private fun getFilteredRegions(regionQueryString: String): List<AreaShort> {
+    private fun getFilteredRegions(regionQueryString: String): List<Region> {
         val trimmedQuery = regionQueryString.trim()
         return if (trimmedQuery.isEmpty()) {
             allRegions
         } else {
-            return allRegions.filter { it.name.contains(query.value.trim(), ignoreCase = true) }
+            return allRegions.filter { it.region.name.contains(query.value.trim(), ignoreCase = true) }
         }
     }
 
-    private fun handleSuccess(data: List<AreaShort>?) {
+    private fun handleSuccess(data: List<Region>?) {
         when {
             data == null -> _regionFilterState.value = RegionFilterState.NotFound
             else -> {
@@ -100,7 +102,7 @@ class RegionFilterViewModel(
         const val DEBOUNCE_DELAY = 300L
 
         // временная заглушка для поиска регионов
-        const val METHOD_STUB_COUNTRY = "Россия"
+        const val METHOD_STUB_COUNTRY = 113
         val METHOD_STUB_AREA = null
     }
 }
