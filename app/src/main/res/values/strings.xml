@@ -18,6 +18,7 @@
     <string name="workplace">Место работы</string>
     <string name="expected_salary">Ожидаемая зарплата</string>
     <string name="enter_amount">Введите сумму</string>
+    <string name="enter_area">Введите регион</string>
     <string name="enter_industry">Введите отрасль</string>
     <string name="from">от</string>
     <string name="to">до</string>
