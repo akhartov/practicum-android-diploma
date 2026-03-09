@@ -5,10 +5,10 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 import ru.practicum.android.diploma.presentation.converters.UiFiltersMapper
 import ru.practicum.android.diploma.presentation.favorites.FavoritesViewModel
-import ru.practicum.android.diploma.presentation.filter.RegionFilterViewModel
 import ru.practicum.android.diploma.presentation.filter.WorkplaceFilterViewModel
 import ru.practicum.android.diploma.presentation.filter.country.CountryFilterViewModel
 import ru.practicum.android.diploma.presentation.filter.industry.IndustryFilterViewModel
+import ru.practicum.android.diploma.presentation.filter.region.RegionFilterViewModel
 import ru.practicum.android.diploma.presentation.filter.settings.FilterSettingsViewModel
 import ru.practicum.android.diploma.presentation.search.SearchViewModel
 import ru.practicum.android.diploma.presentation.team.TeamViewModel
@@ -23,23 +23,23 @@ val presentationModule = module {
     }
 
     viewModel {
-        FilterSettingsViewModel(get(), get())
+        FilterSettingsViewModel(get(), get(), get())
     }
 
     viewModel {
-        WorkplaceFilterViewModel()
+        WorkplaceFilterViewModel(get())
     }
 
     viewModel {
-        CountryFilterViewModel(get())
+        CountryFilterViewModel(get(), get())
     }
 
     viewModel {
-        RegionFilterViewModel()
+        RegionFilterViewModel(get())
     }
 
     viewModel {
-        IndustryFilterViewModel(get())
+        IndustryFilterViewModel(get(), get())
     }
 
     viewModel {

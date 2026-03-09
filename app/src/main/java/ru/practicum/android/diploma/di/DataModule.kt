@@ -24,7 +24,9 @@ import ru.practicum.android.diploma.data.db.dao.VacancyDao
 import ru.practicum.android.diploma.data.dto.SavedFiltersDto
 import ru.practicum.android.diploma.data.impl.AreaRepositoryImpl
 import ru.practicum.android.diploma.data.impl.FavoritesRepositoryImpl
+import ru.practicum.android.diploma.data.impl.FilterCachingRepositoryImpl
 import ru.practicum.android.diploma.data.impl.FilterRepositoryImpl
+import ru.practicum.android.diploma.data.impl.WorkplaceCachingRepositoryImpl
 import ru.practicum.android.diploma.data.network.VacancyApi
 import ru.practicum.android.diploma.data.network.VacancyApiClient
 import ru.practicum.android.diploma.data.network.VacancyApiClientImpl
@@ -32,10 +34,12 @@ import ru.practicum.android.diploma.data.repository.FavoritesRepository
 import ru.practicum.android.diploma.data.storage.CommonPrefsStorageClient
 import ru.practicum.android.diploma.domain.api.AreaRepository
 import ru.practicum.android.diploma.domain.api.ExternalNavigator
+import ru.practicum.android.diploma.domain.api.FilterCachingRepository
 import ru.practicum.android.diploma.domain.api.FilterRepository
 import ru.practicum.android.diploma.domain.api.IndustryRepository
 import ru.practicum.android.diploma.domain.api.SearchVacanciesRepository
 import ru.practicum.android.diploma.domain.api.VacancyRepository
+import ru.practicum.android.diploma.domain.api.WorkplaceCachingRepository
 
 val dataModule = module {
 
@@ -112,4 +116,7 @@ val dataModule = module {
     single<FilterRepository> {
         FilterRepositoryImpl(get(), get())
     }
+
+    single<WorkplaceCachingRepository> { WorkplaceCachingRepositoryImpl() }
+    single<FilterCachingRepository> { FilterCachingRepositoryImpl() }
 }
