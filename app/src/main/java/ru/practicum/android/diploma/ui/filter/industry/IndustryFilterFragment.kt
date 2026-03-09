@@ -5,17 +5,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
@@ -27,6 +32,8 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.presentation.filter.industry.IndustryFilterState
 import ru.practicum.android.diploma.presentation.filter.industry.IndustryFilterViewModel
+import ru.practicum.android.diploma.ui.common.ButtonControl
+import ru.practicum.android.diploma.ui.common.ButtonControlType
 import ru.practicum.android.diploma.ui.common.FilterTopAppBar
 import ru.practicum.android.diploma.ui.common.PlaceholderState
 import ru.practicum.android.diploma.ui.common.SearchTextField
@@ -85,24 +92,41 @@ fun IndustryFilterScreen(viewModel: IndustryFilterViewModel, onBackClick: () -> 
             filterState?.let { state ->
                 when (state) {
                     is IndustryFilterState.Content -> {
-                        LazyColumn(
-                            modifier = Modifier.fillMaxSize(),
-                            verticalArrangement = Arrangement.spacedBy(Dimens.padding2)
+                        Column(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalArrangement = Arrangement.spacedBy(Dimens.padding8)
                         ) {
-                            items((filterState as IndustryFilterState.Content).industries) { industry ->
-                                val isSelected = selectedIndustry?.let { it.id == industry.id } ?: false
-                                TextWithRadioButton(
-                                    Modifier,
-                                    text = industry.name,
-                                    isSelected = isSelected,
-                                    onSelectionChange = {
-                                        if (isSelected) {
-                                            viewModel.selectIndustry(null)
-                                        } else {
-                                            viewModel.selectIndustry(industry)
+                            LazyColumn(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .weight(1f),
+                                verticalArrangement = Arrangement.spacedBy(Dimens.padding2)
+                            ) {
+                                items((filterState as IndustryFilterState.Content).industries) { industry ->
+                                    val isSelected = selectedIndustry?.let { it.id == industry.id } ?: false
+                                    TextWithRadioButton(
+                                        Modifier,
+                                        text = industry.name,
+                                        isSelected = isSelected,
+                                        onSelectionChange = {
+                                            if (isSelected) {
+                                                viewModel.selectIndustry(null)
+                                            } else {
+                                                viewModel.selectIndustry(industry)
+                                            }
                                         }
+                                    )
+                                }
+                            }
+
+                            if (selectedIndustry != null) {
+                                ButtonControl(
+                                    Modifier,
+                                    text = stringResource(R.string.select),
+                                    onClick = {
                                         onBackClick()
-                                    }
+                                    },
+                                    buttonControlType = ButtonControlType.Approve,
                                 )
                             }
                         }
@@ -113,6 +137,19 @@ fun IndustryFilterScreen(viewModel: IndustryFilterViewModel, onBackClick: () -> 
                             painterResource(id = R.drawable.placeholder_region_error),
                             stringResource(R.string.region_selection_error)
                         )
+                    }
+
+                    IndustryFilterState.Loading -> {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(vertical = Dimens.padding16),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator(
+                                Modifier.size(Dimens.progressIndicatorSize)
+                            )
+                        }
                     }
 
                     IndustryFilterState.NoInternet -> {

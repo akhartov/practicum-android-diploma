@@ -31,6 +31,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.presentation.filter.settings.FilterSettingsState
 import ru.practicum.android.diploma.presentation.filter.settings.FilterSettingsViewModel
+import ru.practicum.android.diploma.presentation.filter.settings.isEmpty
 import ru.practicum.android.diploma.ui.common.ButtonControl
 import ru.practicum.android.diploma.ui.common.ButtonControlType
 import ru.practicum.android.diploma.ui.common.CheckboxControl

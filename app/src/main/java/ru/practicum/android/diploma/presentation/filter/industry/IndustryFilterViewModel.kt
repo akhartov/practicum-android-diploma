@@ -39,7 +39,7 @@ class IndustryFilterViewModel(
 
     init {
         viewModelScope.launch {
-
+            _filterState.value = IndustryFilterState.Loading
             industryInteractor.getIndustries()
                 .collect { resource ->
                     when (resource) {
