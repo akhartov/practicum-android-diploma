@@ -207,25 +207,27 @@ private fun LoadingView() {
     }
 }
 
+private const val PREVIEW_RUSSIA = "Россия"
+
 @Preview(uiMode = UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
 private fun PreviewSearchRegion() {
     val text = MutableStateFlow("")
     val regions = listOf(
-        Region(AreaShort(id = 1, name = "Россия"), AreaShort(id = 10, name = "Москва")),
-        Region(AreaShort(id = 1, name = "Россия"), AreaShort(id = 10, name = "Санкт-Петербург")),
-        Region(AreaShort(id = 1, name = "Россия"), AreaShort(id = 10, name = "Новосибирск")),
-        Region(AreaShort(id = 1, name = "Россия"), AreaShort(id = 10, name = "Екатеринбург")),
-        Region(AreaShort(id = 1, name = "Россия"), AreaShort(id = 10, name = "Нижний Новгород")),
-        Region(AreaShort(id = 1, name = "Россия"), AreaShort(id = 10, name = "Челябинск")),
-        Region(AreaShort(id = 1, name = "Россия"), AreaShort(id = 10, name = "Самара")),
-        Region(AreaShort(id = 1, name = "Россия"), AreaShort(id = 10, name = "Омск")),
-        Region(AreaShort(id = 1, name = "Россия"), AreaShort(id = 10, name = "Ростов-на-Дону")),
-        Region(AreaShort(id = 1, name = "Россия"), AreaShort(id = 10, name = "Нижний Новгород")),
-        Region(AreaShort(id = 1, name = "Россия"), AreaShort(id = 10, name = "Челябинск")),
-        Region(AreaShort(id = 1, name = "Россия"), AreaShort(id = 10, name = "Самара")),
-        Region(AreaShort(id = 1, name = "Россия"), AreaShort(id = 10, name = "Омск")),
-        Region(AreaShort(id = 1, name = "Россия"), AreaShort(id = 10, name = "Ростов-на-Дону")),
+        Region(AreaShort(id = 1, name = PREVIEW_RUSSIA), AreaShort(id = 10, name = "Москва")),
+        Region(AreaShort(id = 1, name = PREVIEW_RUSSIA), AreaShort(id = 10, name = "Санкт-Петербург")),
+        Region(AreaShort(id = 1, name = PREVIEW_RUSSIA), AreaShort(id = 10, name = "Новосибирск")),
+        Region(AreaShort(id = 1, name = PREVIEW_RUSSIA), AreaShort(id = 10, name = "Екатеринбург")),
+        Region(AreaShort(id = 1, name = PREVIEW_RUSSIA), AreaShort(id = 10, name = "Нижний Новгород")),
+        Region(AreaShort(id = 1, name = PREVIEW_RUSSIA), AreaShort(id = 10, name = "Челябинск")),
+        Region(AreaShort(id = 1, name = PREVIEW_RUSSIA), AreaShort(id = 10, name = "Самара")),
+        Region(AreaShort(id = 1, name = PREVIEW_RUSSIA), AreaShort(id = 10, name = "Омск")),
+        Region(AreaShort(id = 1, name = PREVIEW_RUSSIA), AreaShort(id = 10, name = "Ростов-на-Дону")),
+        Region(AreaShort(id = 1, name = PREVIEW_RUSSIA), AreaShort(id = 10, name = "Нижний Новгород")),
+        Region(AreaShort(id = 1, name = PREVIEW_RUSSIA), AreaShort(id = 10, name = "Челябинск")),
+        Region(AreaShort(id = 1, name = PREVIEW_RUSSIA), AreaShort(id = 10, name = "Самара")),
+        Region(AreaShort(id = 1, name = PREVIEW_RUSSIA), AreaShort(id = 10, name = "Омск")),
+        Region(AreaShort(id = 1, name = PREVIEW_RUSSIA), AreaShort(id = 10, name = "Ростов-на-Дону")),
     )
 
     val state = MutableStateFlow<RegionFilterState>(RegionFilterState.Content(regions))
