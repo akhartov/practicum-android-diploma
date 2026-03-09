@@ -149,22 +149,24 @@ fun FilterSettingsScreen(
                 )
             }
 
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(Dimens.padding8)
-            ) {
-                ButtonControl(
-                    Modifier,
-                    text = stringResource(R.string.apply),
-                    onClick = { saveFilter() },
-                    buttonControlType = ButtonControlType.Approve,
-                )
-                ButtonControl(
-                    Modifier,
-                    text = stringResource(R.string.reset),
-                    onClick = { resetFilter() },
-                    buttonControlType = ButtonControlType.Decline,
-                )
+            if (!filtersState.isEmpty()) {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(Dimens.padding8)
+                ) {
+                    ButtonControl(
+                        Modifier,
+                        text = stringResource(R.string.apply),
+                        onClick = { saveFilter() },
+                        buttonControlType = ButtonControlType.Approve,
+                    )
+                    ButtonControl(
+                        Modifier,
+                        text = stringResource(R.string.reset),
+                        onClick = { resetFilter() },
+                        buttonControlType = ButtonControlType.Decline,
+                    )
+                }
             }
         }
     }
