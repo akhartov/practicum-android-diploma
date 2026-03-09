@@ -99,8 +99,11 @@ fun RegionFilterScreen(onBackClick: () -> Unit, areas: List<AreaShort>, onAreaCl
     Scaffold(
         topBar = {
             FilterTopAppBar(
-                title = stringResource(R.string.region_selection), onBackClick = { onBackClick() })
-        }) { paddingValues ->
+                title = stringResource(R.string.region_selection),
+                onBackClick = { onBackClick() }
+            )
+        }
+    ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
