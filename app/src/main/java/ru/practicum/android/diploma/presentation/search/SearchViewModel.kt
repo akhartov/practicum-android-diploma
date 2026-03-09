@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.presentation.search
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.FlowPreview
@@ -19,7 +20,6 @@ import ru.practicum.android.diploma.presentation.model.ToastState
 import ru.practicum.android.diploma.presentation.model.VacanciesState
 import ru.practicum.android.diploma.util.NetworkResponseStatus
 import ru.practicum.android.diploma.util.Resource
-import java.util.concurrent.atomic.AtomicInteger
 
 @OptIn(FlowPreview::class)
 class SearchViewModel(
@@ -27,7 +27,6 @@ class SearchViewModel(
 ) : ViewModel() {
     private val _searchParams = MutableStateFlow(SearchParams(text = "", page = FIRST_PAGE_INDEX))
     val searchParams: StateFlow<SearchParams> = _searchParams.asStateFlow()
-    private var currentPage = AtomicInteger(FIRST_PAGE_INDEX)
     private var lastSuccesResult = VacancyShortResponse.Empty
     private val _state = MutableStateFlow<VacanciesState>(VacanciesState.Empty)
     val state: StateFlow<VacanciesState> = _state.asStateFlow()
@@ -93,7 +92,7 @@ class SearchViewModel(
             data == null -> _state.value = VacanciesState.NotFound
             data.found == 0 -> _state.value = VacanciesState.NotFound
             else -> {
-                prepareNextSearch()
+                Log.d("SearchViewModel", "Found page ${data.page}/${data.found}")
                 lastSuccesResult = VacancyShortResponse(
                     found = data.found,
                     pages = data.pages,
@@ -135,8 +134,7 @@ class SearchViewModel(
 
     fun onSearchTextDebounce(text: String) {
         _query.value = text
-        currentPage.set(FIRST_PAGE_INDEX)
-        _searchParams.update { it.copy(text = text, page = currentPage.get()) }
+        _searchParams.update { it.copy(text = text, page = FIRST_PAGE_INDEX) }
     }
 
     fun clearSearchQuery() {
@@ -147,16 +145,12 @@ class SearchViewModel(
 
     fun onLoadNextPage() {
         viewModelScope.launch {
-            searchVacancies(searchParams.value.text, currentPage.get() + PAGE_INCREMENT)
+            searchVacancies(searchParams.value.text, lastSuccesResult.page + PAGE_INCREMENT)
         }
     }
 
     private fun isFirstSearch(): Boolean {
-        return currentPage.get() <= FIRST_PAGE_INDEX
-    }
-
-    private fun prepareNextSearch() {
-        currentPage.incrementAndGet()
+        return lastSuccesResult.page <= FIRST_PAGE_INDEX
     }
 
     companion object {
