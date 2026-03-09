@@ -52,9 +52,9 @@ fun SearchRegionTextField(
         value = textState,
         onValueChange = { newText ->
             if (newText.isEmpty()) {
-                //setRegionValue(null)
+                // setRegionValue(null)
             } else {
-                //setRegionValue(newText)
+                // setRegionValue(newText)
             }
         },
         singleLine = true,

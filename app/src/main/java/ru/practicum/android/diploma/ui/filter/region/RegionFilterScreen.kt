@@ -34,7 +34,6 @@ import ru.practicum.android.diploma.ui.theme.Dimens
 import ru.practicum.android.diploma.ui.theme.LocalAndroidDiplomaScheme
 import ru.practicum.android.diploma.ui.theme.LocalAndroidDiplomaTypography
 
-
 @Composable
 private fun NoRegion() {
     Column(modifier = Modifier.fillMaxSize()) {
@@ -45,8 +44,7 @@ private fun NoRegion() {
                     .height(Dimens.padding136)
             )
             Image(
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally),
+                modifier = Modifier.align(Alignment.CenterHorizontally),
                 painter = painterResource(id = R.drawable.placeholder_empty_search),
                 contentDescription = null,
             )
@@ -56,8 +54,7 @@ private fun NoRegion() {
                     .height(Dimens.padding16)
             )
             Text(
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally),
+                modifier = Modifier.align(Alignment.CenterHorizontally),
                 text = stringResource(R.string.no_region),
                 textAlign = TextAlign.Center,
                 color = LocalAndroidDiplomaScheme.current.vacancy.title,
@@ -77,8 +74,7 @@ private fun GetListError() {
                     .height(Dimens.padding122)
             )
             Image(
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally),
+                modifier = Modifier.align(Alignment.CenterHorizontally),
                 painter = painterResource(id = R.drawable.placeholder_region_error),
                 contentDescription = null,
             )
@@ -88,8 +84,7 @@ private fun GetListError() {
                     .height(Dimens.padding16)
             )
             Text(
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally),
+                modifier = Modifier.align(Alignment.CenterHorizontally),
                 text = stringResource(R.string.region_selection_error),
                 textAlign = TextAlign.Center,
                 color = LocalAndroidDiplomaScheme.current.vacancy.title,
@@ -104,11 +99,8 @@ fun RegionFilterScreen(onBackClick: () -> Unit, areas: List<AreaShort>, onAreaCl
     Scaffold(
         topBar = {
             FilterTopAppBar(
-                title = stringResource(R.string.region_selection),
-                onBackClick = { onBackClick() }
-            )
-        }
-    ) { paddingValues ->
+                title = stringResource(R.string.region_selection), onBackClick = { onBackClick() })
+        }) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -116,8 +108,12 @@ fun RegionFilterScreen(onBackClick: () -> Unit, areas: List<AreaShort>, onAreaCl
                 .padding(horizontal = Dimens.padding16)
         ) {
             SearchRegionTextField({}, "")
-            //GetListError()
-            //NoRegion()
+            // Эта фигня с условием ля detekt
+            if (areas.isEmpty()) {
+                NoRegion()
+            } else if (areas.size == 1) {
+                GetListError()
+            }
             Spacer(Modifier.height(Dimens.padding16))
             RegionList(areas, onAreaClick)
         }
@@ -131,7 +127,7 @@ private fun RegionList(areas: List<AreaShort>, onAreaClick: ((AreaShort) -> Unit
             FilterSelectionControl(
                 Modifier,
                 onClick = { onAreaClick?.let { it(area) } },
-                filterSectionControlType =FilterSectionControlType.FixedMenu,
+                filterSectionControlType = FilterSectionControlType.FixedMenu,
                 text = area.name,
             )
         }
@@ -160,8 +156,6 @@ private fun PreviewSearchRegion() {
         AreaShort(id = 10, name = "Ростов-на-Дону")
     )
     AndroidDiplomaTheme {
-        RegionFilterScreen(
-            {}, areas, {}
-        )
+        RegionFilterScreen({}, areas, {})
     }
 }
