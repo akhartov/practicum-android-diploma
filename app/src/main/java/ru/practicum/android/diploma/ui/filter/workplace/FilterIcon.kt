@@ -45,7 +45,7 @@ sealed class FilterIconType {
 
     abstract fun getFilterColors(customFilterIcon: FilterIconColors): FilterIconConfig
 
-    object HasFilterIcon: FilterIconType() {
+    object HasFilterIcon : FilterIconType() {
         override fun getFilterColors(customFilterIcon: FilterIconColors): FilterIconConfig {
             return FilterIconConfig(
                 background = customFilterIcon.hasFilterIcon.background,

@@ -26,7 +26,7 @@ import ru.practicum.android.diploma.util.Resource
 @OptIn(FlowPreview::class)
 class SearchViewModel(
     private val searchVacanciesInteractor: SearchVacanciesInteractor,
-    private val filterInteractor : FilterInteractor
+    private val filterInteractor: FilterInteractor
 ) : ViewModel() {
     private val _searchParams = MutableStateFlow(SearchParams(text = "", page = FIRST_PAGE_INDEX))
     val searchParams: StateFlow<SearchParams> = _searchParams.asStateFlow()
@@ -154,8 +154,9 @@ class SearchViewModel(
     fun getFilterIconType(): FilterIconType {
         return if (filterInteractor.getFilterIconState()) {
             FilterIconType.HasFilterIcon
-        } else
+        } else {
             FilterIconType.NoFilterIcon
+        }
     }
 
     private fun isFirstSearch(): Boolean {
