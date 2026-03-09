@@ -15,10 +15,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -27,8 +24,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_NIGHT_YES
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.domain.models.AreaShort
+import ru.practicum.android.diploma.domain.models.Region
+import ru.practicum.android.diploma.presentation.filter.region.RegionFilterState
 import ru.practicum.android.diploma.ui.common.FilterSectionControlType
 import ru.practicum.android.diploma.ui.common.FilterSelectionControl
 import ru.practicum.android.diploma.ui.common.FilterTopAppBar
@@ -69,6 +70,36 @@ private fun NoRegion() {
 }
 
 @Composable
+private fun NoInternet() {
+    Column(modifier = Modifier.fillMaxSize()) {
+        Column {
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(Dimens.padding136)
+            )
+            Image(
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                painter = painterResource(id = R.drawable.placeholder_no_internet),
+                contentDescription = null,
+            )
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(Dimens.padding16)
+            )
+            Text(
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                text = stringResource(R.string.no_internet),
+                textAlign = TextAlign.Center,
+                color = LocalAndroidDiplomaScheme.current.vacancy.title,
+                style = LocalAndroidDiplomaTypography.current.medium22
+            )
+        }
+    }
+}
+
+@Composable
 private fun GetListError() {
     Column(modifier = Modifier.fillMaxSize()) {
         Column {
@@ -99,7 +130,16 @@ private fun GetListError() {
 }
 
 @Composable
-fun RegionFilterScreen(onBackClick: () -> Unit, areas: List<AreaShort>, onAreaClick: ((AreaShort) -> Unit)?) {
+fun RegionFilterScreen(
+    onBackClick: () -> Unit,
+    regionFilter: StateFlow<RegionFilterState>,
+    onRegionClick: ((Region) -> Unit),
+    searchQuery: StateFlow<String>,
+    onQueryChange: (String) -> Unit,
+    onClearQuery: () -> Unit,
+) {
+    val regionFilterState = regionFilter.collectAsState()
+    val searchQueryState = searchQuery.collectAsState()
     Scaffold(
         topBar = {
             FilterTopAppBar(
@@ -115,36 +155,39 @@ fun RegionFilterScreen(onBackClick: () -> Unit, areas: List<AreaShort>, onAreaCl
                 .padding(horizontal = Dimens.padding16)
         ) {
             SearchTextField(
-                "",
-                stringResource(R.string.enter_area),
-                {},
-                {}
+                searchQuery = searchQueryState.value,
+                placeholder = stringResource(R.string.enter_area),
+                onQueryChange = onQueryChange,
+                onClearQuery = onClearQuery,
             )
-            // Эта фигня с условием ля detekt
-            if (areas.isEmpty()) {
-                NoRegion()
-            } else if (areas.size == 1) {
-                GetListError()
-            } else if (areas.size == 2) {
-                LoadingView()
-            } else {
-                Spacer(Modifier.height(Dimens.padding16))
-                RegionList(areas, onAreaClick)
-            }
 
+            when (regionFilterState.value) {
+                is RegionFilterState.Content -> {
+                    Spacer(Modifier.height(Dimens.padding16))
+                    RegionList(
+                        (regionFilterState.value as RegionFilterState.Content).regions,
+                        onRegionClick
+                    )
+                }
+
+                RegionFilterState.Loading -> LoadingView()
+                RegionFilterState.NoInternet -> NoInternet()
+                RegionFilterState.NotFound -> NoRegion()
+                RegionFilterState.ServerError -> GetListError()
+            }
         }
     }
 }
 
 @Composable
-private fun RegionList(areas: List<AreaShort>, onAreaClick: ((AreaShort) -> Unit)?) {
+private fun RegionList(areas: List<Region>, onRegionClick: ((Region) -> Unit)?) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
-        items(areas) { area ->
+        items(areas) { region ->
             FilterSelectionControl(
                 Modifier,
-                onClick = { onAreaClick?.let { it(area) } },
+                onClick = { onRegionClick?.let { it(region) } },
                 filterSectionControlType = FilterSectionControlType.FixedMenu,
-                text = area.name,
+                text = region.region.name,
             )
         }
     }
@@ -167,25 +210,26 @@ private fun LoadingView() {
 @Preview(uiMode = UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
 private fun PreviewSearchRegion() {
-    var text by remember { mutableStateOf("") }
-    val areas = listOf(
-        AreaShort(id = 1, name = "Москва"),
-        AreaShort(id = 2, name = "Санкт-Петербург"),
-        AreaShort(id = 3, name = "Новосибирск"),
-        AreaShort(id = 4, name = "Екатеринбург"),
-        AreaShort(id = 5, name = "Казань"),
-        AreaShort(id = 6, name = "Нижний Новгород"),
-        AreaShort(id = 7, name = "Челябинск"),
-        AreaShort(id = 8, name = "Самара"),
-        AreaShort(id = 9, name = "Омск"),
-        AreaShort(id = 10, name = "Ростов-на-Дону"),
-        AreaShort(id = 6, name = "Нижний Новгород"),
-        AreaShort(id = 7, name = "Челябинск"),
-        AreaShort(id = 8, name = "Самара"),
-        AreaShort(id = 9, name = "Омск"),
-        AreaShort(id = 10, name = "Ростов-на-Дону")
+    val text = MutableStateFlow("")
+    val regions = listOf(
+        Region(AreaShort(id = 1, name = "Россия"), AreaShort(id = 10, name = "Москва")),
+        Region(AreaShort(id = 1, name = "Россия"), AreaShort(id = 10, name = "Санкт-Петербург")),
+        Region(AreaShort(id = 1, name = "Россия"), AreaShort(id = 10, name = "Новосибирск")),
+        Region(AreaShort(id = 1, name = "Россия"), AreaShort(id = 10, name = "Екатеринбург")),
+        Region(AreaShort(id = 1, name = "Россия"), AreaShort(id = 10, name = "Нижний Новгород")),
+        Region(AreaShort(id = 1, name = "Россия"), AreaShort(id = 10, name = "Челябинск")),
+        Region(AreaShort(id = 1, name = "Россия"), AreaShort(id = 10, name = "Самара")),
+        Region(AreaShort(id = 1, name = "Россия"), AreaShort(id = 10, name = "Омск")),
+        Region(AreaShort(id = 1, name = "Россия"), AreaShort(id = 10, name = "Ростов-на-Дону")),
+        Region(AreaShort(id = 1, name = "Россия"), AreaShort(id = 10, name = "Нижний Новгород")),
+        Region(AreaShort(id = 1, name = "Россия"), AreaShort(id = 10, name = "Челябинск")),
+        Region(AreaShort(id = 1, name = "Россия"), AreaShort(id = 10, name = "Самара")),
+        Region(AreaShort(id = 1, name = "Россия"), AreaShort(id = 10, name = "Омск")),
+        Region(AreaShort(id = 1, name = "Россия"), AreaShort(id = 10, name = "Ростов-на-Дону")),
     )
+
+    val state = MutableStateFlow<RegionFilterState>(RegionFilterState.Content(regions))
     AndroidDiplomaTheme {
-        RegionFilterScreen({}, areas, {})
+        RegionFilterScreen({}, state, {}, text,{}, {})
     }
 }
