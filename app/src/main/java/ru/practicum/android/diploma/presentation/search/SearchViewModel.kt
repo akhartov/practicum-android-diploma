@@ -39,19 +39,12 @@ class SearchViewModel(
     val query: StateFlow<String> = _query.asStateFlow()
     private val _toastState = MutableStateFlow<ToastState>(ToastState.NoProblem)
     val toastState: StateFlow<ToastState> = _toastState.asStateFlow()
-    private val _filterState = MutableStateFlow<FilterIconType>(FilterIconType.NoFilterIcon)
-    val filterState: StateFlow<FilterIconType> = _filterState.asStateFlow()
-    var options = filterInteractor.prepareQueryParams()
 
     init {
         searchParams.debounce(SEARCH_DEBOUNCE_DELAY) // пауза
             .distinctUntilChanged() // ограничиваем если есть новый поиск
             .onEach { searchParams -> searchVacancies(searchParams.text, searchParams.page) }
             .launchIn(viewModelScope)
-
-        if (filterInteractor.getFilterIconState()) {
-            _filterState.value = FilterIconType.HasFilterIcon
-        }
     }
 
     fun clearToast() {
@@ -75,7 +68,7 @@ class SearchViewModel(
         }
 
         viewModelScope.launch {
-
+            val options = filterInteractor.prepareQueryParams()
             options["text"] = text
             options["page"] = page.toString()
 
@@ -156,6 +149,13 @@ class SearchViewModel(
         viewModelScope.launch {
             searchVacancies(searchParams.value.text, lastSuccesResult.page + PAGE_INCREMENT)
         }
+    }
+
+    fun getFilterIconType(): FilterIconType {
+        return if (filterInteractor.getFilterIconState()) {
+            FilterIconType.HasFilterIcon
+        } else
+            FilterIconType.NoFilterIcon
     }
 
     private fun isFirstSearch(): Boolean {

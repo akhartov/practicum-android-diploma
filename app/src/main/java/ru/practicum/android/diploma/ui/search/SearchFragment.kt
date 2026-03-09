@@ -58,7 +58,7 @@ class SearchFragment : Fragment() {
         val state by viewModel.state.collectAsState()
         val searchQuery by viewModel.query.collectAsState()
         val toastEvent by viewModel.toastState.collectAsState()
-        val filterState = viewModel.filterState.collectAsState().value
+        val filterState = viewModel.getFilterIconType()
 
         LaunchedEffect(toastEvent) {
             val toastText = when (toastEvent) {
