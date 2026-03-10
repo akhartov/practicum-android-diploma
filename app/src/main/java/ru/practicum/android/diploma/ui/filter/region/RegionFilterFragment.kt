@@ -39,4 +39,3 @@ class RegionFilterFragment : Fragment() {
         }
     }
 }
-
