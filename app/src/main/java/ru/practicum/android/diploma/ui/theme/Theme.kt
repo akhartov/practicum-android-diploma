@@ -105,9 +105,13 @@ private val LightCustomScheme = AndroidDiplomaScheme(
     ),
     salaryInput = SalaryInputColors(
         background = LightGray,
+        focusedLabel = Blue,
+        unfocusedLabel = Gray,
+        unfocusedNotEmptyLabel = Black,
+        text = Black,
         clearIcon = Black,
         placeHolder = Gray,
-        brush = Blue
+        cursor = Blue,
     )
 )
 
@@ -189,9 +193,13 @@ private val DarkCustomScheme = AndroidDiplomaScheme(
     ),
     salaryInput = SalaryInputColors(
         background = Gray,
+        focusedLabel = Blue,
+        unfocusedLabel = White,
+        unfocusedNotEmptyLabel = Black,
+        text = Black,
         clearIcon = Black,
         placeHolder = White,
-        brush = Blue
+        cursor = Blue,
     )
 )
 
@@ -201,10 +209,14 @@ data class FilterIconColors(
 )
 
 data class SalaryInputColors(
+    val text: Color,
     val background: Color,
+    val focusedLabel: Color,
+    val unfocusedLabel: Color,
+    val unfocusedNotEmptyLabel: Color,
     val clearIcon: Color,
     val placeHolder: Color,
-    val brush: Color
+    val cursor: Color,
 )
 
 data class FilterIconState(
