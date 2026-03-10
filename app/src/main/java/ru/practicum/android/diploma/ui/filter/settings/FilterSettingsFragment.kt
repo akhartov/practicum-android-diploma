@@ -64,9 +64,11 @@ class FilterSettingsFragment : Fragment() {
                         findNavController().popBackStack()
                     },
                     navigateToWorkplaceFilter = {
+                        filterViewModel.resetWorkplace()
                         findNavController().navigate(R.id.action_filterSettingsFragment_to_workplaceFilterFragment)
                     },
                     navigateToIndustryFilter = {
+                        filterViewModel.resetIndustry()
                         findNavController().navigate(R.id.action_filterSettingsFragment_to_industryFilterFragment)
                     },
                     onBackClick = { findNavController().popBackStack() },

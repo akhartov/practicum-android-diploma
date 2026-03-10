@@ -106,7 +106,7 @@ fun CountryFilterScreen(
 
                     is CountryFilterState.NoInternet -> {
                         PlaceholderState(
-                            painter = painterResource(id = R.drawable.placeholder_region_error),
+                            painter = painterResource(id = R.drawable.placeholder_no_internet),
                             text = stringResource(id = R.string.region_selection_error)
                         )
                     }

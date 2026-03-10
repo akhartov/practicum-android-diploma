@@ -9,4 +9,6 @@ interface WorkplaceCachingRepository {
 
     fun cacheCountry(country: AreaShort?)
     fun cacheArea(country: AreaShort?, area: AreaShort?)
+
+    fun reset()
 }

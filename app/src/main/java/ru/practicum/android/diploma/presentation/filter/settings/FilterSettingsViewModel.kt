@@ -53,6 +53,14 @@ class FilterSettingsViewModel(
         _filtersStateFlow.value = filterInteractor.getFilters()
     }
 
+    fun resetWorkplace() {
+        changeFilterInteractor.resetWorkplace()
+    }
+
+    fun resetIndustry() {
+        changeFilterInteractor.resetIndustry()
+    }
+
     fun changeWithSalaryOnly() {
         _filtersStateFlow.value =
             _filtersStateFlow.value.copy(isIncludeSalary = !_filtersStateFlow.value.isIncludeSalary)

@@ -11,6 +11,14 @@ class ChangeFilterInteractor(
         cachingRepository.cacheIndustry(industry)
     }
 
+    fun resetIndustry() {
+        cachingRepository.cacheIndustry(null)
+    }
+
+    fun resetWorkplace() {
+        cachingRepository.cacheWorkplace(null)
+    }
+
     val industry: StateFlow<Industry?> = cachingRepository.industry
 
     val workplace: StateFlow<Workplace?> = cachingRepository.workplace
