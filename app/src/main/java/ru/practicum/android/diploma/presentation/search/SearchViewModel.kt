@@ -106,7 +106,7 @@ class SearchViewModel(
     }
 
     private fun handleError(errorCode: Int?) {
-        if (isFirstSearch()) {
+        if (lastSuccesResult.items.isEmpty()) {
             _state.value = when (errorCode) {
                 NetworkResponseStatus.NO_INTERNET -> VacanciesState.NoInternet
                 NetworkResponseStatus.SERVER_ERROR -> VacanciesState.ServerError
@@ -154,10 +154,6 @@ class SearchViewModel(
         } else {
             FilterIconType.NoFilterIcon
         }
-    }
-
-    private fun isFirstSearch(): Boolean {
-        return lastSuccesResult.page <= FIRST_PAGE_INDEX
     }
 
     companion object {
