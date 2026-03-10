@@ -20,6 +20,10 @@ class ChangeWorkplaceUseCase(
         }
     }
 
+    fun resetWorkspace() {
+        workplaceRepository.reset()
+    }
+
     private fun buildWorkplace(country: AreaShort?, area: AreaShort?): Workplace? {
         return when {
             area == null && country == null -> null
