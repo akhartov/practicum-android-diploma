@@ -150,8 +150,10 @@ fun FilterSettingsScreen(
                 }
                 Spacer(modifier = Modifier.height(Dimens.padding24))
                 SalaryTextField(
-                    setSalaryValue = setSalaryValue,
-                    salaryText = filtersState.salary ?: ""
+                    modifier = Modifier,
+                    filtersState.salary ?: "",
+                    onValueChange = setSalaryValue,
+                    onClear = { setSalaryValue(null) },
                 )
                 Spacer(modifier = Modifier.height(Dimens.padding24))
                 // Insert amount control here
