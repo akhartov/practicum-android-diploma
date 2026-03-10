@@ -7,5 +7,5 @@ import ru.practicum.android.diploma.util.Resource
 
 interface AreaInteractor {
     fun getCountries(): Flow<Resource<List<AreaShort>>>
-    fun getRegions(countryId: Int?, regionName: String?): Flow<Resource<List<Region>>>
+    fun getRegions(countryId: Int?): Flow<Resource<List<Region>>>
 }

@@ -12,27 +12,30 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.api.AreaInteractor
+import ru.practicum.android.diploma.domain.api.ChangeAreaUseCase
+import ru.practicum.android.diploma.domain.api.ChangeCountryUseCase
 import ru.practicum.android.diploma.domain.models.Region
-import ru.practicum.android.diploma.presentation.filter.industry.IndustryFilterViewModel
 import ru.practicum.android.diploma.util.NetworkResponseStatus
 import ru.practicum.android.diploma.util.Resource
 
 @OptIn(FlowPreview::class)
 class RegionFilterViewModel(
-    private val areaInteractor: AreaInteractor
+    private val areaInteractor: AreaInteractor,
+    private val changeCountryUseCase: ChangeCountryUseCase,
+    private val changeAreaUseCase: ChangeAreaUseCase,
 ) : ViewModel() {
-    private val _regionFilterState = MutableStateFlow<RegionFilterState>(RegionFilterState.Loading)
-    val regionFilterState: StateFlow<RegionFilterState> = _regionFilterState.asStateFlow()
+    private val _regionFilter = MutableStateFlow<RegionFilterState>(RegionFilterState.Loading)
+    val regionFilter: StateFlow<RegionFilterState> = _regionFilter.asStateFlow()
 
-    private val _query = MutableStateFlow<String>("")
+    private val _query = MutableStateFlow("")
     val query: StateFlow<String> = _query.asStateFlow()
 
     var allRegions = listOf<Region>()
 
     init {
         viewModelScope.launch {
-
-            areaInteractor.getRegions(METHOD_STUB_COUNTRY, _query.value)
+            _regionFilter.value = RegionFilterState.Loading
+            areaInteractor.getRegions(changeCountryUseCase.country.value?.id)
                 .collect { resource ->
                     when (resource) {
                         is Resource.Success -> {
@@ -47,23 +50,28 @@ class RegionFilterViewModel(
         }
 
         viewModelScope.launch {
-            query.debounce(IndustryFilterViewModel.Companion.DEBOUNCE_DELAY) // пауза
+            query.debounce(DEBOUNCE_DELAY) // пауза
                 .distinctUntilChanged() // ограничиваем если есть новый поиск
                 .onEach {
-                    _regionFilterState.value = RegionFilterState.Loading
+                    when (_regionFilter.value) {
+                        is RegionFilterState.Content, RegionFilterState.NotFound -> {
+                            val filteredRegions = getFilteredRegions()
 
-                    if (_regionFilterState.value is RegionFilterState.Content) {
-                        _regionFilterState.value = RegionFilterState.Content(
-                            getFilteredRegions(query.value)
-                        )
+                            _regionFilter.value = when {
+                                filteredRegions.isEmpty() -> RegionFilterState.NotFound
+                                else -> RegionFilterState.Content(filteredRegions)
+                            }
+                        }
+
+                        else -> {}
                     }
                 }
                 .launchIn(viewModelScope)
         }
     }
 
-    private fun getFilteredRegions(regionQueryString: String): List<Region> {
-        val trimmedQuery = regionQueryString.trim()
+    private fun getFilteredRegions(): List<Region> {
+        val trimmedQuery = query.value.trim()
         return if (trimmedQuery.isEmpty()) {
             allRegions
         } else {
@@ -73,21 +81,28 @@ class RegionFilterViewModel(
 
     private fun handleSuccess(data: List<Region>?) {
         when {
-            data == null -> _regionFilterState.value = RegionFilterState.NotFound
+            data == null -> _regionFilter.value = RegionFilterState.NotFound
             else -> {
                 allRegions = data
-                _regionFilterState.value = RegionFilterState.Content(allRegions)
+                _regionFilter.value = RegionFilterState.Content(allRegions)
             }
         }
     }
 
     private fun handleError(errorCode: Int?) {
-        _regionFilterState.value = when (errorCode) {
+        _regionFilter.value = when (errorCode) {
             NetworkResponseStatus.NOT_FOUND -> RegionFilterState.NotFound
             NetworkResponseStatus.NO_INTERNET -> RegionFilterState.NoInternet
             NetworkResponseStatus.SERVER_ERROR -> RegionFilterState.ServerError
             else -> RegionFilterState.ServerError // или другая ошибка по умолчанию
         }
+    }
+
+    fun changeRegion(region: Region) {
+        changeAreaUseCase.cacheArea(
+            region.parentCountry,
+            region.region,
+        )
     }
 
     fun onSearchTextDebounce(text: String) {
@@ -100,9 +115,5 @@ class RegionFilterViewModel(
 
     companion object {
         const val DEBOUNCE_DELAY = 300L
-
-        // временная заглушка для поиска регионов
-        const val METHOD_STUB_COUNTRY = 113
-        val METHOD_STUB_AREA = null
     }
 }

@@ -35,7 +35,7 @@ val presentationModule = module {
     }
 
     viewModel {
-        RegionFilterViewModel(get())
+        RegionFilterViewModel(get(), get(), get())
     }
 
     viewModel {
