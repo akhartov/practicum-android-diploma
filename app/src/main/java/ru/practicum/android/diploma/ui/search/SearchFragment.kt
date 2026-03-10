@@ -58,6 +58,7 @@ class SearchFragment : Fragment() {
         val state by viewModel.state.collectAsState()
         val searchQuery by viewModel.query.collectAsState()
         val toastEvent by viewModel.toastState.collectAsState()
+        val filterState = viewModel.getFilterIconType()
 
         LaunchedEffect(toastEvent) {
             val toastText = when (toastEvent) {
@@ -75,6 +76,7 @@ class SearchFragment : Fragment() {
 
         SearchScreen(
             state = state,
+            filterState = filterState,
             searchQuery = searchQuery,
             onQueryChange = { newQuery ->
                 viewModel.onSearchTextDebounce(newQuery)
