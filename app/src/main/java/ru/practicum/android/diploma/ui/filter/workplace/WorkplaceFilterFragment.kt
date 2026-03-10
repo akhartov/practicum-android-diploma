@@ -51,11 +51,11 @@ class WorkplaceFilterFragment : Fragment() {
                     country = viewModel.country,
                     area = viewModel.area,
                     navigateToCountryFilter = {
-                        viewModel.resetWorkspace()
+                        viewModel.resetCountry()
                         findNavController().navigate(R.id.action_workplaceFilterFragment_to_countryFilterFragment)
                     },
                     navigateToRegionFilter = {
-                        viewModel.resetWorkspace()
+                        viewModel.resetArea()
                         findNavController().navigate(R.id.action_workplaceFilterFragment_to_regionFilterFragment)
                     },
                     onApply = {

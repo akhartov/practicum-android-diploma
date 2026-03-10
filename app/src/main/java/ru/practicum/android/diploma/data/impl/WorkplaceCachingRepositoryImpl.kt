@@ -23,8 +23,12 @@ class WorkplaceCachingRepositoryImpl : WorkplaceCachingRepository {
         _area.value = area
     }
 
-    override fun reset() {
+    override fun resetCountry() {
         _country.value = null
+        _area.value = null
+    }
+
+    override fun resetArea() {
         _area.value = null
     }
 }

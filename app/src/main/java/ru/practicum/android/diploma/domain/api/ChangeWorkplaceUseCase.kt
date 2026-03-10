@@ -20,8 +20,12 @@ class ChangeWorkplaceUseCase(
         }
     }
 
-    fun resetWorkspace() {
-        workplaceRepository.reset()
+    fun resetCountry() {
+        workplaceRepository.resetCountry()
+    }
+
+    fun resetArea() {
+        workplaceRepository.resetArea()
     }
 
     private fun buildWorkplace(country: AreaShort?, area: AreaShort?): Workplace? {
