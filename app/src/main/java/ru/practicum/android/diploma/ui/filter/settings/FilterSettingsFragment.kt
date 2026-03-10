@@ -63,13 +63,19 @@ class FilterSettingsFragment : Fragment() {
                         filterViewModel.resetFilter()
                         findNavController().popBackStack()
                     },
-                    navigateToWorkplaceFilter = {
-                        filterViewModel.resetWorkplace()
-                        findNavController().navigate(R.id.action_filterSettingsFragment_to_workplaceFilterFragment)
+                    navigateToWorkplaceFilter = { needReset ->
+                        if (needReset) {
+                            filterViewModel.resetWorkplace()
+                        } else {
+                            findNavController().navigate(R.id.action_filterSettingsFragment_to_workplaceFilterFragment)
+                        }
                     },
-                    navigateToIndustryFilter = {
-                        filterViewModel.resetIndustry()
-                        findNavController().navigate(R.id.action_filterSettingsFragment_to_industryFilterFragment)
+                    navigateToIndustryFilter = { needReset ->
+                        if (needReset) {
+                            filterViewModel.resetIndustry()
+                        } else {
+                            findNavController().navigate(R.id.action_filterSettingsFragment_to_industryFilterFragment)
+                        }
                     },
                     onBackClick = { findNavController().popBackStack() },
                     filters = filterViewModel.filtersUiState,
@@ -83,8 +89,8 @@ class FilterSettingsFragment : Fragment() {
 
 @Composable
 fun FilterSettingsScreen(
-    navigateToWorkplaceFilter: () -> Unit,
-    navigateToIndustryFilter: () -> Unit,
+    navigateToWorkplaceFilter: (needReset: Boolean) -> Unit,
+    navigateToIndustryFilter: (needReset: Boolean) -> Unit,
     onBackClick: () -> Unit,
     saveFilter: () -> Unit,
     resetFilter: () -> Unit,
@@ -112,7 +118,7 @@ fun FilterSettingsScreen(
                 if (filtersState.workplace != null) {
                     FilterSelectionControl(
                         Modifier,
-                        onClick = navigateToWorkplaceFilter,
+                        onClick = { navigateToWorkplaceFilter(true) },
                         filterSectionControlType = FilterSectionControlType.Presents,
                         title = stringResource(R.string.workplace),
                         text = filtersState.workplace
@@ -120,7 +126,7 @@ fun FilterSettingsScreen(
                 } else {
                     FilterSelectionControl(
                         Modifier,
-                        onClick = navigateToWorkplaceFilter,
+                        onClick = { navigateToWorkplaceFilter(false) },
                         filterSectionControlType = FilterSectionControlType.Absent,
                         text = stringResource(R.string.workplace),
                     )
@@ -129,7 +135,7 @@ fun FilterSettingsScreen(
                 if (filtersState.industry != null) {
                     FilterSelectionControl(
                         Modifier,
-                        onClick = navigateToIndustryFilter,
+                        onClick = { navigateToIndustryFilter(true) },
                         filterSectionControlType = FilterSectionControlType.Presents,
                         title = stringResource(R.string.industry),
                         text = filtersState.industry
@@ -137,7 +143,7 @@ fun FilterSettingsScreen(
                 } else {
                     FilterSelectionControl(
                         Modifier,
-                        onClick = navigateToIndustryFilter,
+                        onClick = { navigateToIndustryFilter(false) },
                         filterSectionControlType = FilterSectionControlType.Absent,
                         text = stringResource(R.string.industry),
                     )

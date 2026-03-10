@@ -50,13 +50,19 @@ class WorkplaceFilterFragment : Fragment() {
                 WorkplaceFilterScreen(
                     country = viewModel.country,
                     area = viewModel.area,
-                    navigateToCountryFilter = {
-                        viewModel.resetCountry()
-                        findNavController().navigate(R.id.action_workplaceFilterFragment_to_countryFilterFragment)
+                    navigateToCountryFilter = { needReset ->
+                        if (needReset) {
+                            viewModel.resetCountry()
+                        } else {
+                            findNavController().navigate(R.id.action_workplaceFilterFragment_to_countryFilterFragment)
+                        }
                     },
-                    navigateToRegionFilter = {
-                        viewModel.resetArea()
-                        findNavController().navigate(R.id.action_workplaceFilterFragment_to_regionFilterFragment)
+                    navigateToRegionFilter = { needReset ->
+                        if (needReset) {
+                            viewModel.resetArea()
+                        } else {
+                            findNavController().navigate(R.id.action_workplaceFilterFragment_to_regionFilterFragment)
+                        }
                     },
                     onApply = {
                         viewModel.applyWorkplace()
@@ -73,8 +79,8 @@ class WorkplaceFilterFragment : Fragment() {
 fun WorkplaceFilterScreen(
     country: StateFlow<AreaShort?>,
     area: StateFlow<AreaShort?>,
-    navigateToCountryFilter: () -> Unit,
-    navigateToRegionFilter: () -> Unit,
+    navigateToCountryFilter: (needReset: Boolean) -> Unit,
+    navigateToRegionFilter: (needReset: Boolean) -> Unit,
     onApply: () -> Unit,
     onBackClick: () -> Unit,
 ) {
@@ -99,7 +105,7 @@ fun WorkplaceFilterScreen(
                 if (countryState.value?.name != null) {
                     FilterSelectionControl(
                         Modifier,
-                        onClick = { navigateToCountryFilter() },
+                        onClick = { navigateToCountryFilter(true) },
                         filterSectionControlType = FilterSectionControlType.Presents,
                         title = stringResource(R.string.country_selection),
                         text = countryState.value?.name
@@ -107,7 +113,7 @@ fun WorkplaceFilterScreen(
                 } else {
                     FilterSelectionControl(
                         Modifier,
-                        onClick = { navigateToCountryFilter() },
+                        onClick = { navigateToCountryFilter(false) },
                         filterSectionControlType = FilterSectionControlType.Absent,
                         text = stringResource(R.string.country_selection),
                     )
@@ -115,7 +121,7 @@ fun WorkplaceFilterScreen(
                 if (areaState.value?.name != null) {
                     FilterSelectionControl(
                         Modifier,
-                        onClick = { navigateToRegionFilter() },
+                        onClick = { navigateToRegionFilter(true) },
                         filterSectionControlType = FilterSectionControlType.Presents,
                         title = stringResource(R.string.region_selection),
                         text = areaState.value?.name
@@ -123,7 +129,7 @@ fun WorkplaceFilterScreen(
                 } else {
                     FilterSelectionControl(
                         Modifier,
-                        onClick = { navigateToRegionFilter() },
+                        onClick = { navigateToRegionFilter(false) },
                         filterSectionControlType = FilterSectionControlType.Absent,
                         text = stringResource(R.string.region_selection),
                     )
