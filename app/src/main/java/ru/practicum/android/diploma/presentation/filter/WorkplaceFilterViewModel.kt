@@ -14,7 +14,11 @@ class WorkplaceFilterViewModel(
         changeWorkplaceUseCase.applyWorkplace()
     }
 
-    fun resetWorkspace() {
-        changeWorkplaceUseCase.resetWorkspace()
+    fun resetCountry() {
+        changeWorkplaceUseCase.resetCountry()
+    }
+
+    fun resetArea() {
+        changeWorkplaceUseCase.resetArea()
     }
 }
