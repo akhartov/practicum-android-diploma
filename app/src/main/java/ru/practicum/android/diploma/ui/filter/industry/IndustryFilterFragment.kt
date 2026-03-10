@@ -28,8 +28,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import kotlinx.coroutines.flow.StateFlow
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.domain.models.Industry
 import ru.practicum.android.diploma.presentation.filter.industry.IndustryFilterState
 import ru.practicum.android.diploma.presentation.filter.industry.IndustryFilterViewModel
 import ru.practicum.android.diploma.ui.common.ButtonControl
@@ -65,7 +67,6 @@ class IndustryFilterFragment : Fragment() {
 fun IndustryFilterScreen(viewModel: IndustryFilterViewModel, onBackClick: () -> Unit) {
     val searchQuery by viewModel.query.collectAsState()
     val filterState by viewModel.filterState.collectAsState()
-    val selectedIndustry by viewModel.selectedIndustry.collectAsState()
 
     Scaffold(
         topBar = {
@@ -92,44 +93,14 @@ fun IndustryFilterScreen(viewModel: IndustryFilterViewModel, onBackClick: () -> 
             filterState?.let { state ->
                 when (state) {
                     is IndustryFilterState.Content -> {
-                        Column(
-                            modifier = Modifier.fillMaxWidth(),
-                            verticalArrangement = Arrangement.spacedBy(Dimens.padding8)
-                        ) {
-                            LazyColumn(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .weight(1f),
-                                verticalArrangement = Arrangement.spacedBy(Dimens.padding2)
-                            ) {
-                                items((filterState as IndustryFilterState.Content).industries) { industry ->
-                                    val isSelected = selectedIndustry?.let { it.id == industry.id } ?: false
-                                    TextWithRadioButton(
-                                        Modifier,
-                                        text = industry.name,
-                                        isSelected = isSelected,
-                                        onSelectionChange = {
-                                            if (isSelected) {
-                                                viewModel.selectIndustry(null)
-                                            } else {
-                                                viewModel.selectIndustry(industry)
-                                            }
-                                        }
-                                    )
-                                }
-                            }
-
-                            if (selectedIndustry != null) {
-                                ButtonControl(
-                                    Modifier,
-                                    text = stringResource(R.string.select),
-                                    onClick = {
-                                        onBackClick()
-                                    },
-                                    buttonControlType = ButtonControlType.Approve,
-                                )
-                            }
-                        }
+                        ContentState(
+                            filterState = state,
+                            selectedIndustryState = viewModel.selectedIndustry,
+                            onSelectionChange = { industry ->
+                                viewModel.selectIndustry(industry)
+                            },
+                            onBackClick = onBackClick
+                        )
                     }
 
                     IndustryFilterState.NotFound -> {
@@ -167,6 +138,55 @@ fun IndustryFilterScreen(viewModel: IndustryFilterViewModel, onBackClick: () -> 
                     }
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun ContentState(
+    filterState: IndustryFilterState.Content,
+    selectedIndustryState: StateFlow<Industry?>,
+    onSelectionChange: (industry: Industry?) -> Unit,
+    onBackClick: () -> Unit
+) {
+    val selectedIndustry by selectedIndustryState.collectAsState()
+
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(Dimens.padding8)
+    ) {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .weight(1f),
+            verticalArrangement = Arrangement.spacedBy(Dimens.padding2)
+        ) {
+            items(filterState.industries) { industry ->
+                val isSelected = selectedIndustry?.let { it.id == industry.id } ?: false
+                TextWithRadioButton(
+                    Modifier,
+                    text = industry.name,
+                    isSelected = isSelected,
+                    onSelectionChange = {
+                        if (isSelected) {
+                            onSelectionChange(null)
+                        } else {
+                            onSelectionChange(industry)
+                        }
+                    }
+                )
+            }
+        }
+
+        if (selectedIndustry != null) {
+            ButtonControl(
+                Modifier,
+                text = stringResource(R.string.select),
+                onClick = {
+                    onBackClick()
+                },
+                buttonControlType = ButtonControlType.Approve,
+            )
         }
     }
 }
