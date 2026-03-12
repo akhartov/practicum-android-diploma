@@ -39,6 +39,43 @@ private val LightCustomScheme = AndroidDiplomaScheme(
         cursor = Blue,
         icon = Black
     ),
+    buttonColors = ButtonColors(
+        approve = ButtonElementColors(
+            background = Blue,
+            text = White
+        ),
+        decline = ButtonElementColors(
+            background = White,
+            text = Red
+        ),
+    ),
+    checkboxColors = CheckboxColors(
+        filter = CheckboxElementColors(
+            text = Black,
+            tint = Blue,
+            checkmark = White
+        )
+    ),
+    filterSelectionColors = FilterSelectionColors(
+        presents = FilterSelectionElementColors(
+            background = White,
+            text = Black,
+            icon = Black,
+            hint = Gray,
+        ),
+        absent = FilterSelectionElementColors(
+            background = White,
+            text = Gray,
+            icon = Black,
+            hint = Gray,
+        ),
+        fixed = FilterSelectionElementColors(
+            background = White,
+            text = Black,
+            icon = Black,
+            hint = Black,
+        ),
+    ),
     vacancy = VacancyColors(
         title = Black,
         subTitle = Black,
@@ -47,6 +84,10 @@ private val LightCustomScheme = AndroidDiplomaScheme(
         company = Black,
         progress = Blue,
         like = Red
+    ),
+    radioButton = RadioButtonColors(
+        text = Black,
+        tint = Blue
     ),
     results = ResultsColors(
         background = Blue,
@@ -61,6 +102,16 @@ private val LightCustomScheme = AndroidDiplomaScheme(
             background = White,
             hint = Black
         )
+    ),
+    salaryInput = SalaryInputColors(
+        background = LightGray,
+        focusedLabel = Blue,
+        unfocusedLabel = Gray,
+        unfocusedNotEmptyLabel = Black,
+        text = Black,
+        clearIcon = Black,
+        placeHolder = Gray,
+        cursor = Blue,
     )
 )
 
@@ -76,6 +127,43 @@ private val DarkCustomScheme = AndroidDiplomaScheme(
         cursor = Blue,
         icon = Black
     ),
+    buttonColors = ButtonColors(
+        approve = ButtonElementColors(
+            background = Blue,
+            text = White
+        ),
+        decline = ButtonElementColors(
+            background = Black,
+            text = Red
+        ),
+    ),
+    checkboxColors = CheckboxColors(
+        filter = CheckboxElementColors(
+            text = White,
+            tint = Blue,
+            checkmark = Black,
+        )
+    ),
+    filterSelectionColors = FilterSelectionColors(
+        presents = FilterSelectionElementColors(
+            background = Black,
+            text = White,
+            icon = White,
+            hint = Gray,
+        ),
+        absent = FilterSelectionElementColors(
+            background = Black,
+            text = White,
+            icon = White,
+            hint = Gray
+        ),
+        fixed = FilterSelectionElementColors(
+            background = Black,
+            text = White,
+            icon = White,
+            hint = White,
+        ),
+    ),
     vacancy = VacancyColors(
         title = White,
         subTitle = White,
@@ -84,6 +172,10 @@ private val DarkCustomScheme = AndroidDiplomaScheme(
         company = Black,
         progress = Blue,
         like = Red
+    ),
+    radioButton = RadioButtonColors(
+        text = White,
+        tint = Blue
     ),
     results = ResultsColors(
         background = Blue,
@@ -98,12 +190,33 @@ private val DarkCustomScheme = AndroidDiplomaScheme(
             background = Black,
             hint = White
         )
+    ),
+    salaryInput = SalaryInputColors(
+        background = Gray,
+        focusedLabel = Blue,
+        unfocusedLabel = White,
+        unfocusedNotEmptyLabel = Black,
+        text = Black,
+        clearIcon = Black,
+        placeHolder = White,
+        cursor = Blue,
     )
 )
 
 data class FilterIconColors(
     val hasFilterIcon: FilterIconState,
     val noFilterIcon: FilterIconState
+)
+
+data class SalaryInputColors(
+    val text: Color,
+    val background: Color,
+    val focusedLabel: Color,
+    val unfocusedLabel: Color,
+    val unfocusedNotEmptyLabel: Color,
+    val clearIcon: Color,
+    val placeHolder: Color,
+    val cursor: Color,
 )
 
 data class FilterIconState(
@@ -114,9 +227,47 @@ data class FilterIconState(
 data class AndroidDiplomaScheme(
     val topBar: TopBarStateColors,
     val searchField: SearchFieldColors,
+    val buttonColors: ButtonColors,
+    val checkboxColors: CheckboxColors,
+    val filterSelectionColors: FilterSelectionColors,
     val vacancy: VacancyColors,
+    val radioButton: RadioButtonColors,
     val results: ResultsColors,
-    val filterIcon: FilterIconColors
+    val filterIcon: FilterIconColors,
+    val salaryInput: SalaryInputColors
+)
+
+data class ButtonColors(
+    val approve: ButtonElementColors,
+    val decline: ButtonElementColors,
+)
+
+data class ButtonElementColors(
+    val background: Color,
+    val text: Color
+)
+
+data class CheckboxColors(
+    val filter: CheckboxElementColors,
+)
+
+data class CheckboxElementColors(
+    val text: Color,
+    val tint: Color,
+    val checkmark: Color,
+)
+
+data class FilterSelectionColors(
+    val presents: FilterSelectionElementColors, // фильтр указан
+    val absent: FilterSelectionElementColors, // фильтр не указан
+    val fixed: FilterSelectionElementColors, // не фильтр, а пункт меню фильтрации
+)
+
+data class FilterSelectionElementColors(
+    val background: Color,
+    val text: Color,
+    val icon: Color,
+    val hint: Color,
 )
 
 // Результат поиска(количество найденных вакансий)
@@ -141,6 +292,11 @@ data class SearchFieldColors(
     val hint: Color,
     val cursor: Color,
     val icon: Color
+)
+
+data class RadioButtonColors(
+    val text: Color,
+    val tint: Color,
 )
 
 data class TopBarStateColors(

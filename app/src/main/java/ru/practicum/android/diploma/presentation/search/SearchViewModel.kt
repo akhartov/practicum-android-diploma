@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.presentation.search
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.FlowPreview
@@ -10,24 +11,21 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import ru.practicum.android.diploma.domain.api.FilterInteractor
 import ru.practicum.android.diploma.domain.api.SearchVacanciesInteractor
-import ru.practicum.android.diploma.domain.models.SearchParams
 import ru.practicum.android.diploma.domain.models.VacancyShortResponse
 import ru.practicum.android.diploma.presentation.model.ToastState
 import ru.practicum.android.diploma.presentation.model.VacanciesState
+import ru.practicum.android.diploma.ui.filter.workplace.FilterIconType
 import ru.practicum.android.diploma.util.NetworkResponseStatus
 import ru.practicum.android.diploma.util.Resource
-import java.util.concurrent.atomic.AtomicInteger
 
 @OptIn(FlowPreview::class)
 class SearchViewModel(
     private val searchVacanciesInteractor: SearchVacanciesInteractor,
+    private val filterInteractor: FilterInteractor,
 ) : ViewModel() {
-    private val _searchParams = MutableStateFlow(SearchParams(text = "", page = FIRST_PAGE_INDEX))
-    val searchParams: StateFlow<SearchParams> = _searchParams.asStateFlow()
-    private var currentPage = AtomicInteger(FIRST_PAGE_INDEX)
     private var lastSuccesResult = VacancyShortResponse.Empty
     private val _state = MutableStateFlow<VacanciesState>(VacanciesState.Empty)
     val state: StateFlow<VacanciesState> = _state.asStateFlow()
@@ -39,53 +37,54 @@ class SearchViewModel(
     val toastState: StateFlow<ToastState> = _toastState.asStateFlow()
 
     init {
-        searchParams.debounce(SEARCH_DEBOUNCE_DELAY) // пауза
-            .distinctUntilChanged() // ограничиваем если есть новый поиск
-            .onEach { searchParams -> searchVacancies(searchParams.text, searchParams.page) }
+        // Наблюдаем за запросом поиска, после паузы эмитим поиск по введенным параметрам
+        query
+            .debounce(SEARCH_DEBOUNCE_DELAY)
+            .distinctUntilChanged().onEach { text ->
+                filterInteractor.emitSearch(text, FIRST_PAGE_INDEX)
+            }
             .launchIn(viewModelScope)
+
+        // Наблюдаем за параметарми ввода, если что-то прилетело, будем искать
+        viewModelScope.launch {
+            filterInteractor.searchParamsFlow.collect { searchOptionsMap ->
+                val text = searchOptionsMap.get("text")
+                val page = searchOptionsMap.get("page")?.toInt() ?: FIRST_PAGE_INDEX
+                // Если прилетели параметры поиска, но в них нет текста, то не стоит искать
+                if (text.isNullOrBlank()) {
+                    lastSuccesResult = VacancyShortResponse.Empty
+                    _state.value = VacanciesState.Empty
+                } else {
+                    _isSearchInProgress.value = true
+
+                    if (page <= FIRST_PAGE_INDEX) {
+                        lastSuccesResult = VacancyShortResponse.Empty
+                        _state.value = VacanciesState.Loading
+                    } else {
+                        _state.value = VacanciesState.Content(lastSuccesResult, inProgress = true)
+                    }
+
+                    searchVacanciesInteractor.searchVacancies(searchOptionsMap)
+                        .collect { resource ->
+                            when (resource) {
+                                is Resource.Success -> {
+                                    handleSuccess(resource.data)
+                                }
+
+                                is Resource.Error -> {
+                                    handleError(resource.error)
+                                }
+                            }
+
+                            _isSearchInProgress.value = false
+                        }
+                }
+            }
+        }
     }
 
     fun clearToast() {
         _toastState.value = ToastState.NoProblem
-    }
-
-    fun searchVacancies(text: String, page: Int) {
-        if (text.isBlank()) {
-            lastSuccesResult = VacancyShortResponse.Empty
-            _state.value = VacanciesState.Empty
-            return
-        }
-
-        _isSearchInProgress.value = true
-
-        if (isFirstSearch()) {
-            lastSuccesResult = VacancyShortResponse.Empty
-            _state.value = VacanciesState.Loading
-        } else {
-            _state.value = VacanciesState.Content(lastSuccesResult, inProgress = true)
-        }
-
-        viewModelScope.launch {
-            val options = hashMapOf<String, String>().apply {
-                put("text", text)
-                put("page", page.toString())
-            }
-
-            searchVacanciesInteractor.searchVacancies(options)
-                .collect { resource ->
-                    when (resource) {
-                        is Resource.Success -> {
-                            handleSuccess(resource.data)
-                        }
-
-                        is Resource.Error -> {
-                            handleError(resource.error)
-                        }
-                    }
-
-                    _isSearchInProgress.value = false
-                }
-        }
     }
 
     private fun handleSuccess(data: VacancyShortResponse?) {
@@ -93,7 +92,7 @@ class SearchViewModel(
             data == null -> _state.value = VacanciesState.NotFound
             data.found == 0 -> _state.value = VacanciesState.NotFound
             else -> {
-                prepareNextSearch()
+                Log.d("SearchViewModel", "Found page ${data.page}/${data.found}")
                 lastSuccesResult = VacancyShortResponse(
                     found = data.found,
                     pages = data.pages,
@@ -107,7 +106,7 @@ class SearchViewModel(
     }
 
     private fun handleError(errorCode: Int?) {
-        if (isFirstSearch()) {
+        if (lastSuccesResult.items.isEmpty()) {
             _state.value = when (errorCode) {
                 NetworkResponseStatus.NO_INTERNET -> VacanciesState.NoInternet
                 NetworkResponseStatus.SERVER_ERROR -> VacanciesState.ServerError
@@ -135,8 +134,6 @@ class SearchViewModel(
 
     fun onSearchTextDebounce(text: String) {
         _query.value = text
-        currentPage.set(FIRST_PAGE_INDEX)
-        _searchParams.update { it.copy(text = text, page = currentPage.get()) }
     }
 
     fun clearSearchQuery() {
@@ -147,16 +144,16 @@ class SearchViewModel(
 
     fun onLoadNextPage() {
         viewModelScope.launch {
-            searchVacancies(searchParams.value.text, currentPage.get() + PAGE_INCREMENT)
+            filterInteractor.emitSearch(_query.value, lastSuccesResult.page + PAGE_INCREMENT)
         }
     }
 
-    private fun isFirstSearch(): Boolean {
-        return currentPage.get() <= FIRST_PAGE_INDEX
-    }
-
-    private fun prepareNextSearch() {
-        currentPage.incrementAndGet()
+    fun getFilterIconType(): FilterIconType {
+        return if (filterInteractor.getFilterIconState()) {
+            FilterIconType.HasFilterIcon
+        } else {
+            FilterIconType.NoFilterIcon
+        }
     }
 
     companion object {

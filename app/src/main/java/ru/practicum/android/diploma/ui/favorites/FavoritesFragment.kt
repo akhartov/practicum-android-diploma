@@ -28,7 +28,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.domain.models.VacancyShort
 import ru.practicum.android.diploma.presentation.favorites.FavoritesState
-import kotlin.getValue
 import ru.practicum.android.diploma.presentation.favorites.FavoritesViewModel
 import ru.practicum.android.diploma.ui.common.PlaceholderState
 import ru.practicum.android.diploma.ui.common.VacancyItem

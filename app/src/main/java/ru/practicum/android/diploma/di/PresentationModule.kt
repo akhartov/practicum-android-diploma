@@ -3,12 +3,13 @@ package ru.practicum.android.diploma.di
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
+import ru.practicum.android.diploma.presentation.converters.UiFiltersMapper
 import ru.practicum.android.diploma.presentation.favorites.FavoritesViewModel
-import ru.practicum.android.diploma.presentation.filter.CountryFilterViewModel
-import ru.practicum.android.diploma.presentation.filter.FilterSettingsViewModel
-import ru.practicum.android.diploma.presentation.filter.IndustryFilterViewModel
-import ru.practicum.android.diploma.presentation.filter.RegionFilterViewModel
 import ru.practicum.android.diploma.presentation.filter.WorkplaceFilterViewModel
+import ru.practicum.android.diploma.presentation.filter.country.CountryFilterViewModel
+import ru.practicum.android.diploma.presentation.filter.industry.IndustryFilterViewModel
+import ru.practicum.android.diploma.presentation.filter.region.RegionFilterViewModel
+import ru.practicum.android.diploma.presentation.filter.settings.FilterSettingsViewModel
 import ru.practicum.android.diploma.presentation.search.SearchViewModel
 import ru.practicum.android.diploma.presentation.team.TeamViewModel
 import ru.practicum.android.diploma.presentation.vacancy.VacancyViewModel
@@ -18,27 +19,27 @@ import ru.practicum.android.diploma.util.SalaryMapper
 val presentationModule = module {
 
     viewModel {
-        SearchViewModel(get())
+        SearchViewModel(get(), get())
     }
 
     viewModel {
-        FilterSettingsViewModel()
+        FilterSettingsViewModel(get(), get(), get())
     }
 
     viewModel {
-        WorkplaceFilterViewModel()
+        WorkplaceFilterViewModel(get())
     }
 
     viewModel {
-        CountryFilterViewModel()
+        CountryFilterViewModel(get(), get())
     }
 
     viewModel {
-        RegionFilterViewModel()
+        RegionFilterViewModel(get(), get(), get())
     }
 
     viewModel {
-        IndustryFilterViewModel()
+        IndustryFilterViewModel(get(), get())
     }
 
     viewModel {
@@ -54,6 +55,8 @@ val presentationModule = module {
     }
 
     single { CurrencyMapper() }
+
+    single { UiFiltersMapper() }
 
     single { SalaryMapper(androidContext(), get()) }
 }

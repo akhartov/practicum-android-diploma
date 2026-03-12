@@ -6,8 +6,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import ru.practicum.android.diploma.data.Response
-import ru.practicum.android.diploma.data.dto.FilterAreaDto
-import ru.practicum.android.diploma.data.dto.FilterIndustryDto
+import ru.practicum.android.diploma.data.dto.AreaResponse
+import ru.practicum.android.diploma.data.dto.IndustryDtoResponse
 import ru.practicum.android.diploma.util.NetworkChecker
 import ru.practicum.android.diploma.util.NetworkResponseStatus
 
@@ -28,15 +28,19 @@ class VacancyApiClientImpl(private val api: VacancyApi, private val context: Con
         }
     }
 
-    override suspend fun getFilterAreas(): List<FilterAreaDto> {
+    override suspend fun getFilterAreas(): Response {
         return withContext(Dispatchers.IO) {
-            api.getFilterAreas()
+            withNetworkErrorHandling {
+                AreaResponse(api.getFilterAreas())
+            }
         }
     }
 
-    override suspend fun getFilterIndustries(): List<FilterIndustryDto> {
+    override suspend fun getFilterIndustries(): Response {
         return withContext(Dispatchers.IO) {
-            api.getFilterIndustries()
+            withNetworkErrorHandling {
+                IndustryDtoResponse(api.getFilterIndustries())
+            }
         }
     }
 

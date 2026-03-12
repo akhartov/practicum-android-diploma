@@ -1,10 +1,16 @@
 package ru.practicum.android.diploma.domain.api
 
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 import ru.practicum.android.diploma.domain.models.Filters
-import ru.practicum.android.diploma.ui.filter.workplace.FilterIconType
 
 interface FilterInteractor {
-    fun prepareQueryParams(filters: Filters): HashMap<String, String>
-    fun getFilterIconState(): Flow<FilterIconType>
+    val searchParamsFlow: StateFlow<Map<String, String>>
+
+    suspend fun emitSearch(text: String, pageIndex: Int)
+    suspend fun emitSearch()
+
+    fun getFilters(): Filters
+    fun setFilters(filters: Filters)
+    fun resetFilters()
+    fun getFilterIconState(): Boolean
 }

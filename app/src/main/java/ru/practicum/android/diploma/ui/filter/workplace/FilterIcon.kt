@@ -13,7 +13,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import ru.practicum.android.diploma.R
-import ru.practicum.android.diploma.domain.models.Filters
 import ru.practicum.android.diploma.ui.theme.Dimens
 import ru.practicum.android.diploma.ui.theme.FilterIconColors
 import ru.practicum.android.diploma.ui.theme.LocalAndroidDiplomaScheme
@@ -46,7 +45,7 @@ sealed class FilterIconType {
 
     abstract fun getFilterColors(customFilterIcon: FilterIconColors): FilterIconConfig
 
-    class hasFilterIcon(val filters: Filters) : FilterIconType() {
+    object HasFilterIcon : FilterIconType() {
         override fun getFilterColors(customFilterIcon: FilterIconColors): FilterIconConfig {
             return FilterIconConfig(
                 background = customFilterIcon.hasFilterIcon.background,
@@ -55,7 +54,7 @@ sealed class FilterIconType {
         }
     }
 
-    object noFilterIcon : FilterIconType() {
+    object NoFilterIcon : FilterIconType() {
         override fun getFilterColors(customFilterIcon: FilterIconColors): FilterIconConfig {
             return FilterIconConfig(
                 background = customFilterIcon.noFilterIcon.background,
