@@ -7,11 +7,13 @@ import ru.practicum.android.diploma.data.repository.FavoritesRepository
 import ru.practicum.android.diploma.domain.GetVacanciesFlowUseCase
 import ru.practicum.android.diploma.domain.LikeInteractor
 import ru.practicum.android.diploma.domain.api.AreaInteractor
-import ru.practicum.android.diploma.domain.api.ChangeAreaUseCase
 import ru.practicum.android.diploma.domain.api.ChangeCountryUseCase
-import ru.practicum.android.diploma.domain.api.ChangeFilterInteractor
-import ru.practicum.android.diploma.domain.api.ChangeWorkplaceUseCase
+import ru.practicum.android.diploma.domain.api.ChangeFilterSettingsInteractor
+import ru.practicum.android.diploma.domain.api.ChangeIndustryInteractor
+import ru.practicum.android.diploma.domain.api.ChangeRegionUseCase
+import ru.practicum.android.diploma.domain.api.ChangeWorkplaceInteractor
 import ru.practicum.android.diploma.domain.api.FilterInteractor
+import ru.practicum.android.diploma.domain.api.FiltersWatchingUseCase
 import ru.practicum.android.diploma.domain.api.IndustryInteractor
 import ru.practicum.android.diploma.domain.api.SearchVacanciesInteractor
 import ru.practicum.android.diploma.domain.api.SharingInteractor
@@ -42,9 +44,11 @@ val domainModule = module {
     single<AreaInteractor> { AreaInteractorImpl(get()) }
 
     single<FilterInteractor> { FilterInteractorImpl(get(), get()) }
-    single { ChangeFilterInteractor(get()) }
+    single { ChangeFilterSettingsInteractor(get()) }
+    single { ChangeIndustryInteractor(get()) }
 
-    single { ChangeAreaUseCase(get()) }
+    single { ChangeRegionUseCase(get()) }
     single { ChangeCountryUseCase(get()) }
-    single { ChangeWorkplaceUseCase(get(), get()) }
+    single { ChangeWorkplaceInteractor(get()) }
+    single { FiltersWatchingUseCase(get()) }
 }

@@ -25,7 +25,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
-import ru.practicum.android.diploma.domain.models.AreaShort
+import ru.practicum.android.diploma.domain.models.Filters
 import ru.practicum.android.diploma.presentation.filter.WorkplaceFilterViewModel
 import ru.practicum.android.diploma.ui.common.ButtonControl
 import ru.practicum.android.diploma.ui.common.ButtonControlType
@@ -48,8 +48,7 @@ class WorkplaceFilterFragment : Fragment() {
         setContent {
             AndroidDiplomaTheme {
                 WorkplaceFilterScreen(
-                    country = viewModel.country,
-                    area = viewModel.area,
+                    filtersFlow = viewModel.filtersFlow,
                     navigateToCountryFilter = { needReset ->
                         if (needReset) {
                             viewModel.resetCountry()
@@ -68,7 +67,9 @@ class WorkplaceFilterFragment : Fragment() {
                         viewModel.applyWorkplace()
                         findNavController().popBackStack()
                     },
-                    onBackClick = { findNavController().popBackStack() }
+                    onBackClick = {
+                        findNavController().popBackStack()
+                    }
                 )
             }
         }
@@ -77,15 +78,13 @@ class WorkplaceFilterFragment : Fragment() {
 
 @Composable
 fun WorkplaceFilterScreen(
-    country: StateFlow<AreaShort?>,
-    area: StateFlow<AreaShort?>,
+    filtersFlow: StateFlow<Filters>,
     navigateToCountryFilter: (needReset: Boolean) -> Unit,
     navigateToRegionFilter: (needReset: Boolean) -> Unit,
     onApply: () -> Unit,
     onBackClick: () -> Unit,
 ) {
-    val countryState = country.collectAsState()
-    val areaState = area.collectAsState()
+    val filters = filtersFlow.collectAsState()
     Scaffold(
         topBar = {
             FilterTopAppBar(
@@ -102,13 +101,13 @@ fun WorkplaceFilterScreen(
             verticalArrangement = Arrangement.SpaceBetween,
         ) {
             Column {
-                if (countryState.value?.name != null) {
+                if (filters.value.countryName != null) {
                     FilterSelectionControl(
                         Modifier,
                         onClick = { navigateToCountryFilter(true) },
                         filterSectionControlType = FilterSectionControlType.Presents,
                         title = stringResource(R.string.country_selection),
-                        text = countryState.value?.name
+                        text = filters.value.countryName
                     )
                 } else {
                     FilterSelectionControl(
@@ -118,13 +117,13 @@ fun WorkplaceFilterScreen(
                         text = stringResource(R.string.country_selection),
                     )
                 }
-                if (areaState.value?.name != null) {
+                if (filters.value.regionName != null) {
                     FilterSelectionControl(
                         Modifier,
                         onClick = { navigateToRegionFilter(true) },
                         filterSectionControlType = FilterSectionControlType.Presents,
                         title = stringResource(R.string.region_selection),
-                        text = areaState.value?.name
+                        text = filters.value.regionName
                     )
                 } else {
                     FilterSelectionControl(
@@ -136,7 +135,7 @@ fun WorkplaceFilterScreen(
                 }
             }
 
-            if (countryState.value != null || areaState.value != null) {
+            if (filters.value.countryName != null || filters.value.regionName != null) {
                 Column(
                     modifier = Modifier.fillMaxWidth(),
                     verticalArrangement = Arrangement.spacedBy(Dimens.padding8)
@@ -160,13 +159,11 @@ fun WorkplaceFilterScreen(
 )
 @Composable
 fun PreviewScreenDay() {
-    val area = MutableStateFlow<AreaShort?>(null)
-    val country = MutableStateFlow<AreaShort?>(null)
+    val filtersFlow = MutableStateFlow<Filters>(Filters())
 
     AndroidDiplomaTheme {
         WorkplaceFilterScreen(
-            area,
-            country,
+            filtersFlow,
             {},
             {},
             {},
@@ -182,13 +179,11 @@ fun PreviewScreenDay() {
 )
 @Composable
 fun PreviewScreenNight() {
-    val area = MutableStateFlow<AreaShort?>(null)
-    val country = MutableStateFlow<AreaShort?>(null)
+    val filtersFlow = MutableStateFlow<Filters>(Filters())
 
     AndroidDiplomaTheme {
         WorkplaceFilterScreen(
-            area,
-            country,
+            filtersFlow,
             {},
             {},
             {},
@@ -204,13 +199,11 @@ fun PreviewScreenNight() {
 )
 @Composable
 fun PreviewScreenFilledNight() {
-    val area = MutableStateFlow<AreaShort?>(AreaShort(1, "Area"))
-    val country = MutableStateFlow<AreaShort?>(AreaShort(1, "Country"))
+    val filtersFlow = MutableStateFlow<Filters>(Filters(countryName = "Country", regionName = "Region"))
 
     AndroidDiplomaTheme {
         WorkplaceFilterScreen(
-            area,
-            country,
+            filtersFlow,
             {},
             {},
             {},
@@ -226,13 +219,11 @@ fun PreviewScreenFilledNight() {
 )
 @Composable
 fun PreviewScreenFilledDay() {
-    val area = MutableStateFlow<AreaShort?>(AreaShort(1, "Area"))
-    val country = MutableStateFlow<AreaShort?>(AreaShort(1, "Country"))
+    val filtersFlow = MutableStateFlow<Filters>(Filters(countryName = "Country", regionName = "Region"))
 
     AndroidDiplomaTheme {
         WorkplaceFilterScreen(
-            area,
-            country,
+            filtersFlow,
             {},
             {},
             {},

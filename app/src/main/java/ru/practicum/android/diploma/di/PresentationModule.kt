@@ -23,11 +23,11 @@ val presentationModule = module {
     }
 
     viewModel {
-        FilterSettingsViewModel(get(), get(), get())
+        FilterSettingsViewModel(get(), get(), get(), get())
     }
 
     viewModel {
-        WorkplaceFilterViewModel(get())
+        WorkplaceFilterViewModel(get(), get())
     }
 
     viewModel {
