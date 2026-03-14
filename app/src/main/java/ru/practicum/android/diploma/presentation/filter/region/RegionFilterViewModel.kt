@@ -13,7 +13,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.api.AreaInteractor
 import ru.practicum.android.diploma.domain.api.ChangeRegionUseCase
-import ru.practicum.android.diploma.domain.api.FiltersWatchingUseCase
 import ru.practicum.android.diploma.domain.models.Region
 import ru.practicum.android.diploma.util.NetworkResponseStatus
 import ru.practicum.android.diploma.util.Resource
@@ -21,7 +20,6 @@ import ru.practicum.android.diploma.util.Resource
 @OptIn(FlowPreview::class)
 class RegionFilterViewModel(
     private val areaInteractor: AreaInteractor,
-    private val filtersWatchingUseCase: FiltersWatchingUseCase,
     private val changeRegionUseCase: ChangeRegionUseCase,
 ) : ViewModel() {
     private val _regionFilter = MutableStateFlow<RegionFilterState>(RegionFilterState.Loading)
@@ -35,7 +33,7 @@ class RegionFilterViewModel(
     init {
         viewModelScope.launch {
             _regionFilter.value = RegionFilterState.Loading
-            areaInteractor.getRegions(filtersWatchingUseCase.filtersFlow.value.countryId)
+            areaInteractor.getRegions(changeRegionUseCase.selectedCountry.value?.id)
                 .collect { resource ->
                     when (resource) {
                         is Resource.Success -> {
@@ -99,7 +97,7 @@ class RegionFilterViewModel(
     }
 
     fun setRegion(region: Region) {
-        changeRegionUseCase.setRegion(
+        changeRegionUseCase.selectRegion(
             region.parentCountry,
             region.region,
         )

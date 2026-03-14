@@ -18,6 +18,7 @@ import ru.practicum.android.diploma.domain.api.IndustryInteractor
 import ru.practicum.android.diploma.domain.api.SearchVacanciesInteractor
 import ru.practicum.android.diploma.domain.api.SharingInteractor
 import ru.practicum.android.diploma.domain.api.VacancyInteractor
+import ru.practicum.android.diploma.domain.api.WorkspaceCachingRepository
 import ru.practicum.android.diploma.domain.impl.AreaInteractorImpl
 import ru.practicum.android.diploma.domain.impl.FilterInteractorImpl
 import ru.practicum.android.diploma.domain.impl.IndustryInteractorImpl
@@ -51,4 +52,5 @@ val domainModule = module {
     single { ChangeCountryUseCase(get()) }
     single { ChangeWorkplaceInteractor(get()) }
     single { FiltersWatchingUseCase(get()) }
+    single { WorkspaceCachingRepository(get()) }
 }

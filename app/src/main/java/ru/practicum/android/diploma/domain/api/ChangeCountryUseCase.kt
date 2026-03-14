@@ -4,11 +4,12 @@ import ru.practicum.android.diploma.domain.models.AreaShort
 
 /**
  * Бизнес-логика экрана "Выбор страны"
+ * Здесь ничего не сохраняется в фильтр, только выбираем страну
  * */
 class ChangeCountryUseCase(
-    private val filterRepository: FilterRepository
+    private val workspaceCachingRepository: WorkspaceCachingRepository,
 ) {
     fun setCountry(country: AreaShort?) {
-        filterRepository.setCountry(country?.name, country?.id)
+        workspaceCachingRepository.selectCountry(country)
     }
 }

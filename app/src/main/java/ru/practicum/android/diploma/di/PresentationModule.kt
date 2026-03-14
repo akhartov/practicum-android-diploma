@@ -27,7 +27,7 @@ val presentationModule = module {
     }
 
     viewModel {
-        WorkplaceFilterViewModel(get(), get())
+        WorkplaceFilterViewModel(get())
     }
 
     viewModel {
@@ -35,7 +35,7 @@ val presentationModule = module {
     }
 
     viewModel {
-        RegionFilterViewModel(get(), get(), get())
+        RegionFilterViewModel(get(), get())
     }
 
     viewModel {
