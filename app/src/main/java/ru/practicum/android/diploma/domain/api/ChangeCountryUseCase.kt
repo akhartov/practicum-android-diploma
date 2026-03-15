@@ -1,14 +1,15 @@
 package ru.practicum.android.diploma.domain.api
 
-import kotlinx.coroutines.flow.StateFlow
 import ru.practicum.android.diploma.domain.models.AreaShort
 
+/**
+ * Бизнес-логика экрана "Выбор страны"
+ * Здесь ничего не сохраняется в фильтр, только выбираем страну
+ * */
 class ChangeCountryUseCase(
-    private val workplaceCachingRepository: WorkplaceCachingRepository
+    private val workspaceCachingRepository: WorkspaceCachingRepository,
 ) {
-    val country: StateFlow<AreaShort?> = workplaceCachingRepository.country
-
-    fun cacheCountry(country: AreaShort?) {
-        workplaceCachingRepository.cacheCountry(country)
+    fun setCountry(country: AreaShort?) {
+        workspaceCachingRepository.selectCountry(country)
     }
 }

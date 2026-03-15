@@ -52,7 +52,7 @@ class CountryFilterFragment : Fragment() {
                     viewModel = countryFilterViewModel,
                     onBackClick = { findNavController().navigateUp() },
                     onItemClick = { countryId, countryName ->
-                        countryFilterViewModel.prepareCountry(AreaShort(countryId, countryName))
+                        countryFilterViewModel.setCountry(AreaShort(countryId, countryName))
                         findNavController().navigateUp()
                     }
                 )

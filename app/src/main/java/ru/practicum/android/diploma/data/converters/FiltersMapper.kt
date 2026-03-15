@@ -8,22 +8,26 @@ import ru.practicum.android.diploma.domain.models.Filters
 class FiltersMapper {
     fun mapToSavedFiltersDto(filters: Filters): SavedFiltersDto =
         SavedFiltersDto(
-            area = filters.workplaceName ?: "",
-            areaId = filters.areaId?.toString() ?: "",
-            industry = filters.industryName ?: "",
-            industryId = filters.industryId?.toString() ?: "",
-            salary = filters.salary ?: "",
-            isIncludeSalary = filters.isIncludeSalary.toString()
+            countryName = filters.countryName,
+            countryId = filters.countryId,
+            regionName = filters.regionName,
+            regionId = filters.regionId,
+            industryName = filters.industryName,
+            industryId = filters.industryId,
+            salary = filters.salary,
+            isIncludeSalary = filters.isIncludeSalary
         )
 
     fun mapToFilters(savedFiltersDto: SavedFiltersDto): Filters =
         Filters(
-            workplaceName = savedFiltersDto.area.ifEmpty { null },
-            areaId = if (savedFiltersDto.areaId.isEmpty()) null else savedFiltersDto.areaId.toInt(),
-            industryName = savedFiltersDto.industry.ifEmpty { null },
-            industryId = if (savedFiltersDto.industryId.isEmpty()) null else savedFiltersDto.industryId.toInt(),
-            salary = savedFiltersDto.salary.ifEmpty { null },
-            isIncludeSalary = savedFiltersDto.isIncludeSalary.toBoolean()
+            countryName = savedFiltersDto.countryName,
+            countryId = savedFiltersDto.countryId,
+            regionName = savedFiltersDto.regionName,
+            regionId = savedFiltersDto.regionId,
+            industryName = savedFiltersDto.industryName,
+            industryId = savedFiltersDto.industryId,
+            salary = savedFiltersDto.salary,
+            isIncludeSalary = savedFiltersDto.isIncludeSalary
         )
 
     fun mapToArea(dto: FilterAreaDto): Area =
@@ -36,10 +40,9 @@ class FiltersMapper {
 
     fun filtersToHashMap(filters: Filters): HashMap<String, String> {
         return hashMapOf<String, String>().apply {
-            filters.areaId?.let { put("area", it.toString()) }
+            filters.regionId?.let { put("area", it.toString()) }
             filters.industryId?.let { put("industry", it.toString()) }
-
-            if (!filters.salary.isNullOrBlank()) {
+            if (filters.salary.isNotBlank()) {
                 put("salary", filters.salary)
             }
             if (filters.isIncludeSalary) {

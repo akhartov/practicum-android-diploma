@@ -27,8 +27,8 @@ class CountryFilterViewModel(
         }
     }
 
-    fun prepareCountry(country: AreaShort?) {
-        changeCountryUseCase.cacheCountry(country)
+    fun setCountry(country: AreaShort?) {
+        changeCountryUseCase.setCountry(country)
     }
 
     private fun proccesResult(result: Resource<List<AreaShort>>) {

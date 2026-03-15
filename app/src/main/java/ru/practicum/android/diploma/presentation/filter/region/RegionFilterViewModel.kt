@@ -12,8 +12,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.api.AreaInteractor
-import ru.practicum.android.diploma.domain.api.ChangeAreaUseCase
-import ru.practicum.android.diploma.domain.api.ChangeCountryUseCase
+import ru.practicum.android.diploma.domain.api.ChangeRegionUseCase
 import ru.practicum.android.diploma.domain.models.Region
 import ru.practicum.android.diploma.util.NetworkResponseStatus
 import ru.practicum.android.diploma.util.Resource
@@ -21,8 +20,7 @@ import ru.practicum.android.diploma.util.Resource
 @OptIn(FlowPreview::class)
 class RegionFilterViewModel(
     private val areaInteractor: AreaInteractor,
-    private val changeCountryUseCase: ChangeCountryUseCase,
-    private val changeAreaUseCase: ChangeAreaUseCase,
+    private val changeRegionUseCase: ChangeRegionUseCase,
 ) : ViewModel() {
     private val _regionFilter = MutableStateFlow<RegionFilterState>(RegionFilterState.Loading)
     val regionFilter: StateFlow<RegionFilterState> = _regionFilter.asStateFlow()
@@ -35,7 +33,7 @@ class RegionFilterViewModel(
     init {
         viewModelScope.launch {
             _regionFilter.value = RegionFilterState.Loading
-            areaInteractor.getRegions(changeCountryUseCase.country.value?.id)
+            areaInteractor.getRegions(changeRegionUseCase.selectedCountry.value?.id)
                 .collect { resource ->
                     when (resource) {
                         is Resource.Success -> {
@@ -98,8 +96,8 @@ class RegionFilterViewModel(
         }
     }
 
-    fun changeRegion(region: Region) {
-        changeAreaUseCase.cacheArea(
+    fun setRegion(region: Region) {
+        changeRegionUseCase.selectRegion(
             region.parentCountry,
             region.region,
         )
