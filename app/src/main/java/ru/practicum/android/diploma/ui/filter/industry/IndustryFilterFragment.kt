@@ -28,7 +28,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import kotlinx.coroutines.flow.StateFlow
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.domain.models.Industry
@@ -67,12 +66,16 @@ class IndustryFilterFragment : Fragment() {
 fun IndustryFilterScreen(viewModel: IndustryFilterViewModel, onBackClick: () -> Unit) {
     val searchQuery by viewModel.query.collectAsState()
     val filterState by viewModel.filterState.collectAsState()
+    val industryState by viewModel.selectedIndustry.collectAsState()
 
     Scaffold(
         topBar = {
             FilterTopAppBar(
                 title = stringResource(R.string.industry_selection),
-                onBackClick = { onBackClick() }
+                onBackClick = {
+                    viewModel.clearSelectedIndustry()
+                    onBackClick()
+                }
             )
         }
     ) { paddingValues ->
@@ -95,11 +98,14 @@ fun IndustryFilterScreen(viewModel: IndustryFilterViewModel, onBackClick: () -> 
                     is IndustryFilterState.Content -> {
                         ContentState(
                             filterState = state,
-                            selectedIndustryState = viewModel.selectedIndustry,
+                            industryId = industryState?.id,
                             onSelectionChange = { industry ->
                                 viewModel.selectIndustry(industry)
                             },
-                            onBackClick = onBackClick
+                            onApplySelectionClick = {
+                                viewModel.applySelectedIndustry()
+                                onBackClick()
+                            }
                         )
                     }
 
@@ -145,12 +151,10 @@ fun IndustryFilterScreen(viewModel: IndustryFilterViewModel, onBackClick: () -> 
 @Composable
 fun ContentState(
     filterState: IndustryFilterState.Content,
-    selectedIndustryState: StateFlow<Industry?>,
+    industryId: Int?,
     onSelectionChange: (industry: Industry?) -> Unit,
-    onBackClick: () -> Unit
+    onApplySelectionClick: () -> Unit
 ) {
-    val selectedIndustry by selectedIndustryState.collectAsState()
-
     Column(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(Dimens.padding8)
@@ -162,7 +166,7 @@ fun ContentState(
             verticalArrangement = Arrangement.spacedBy(Dimens.padding2)
         ) {
             items(filterState.industries) { industry ->
-                val isSelected = selectedIndustry?.let { it.id == industry.id } ?: false
+                val isSelected = industryId?.let { it == industry.id } ?: false
                 TextWithRadioButton(
                     Modifier,
                     text = industry.name,
@@ -178,12 +182,12 @@ fun ContentState(
             }
         }
 
-        if (selectedIndustry != null) {
+        if (industryId != null) {
             ButtonControl(
                 Modifier,
                 text = stringResource(R.string.select),
                 onClick = {
-                    onBackClick()
+                    onApplySelectionClick()
                 },
                 buttonControlType = ButtonControlType.Approve,
             )

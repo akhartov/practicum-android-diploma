@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import ru.practicum.android.diploma.domain.api.ChangeFilterInteractor
+import ru.practicum.android.diploma.domain.api.ChangeIndustryInteractor
 import ru.practicum.android.diploma.domain.api.IndustryInteractor
 import ru.practicum.android.diploma.domain.models.Industry
 import ru.practicum.android.diploma.domain.models.IndustryResponse
@@ -21,20 +21,27 @@ import ru.practicum.android.diploma.util.Resource
 @OptIn(FlowPreview::class)
 class IndustryFilterViewModel(
     private val industryInteractor: IndustryInteractor,
-    private val changeFilterInteractor: ChangeFilterInteractor,
+    private val changeIndustryInteractor: ChangeIndustryInteractor,
 ) : ViewModel() {
     private val _filterState = MutableStateFlow<IndustryFilterState?>(null)
     val filterState: StateFlow<IndustryFilterState?> = _filterState.asStateFlow()
 
-    private val _query = MutableStateFlow<String>("")
+    private val _query = MutableStateFlow("")
     val query: StateFlow<String> = _query.asStateFlow()
 
     var allIndustries = listOf<Industry>()
-
-    val selectedIndustry: StateFlow<Industry?> = changeFilterInteractor.industry
+    val selectedIndustry: StateFlow<Industry?> = changeIndustryInteractor.selectedIndustryFlow
 
     fun selectIndustry(industry: Industry?) {
-        changeFilterInteractor.cacheIndustry(industry)
+        changeIndustryInteractor.selectIndustry(industry)
+    }
+
+    fun applySelectedIndustry() {
+        changeIndustryInteractor.applySelectedIndustry()
+    }
+
+    fun clearSelectedIndustry() {
+        changeIndustryInteractor.clearSelectedIndustry()
     }
 
     init {
