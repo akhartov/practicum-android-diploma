@@ -35,9 +35,10 @@ class FilterInteractorImpl(
 
     override fun getFilterIconState(): Boolean {
         val filters = getFilters()
-        return filters.areaId != null
+        return filters.regionId != null
+            || filters.countryId != null
             || filters.industryId != null
-            || !filters.salary.isNullOrBlank()
-            || filters.isIncludeSalary
+            || filters.salary.isNotBlank()
+            || filters.isIncludeSalary == true
     }
 }

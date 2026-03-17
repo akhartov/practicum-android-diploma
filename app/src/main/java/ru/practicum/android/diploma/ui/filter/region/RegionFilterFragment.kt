@@ -25,10 +25,12 @@ class RegionFilterFragment : Fragment() {
         setContent {
             AndroidDiplomaTheme {
                 RegionFilterScreen(
-                    onBackClick = { findNavController().popBackStack() },
+                    onBackClick = {
+                        findNavController().popBackStack()
+                    },
                     regionFilter = viewModel.regionFilter,
                     onRegionClick = { region ->
-                        viewModel.changeRegion(region)
+                        viewModel.setRegion(region)
                         findNavController().popBackStack()
                     },
                     viewModel.query,

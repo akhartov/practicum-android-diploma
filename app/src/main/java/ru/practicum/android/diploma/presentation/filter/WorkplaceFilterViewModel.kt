@@ -2,23 +2,27 @@ package ru.practicum.android.diploma.presentation.filter
 
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.StateFlow
-import ru.practicum.android.diploma.domain.api.ChangeWorkplaceUseCase
+import ru.practicum.android.diploma.domain.api.ChangeWorkplaceInteractor
 import ru.practicum.android.diploma.domain.models.AreaShort
 
 class WorkplaceFilterViewModel(
-    private val changeWorkplaceUseCase: ChangeWorkplaceUseCase
+    private val changeWorkplaceInteractor: ChangeWorkplaceInteractor,
 ) : ViewModel() {
-    val area: StateFlow<AreaShort?> = changeWorkplaceUseCase.area
-    val country: StateFlow<AreaShort?> = changeWorkplaceUseCase.country
+    val selectedCountry: StateFlow<AreaShort?> = changeWorkplaceInteractor.selectedCountry
+    val selectedRegion: StateFlow<AreaShort?> = changeWorkplaceInteractor.selectedRegion
     fun applyWorkplace() {
-        changeWorkplaceUseCase.applyWorkplace()
+        changeWorkplaceInteractor.applyWorkplace()
     }
 
-    fun resetCountry() {
-        changeWorkplaceUseCase.resetCountry()
+    fun resetSelectedCountry() {
+        changeWorkplaceInteractor.resetSelectedCountry()
     }
 
-    fun resetArea() {
-        changeWorkplaceUseCase.resetArea()
+    fun resetSelectedRegion() {
+        changeWorkplaceInteractor.resetSelectedRegion()
+    }
+
+    fun cleanSelectedWorkplace() {
+        changeWorkplaceInteractor.cleanSelectedWorkplace()
     }
 }

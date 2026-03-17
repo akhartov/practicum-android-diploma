@@ -55,12 +55,13 @@ class FilterSettingsFragment : Fragment() {
         setContent {
             AndroidDiplomaTheme {
                 FilterSettingsScreen(
-                    saveFilter = {
-                        filterViewModel.applyFilter()
+                    applyFilter = {
+                        filterViewModel.updateSearch()
                         findNavController().popBackStack()
                     },
                     resetFilter = {
-                        filterViewModel.resetFilter()
+                        filterViewModel.resetFilters()
+                        filterViewModel.updateSearch()
                         findNavController().popBackStack()
                     },
                     navigateToWorkplaceFilter = { needReset ->
@@ -77,10 +78,13 @@ class FilterSettingsFragment : Fragment() {
                             findNavController().navigate(R.id.action_filterSettingsFragment_to_industryFilterFragment)
                         }
                     },
-                    onBackClick = { findNavController().popBackStack() },
+                    onBackClick = {
+                        filterViewModel.leaveFilterSettings()
+                        findNavController().popBackStack()
+                    },
                     filters = filterViewModel.filtersUiState,
                     changeWithSalaryOnly = { filterViewModel.changeWithSalaryOnly() },
-                    setSalaryValue = { salary -> filterViewModel.changeSalary(salary) }
+                    setSalaryValue = { salary -> filterViewModel.setSalary(salary) }
                 )
             }
         }
@@ -92,11 +96,11 @@ fun FilterSettingsScreen(
     navigateToWorkplaceFilter: (needReset: Boolean) -> Unit,
     navigateToIndustryFilter: (needReset: Boolean) -> Unit,
     onBackClick: () -> Unit,
-    saveFilter: () -> Unit,
+    applyFilter: () -> Unit,
     resetFilter: () -> Unit,
     filters: StateFlow<FilterSettingsState>,
     changeWithSalaryOnly: () -> Unit,
-    setSalaryValue: (String?) -> Unit
+    setSalaryValue: (String) -> Unit
 ) {
     val filtersState by filters.collectAsState()
     Scaffold(
@@ -153,14 +157,13 @@ fun FilterSettingsScreen(
                     modifier = Modifier,
                     filtersState.salary ?: "",
                     onValueChange = setSalaryValue,
-                    onClear = { setSalaryValue(null) },
+                    onClear = { setSalaryValue("") },
                 )
                 Spacer(modifier = Modifier.height(Dimens.padding24))
-                // Insert amount control here
                 CheckboxControl(
                     modifier = Modifier,
                     text = stringResource(R.string.dont_show_without_salary),
-                    isChecked = filtersState.isIncludeSalary,
+                    isChecked = filtersState.isIncludeSalary?.equals(true) == true,
                     onCheckedChange = { changeWithSalaryOnly() },
                     checkboxControlType = CheckboxControlType.Filter,
                 )
@@ -174,7 +177,7 @@ fun FilterSettingsScreen(
                     ButtonControl(
                         Modifier,
                         text = stringResource(R.string.apply),
-                        onClick = { saveFilter() },
+                        onClick = { applyFilter() },
                         buttonControlType = ButtonControlType.Approve,
                     )
                     ButtonControl(
@@ -205,7 +208,7 @@ private fun PreviewScreenDay() {
             navigateToWorkplaceFilter = {},
             navigateToIndustryFilter = {},
             onBackClick = {},
-            saveFilter = {},
+            applyFilter = {},
             resetFilter = {},
             filters = stateFlow.asStateFlow(),
             changeWithSalaryOnly = {},
@@ -234,7 +237,7 @@ private fun PreviewScreenSelectedDay() {
             navigateToWorkplaceFilter = {},
             navigateToIndustryFilter = {},
             onBackClick = {},
-            saveFilter = {},
+            applyFilter = {},
             resetFilter = {},
             filters = stateFlow.asStateFlow(),
             changeWithSalaryOnly = {},
@@ -256,7 +259,7 @@ private fun PreviewScreenNight() {
             navigateToWorkplaceFilter = {},
             navigateToIndustryFilter = {},
             onBackClick = {},
-            saveFilter = {},
+            applyFilter = {},
             resetFilter = {},
             filters = stateFlow.asStateFlow(),
             changeWithSalaryOnly = {},
